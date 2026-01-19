@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('archive');
+
+// Sort by date descending
+const sortedPosts = posts.sort((a, b) =>
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+// Group by year
+const postsByYear = sortedPosts.reduce((acc, post) => {
+  const year = post.data.date.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+---
+
+<BaseLayout title="Archive | Shingai Thornton">
+  <div class="space-y-4 mb-12">
+    <h1 class="text-4xl font-semibold text-gray-900">Archive</h1>
+    <p class="text-lg text-gray-500">Essays and notes from 2019-2025.</p>
+    <p class="text-sm text-gray-400">Links open on shingai.xyz ↗</p>
+  </div>
+
+  {years.map((year) => (
+    <section class="mb-10">
+      <h2 class="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-4">{year}</h2>
+      <ul class="space-y-3">
+        {postsByYear[Number(year)].map((post) => (
+          <li class="flex items-baseline justify-between gap-4 py-1 group">
+            <a href={`https://shingai.xyz/${post.data.permalink}/`} target="_blank" rel="noopener" class="text-gray-800 group-hover:text-blue-600 no-underline hover:no-underline transition-colors">
+              {post.data.title}
+            </a>
+            <span class="text-sm text-gray-400 whitespace-nowrap">
+              {post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</BaseLayout>
