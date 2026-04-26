@@ -16,10 +16,12 @@
   --color-clay: #a3856a;
   --color-clay-light: #c4a882;
   --color-clay-muted: #d4c4b0;
+  --color-plum: #6b5361;
 }
 
 html {
   font-family: var(--font-family-sans);
+  font-feature-settings: 'kern' 1, 'liga' 1;
   background-color: #fafaf9;
   color: var(--color-stone-800);
 }
@@ -28,6 +30,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 a {
@@ -36,11 +39,30 @@ a {
   text-decoration-color: var(--color-clay-muted);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
-  transition: text-decoration-color 0.15s ease;
+  transition: text-decoration-color 0.25s ease;
 }
 
 a:hover {
   text-decoration-color: var(--color-clay);
+}
+
+.now-line {
+  font-style: italic;
+  color: var(--color-plum);
+  font-size: 0.9em;
+}
+
+.arrow-link {
+  display: inline-block;
+}
+
+.arrow-link .arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.arrow-link:hover .arrow {
+  transform: translateX(3px);
 }
 
 .prose {
@@ -124,4 +146,13 @@ a:hover {
 .prose em {
   color: var(--color-stone-500);
   font-size: 0.875em;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
 }
