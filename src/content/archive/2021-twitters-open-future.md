@@ -237,3 +237,6 @@ Further Reading
    [https://ricburton.substack.com/p/social-networks-and-sociable-protocols]
  * Protocols, Not Platforms: A Technological Approach to Free Speech
    [https://knightcolumbia.org/content/protocols-not-platforms-a-technological-approach-to-free-speech]
+
+![](/images/archive/twitters-open-future/image.png)
+

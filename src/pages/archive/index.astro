@@ -24,7 +24,6 @@ const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
   <div class="space-y-4 mb-12">
     <h1 class="text-4xl font-semibold text-gray-900">Archive</h1>
     <p class="text-lg text-gray-500">Essays and notes from 2019-2025.</p>
-    <p class="text-sm text-gray-400">Links open on shingai.xyz ↗</p>
   </div>
 
   {years.map((year) => (
@@ -33,7 +32,7 @@ const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
       <ul class="space-y-3">
         {postsByYear[Number(year)].map((post) => (
           <li class="flex items-baseline justify-between gap-4 py-1 group">
-            <a href={`https://shingai.xyz/${post.data.permalink}/`} target="_blank" rel="noopener" class="text-gray-800 group-hover:text-blue-600 no-underline hover:no-underline transition-colors">
+            <a href={`/archive/${post.data.permalink}/`} class="text-gray-800 group-hover:text-blue-600 no-underline hover:no-underline transition-colors">
               {post.data.title}
             </a>
             <span class="text-sm text-gray-400 whitespace-nowrap">

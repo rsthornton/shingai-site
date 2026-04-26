@@ -134,3 +134,8 @@ Social platforms must accommodate two disparate use cases.
 
 Our future is one where rewards are more heavily influenced by the quality of
 one's audience than its size.
+
+![](/images/archive/notes-on-working-in-public/PXL_20220325_234213450.jpeg)
+
+![](/images/archive/notes-on-working-in-public/PXL_20220325_235312645.jpeg)
+

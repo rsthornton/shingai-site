@@ -73,3 +73,16 @@ Causal loop diagrams are used to clearly define causalities, but can only give u
 Stock and flow-diagrams help us represent system dynamics, they give us quantitative measures of how the quantity of stocks change over time through inflows and outflows.
 
 Block Diagrams are another way to look at system dynamics. Block diagrams are used to visualize control systems and provide comprehensive yet simple overview of the system. They provide information that can be used to define the state space and its transitions.
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/image.png)
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/image-1.png)
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/Screen-Shot-2023-01-31-at-9.46.26-AM.png)
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/loop.png)
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/stock.png)
+
+![](/images/archive/notes-on-token-engineering-discovery-phase/block.png)
+

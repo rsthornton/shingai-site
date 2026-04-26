@@ -88,3 +88,12 @@ Reading about systems science satisfies my curiosity. I enjoy learning about how
 Studying systems science will put me in a better position to work towards elevating its status as an academic discipline. I believe this will provide society with greater interdisciplinary understanding, better mechanisms for threat detection and adaptation, and improved methods for designing and managing complex systems.
 
 Following my intellectual curiosity and ignoring external skepticism about obscure ideas has worked out well for me in the past. It's well past time for me to dive down a new rabbit hole.
+
+![](/images/archive/why-systems-science/Screen-Shot-2022-07-04-at-3.09.05-PM-1.png)
+
+![](/images/archive/why-systems-science/Screen-Shot-2022-06-24-at-9.52.24-PM-1.png)
+
+![](/images/archive/why-systems-science/Screen-Shot-2022-06-24-at-9.48.48-PM-2.png)
+
+![](/images/archive/why-systems-science/Screen-Shot-2022-07-04-at-1.06.02-PM.png)
+

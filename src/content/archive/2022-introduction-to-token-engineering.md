@@ -65,3 +65,6 @@ Zargham argues that Web3 enabled systems are deeply entangled with existing soci
 We need institutions like the Token Engineering Commons that are dedicated to safeguarding the public in the face of complex technologies they don't understand. This work requires looking beyond the boundaries of technical fields, and towards experts in the humanities and the social sciences. Especially those who have studied ethics law and governance.
 
 The content in this course might feel too theoretical and academic for people without much direct experience using crypto. Still, I'd highly recommend it to any founders or builders working on new cryptonetworks.
+
+![](/images/archive/introduction-to-token-engineering/image.png)
+

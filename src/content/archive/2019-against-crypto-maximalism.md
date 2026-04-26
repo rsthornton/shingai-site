@@ -40,3 +40,8 @@ Bitcoin could evolve into a widely trusted form of global, Internet-native money
 Blockchains like Cosmos that aim to foster interoperability between other public blockchains, could help Bitcoin and Ethereum communicate with each other in a decentralized manner. Gmail, Yahoo, and Microsoft Outlook users can freely communicate with each other because all email providers use open standards like SMTP and IMAP that create interoperability. A world full of open blockchains should have similar standards.
 
 I've obsessively followed the evolution of open blockchains since 2011 because I’m optimistic about their potential to help improve the resiliency, transparency, and efficiency of our social institutions. I'll keep an open mind towards any technology that might help achieve that goal.
+
+![](/images/archive/against-crypto-maximalism/image.png)
+
+![](/images/archive/against-crypto-maximalism/Screen-Shot-2019-12-04-at-7.46.27-PM.png)
+

@@ -57,3 +57,14 @@ recommend it to other DAO voters.
 
 (Note: One feature I'd love to see implemented is a filter on the dashboard
 which allows me to only see proposals from DAOs I've favorited.)
+
+![](/images/archive/using-boardroom-to-efficiently-participate-in-multiple-daos/Screen-Shot-2021-07-21-at-12.35.45-PM.png)
+
+![](/images/archive/using-boardroom-to-efficiently-participate-in-multiple-daos/Screen-Shot-2021-07-21-at-3.24.19-PM.png)
+
+![](/images/archive/using-boardroom-to-efficiently-participate-in-multiple-daos/Screen-Shot-2021-07-21-at-12.39.21-PM.png)
+
+![](/images/archive/using-boardroom-to-efficiently-participate-in-multiple-daos/Screen-Shot-2021-07-21-at-2.41.47-PM.png)
+
+![](/images/archive/using-boardroom-to-efficiently-participate-in-multiple-daos/Screen-Shot-2021-07-21-at-2.53.07-PM.png)
+

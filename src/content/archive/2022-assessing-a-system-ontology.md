@@ -80,3 +80,14 @@ I'm excited to see how these basic building blocks are used in the following cha
 I haven't spent any time studying ontologies so I'm not in a position to deeply critique it or assess how it could be improved. There are some minor inconsistencies in terminology that can be a bit confusing. Archetypes in the diagram are "objects" in the text. Identity elements in the diagram are "qualities" in the text. Characteristics in the diagram are "attributes" in the text.
 
 Aside from this issue, the framework is logically consistent. It is a solid foundation for building a formal language of systems.
+
+![](/images/archive/assessing-a-system-ontology/Screen-Shot-2022-12-04-at-11.57.34-AM.png)
+
+![](/images/archive/assessing-a-system-ontology/Screen-Shot-2022-12-10-at-9.18.39-AM-2.png)
+
+![](/images/archive/assessing-a-system-ontology/Screen-Shot-2022-12-10-at-9.21.32-AM.png)
+
+![](/images/archive/assessing-a-system-ontology/Screen-Shot-2022-12-12-at-8.39.02-AM.png)
+
+![](/images/archive/assessing-a-system-ontology/Screen-Shot-2022-12-13-at-8.36.52-AM.png)
+

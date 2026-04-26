@@ -184,3 +184,6 @@ describes Musk as the "singular solution [he] trusts to solve for the issue of
 Twitter being a company" and as being on "a mission to extend the light of
 consciousness" makes me cautiously optimistic about his potential to transform
 Twitter for the better.
+
+![](/images/archive/musk-twitter-and-digital-public-squares/Screen-Shot-2022-05-06-at-8.32.35-AM.png)
+

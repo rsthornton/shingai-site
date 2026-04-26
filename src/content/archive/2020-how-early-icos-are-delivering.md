@@ -111,3 +111,6 @@ ICO
 Boom
 [https://hackernoon.com/looking-back-at-the-companies-that-led-to-the-ico-boom-lr3q3xxf]
 " on Hackernoon
+
+![](/images/archive/how-early-icos-are-delivering/ICOs-Logo.png)
+

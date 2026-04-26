@@ -107,3 +107,6 @@ This first iteration of my tech tree leaves much to be desired. I’ll be refini
  * Information about ideas I’d like to fund in the future
 
 I’d love feedback, so please reach out if you have any thoughts or questions.
+
+![](/images/archive/a-personal-tech-tree/Shingai-s-Tech-Tree-5.jpeg)
+

@@ -157,3 +157,14 @@ I'm a sucker for grand technological visions and am biased towards being inspire
 The Network State is an enthralling, inspiring, and well-researched read that deserves serious engagement, not casual dismissal. The expandable tree format makes it incredibly easy to navigate and digest key points.
 
 Balaji inspired me to start thinking about the power of exit in 2013. Now he's inspired me to believe that I am capable of building the types of societies I want to live in.
+
+![](/images/archive/thoughts-on-network-states/ns-1.png)
+
+![](/images/archive/thoughts-on-network-states/Screen-Shot-2022-07-20-at-7.37.56-PM.png)
+
+![](/images/archive/thoughts-on-network-states/image.png)
+
+![](/images/archive/thoughts-on-network-states/ns.jpeg)
+
+![](/images/archive/thoughts-on-network-states/Screen-Shot-2022-07-21-at-3.26.53-PM.png)
+

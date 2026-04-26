@@ -96,3 +96,6 @@ properly, can help.
 
 I'll share thoughts on how Tweetscape could become my go to Twitter interface in
 a future post.
+
+![](/images/archive/what-i-want-from-twitter/Screen-Shot-2022-04-01-at-11.57.18-AM.png)
+

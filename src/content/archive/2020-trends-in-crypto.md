@@ -167,3 +167,16 @@ terms of adoption and the development of useful applications that are starting
 to find product market fit. The price action is important and exciting, but
 focusing on long term-trends is the best way to find the signal in all of the
 noise.
+
+![](/images/archive/trends-in-crypto/Screen-Shot-2020-11-30-at-9.01.12-AM.png)
+
+![](/images/archive/trends-in-crypto/defiusers.png)
+
+![](/images/archive/trends-in-crypto/dexvolume-1.png)
+
+![](/images/archive/trends-in-crypto/nftsales.png)
+
+![](/images/archive/trends-in-crypto/NFTrevenue.png)
+
+![](/images/archive/trends-in-crypto/Screen-Shot-2020-11-26-at-12.01.06-PM.png)
+

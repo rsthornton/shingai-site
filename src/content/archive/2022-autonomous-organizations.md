@@ -54,3 +54,6 @@ Some low-hanging fruit I'd love to see explored:
  * Prediction market DAOs that bet on the outcomes of real world events in decentralized prediction markets and send any profits to investment or charity/philanthropy DAOs.
 
 If you're working on anything in this space, please reach out!
+
+![](/images/archive/autonomous-organizations/Screen-Shot-2022-03-16-at-7.14.21-PM.png)
+
