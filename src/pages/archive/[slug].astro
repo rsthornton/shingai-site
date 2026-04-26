@@ -22,16 +22,16 @@ const formattedDate = post.data.date.toLocaleDateString('en-US', {
 
 <BaseLayout title={`${post.data.title} | Shingai Thornton`}>
   <article class="prose">
-    <header class="mb-10 pb-6 border-b border-gray-200">
-      <a href="/archive" class="text-sm text-blue-600 hover:text-blue-700 no-underline mb-4 inline-block">&larr; Archive</a>
-      <h1 class="text-3xl font-semibold text-gray-900 mb-3 mt-2">{post.data.title}</h1>
-      <time class="text-sm text-gray-400">{formattedDate}</time>
+    <header class="mb-10">
+      <a href="/archive" class="text-xs text-stone-400 hover:text-stone-700 no-underline mb-4 inline-block uppercase tracking-widest">&larr; Archive</a>
+      <h1 class="text-3xl font-semibold text-stone-900 mb-3 mt-2" style="font-family: 'Source Serif 4', Georgia, serif;">{post.data.title}</h1>
+      <time class="text-xs text-stone-400 tracking-wide">{formattedDate}</time>
     </header>
-    <div class="text-gray-700">
+    <div class="text-stone-700">
       <Content />
     </div>
   </article>
-  <div class="mt-12 pt-6 border-t border-gray-200">
-    <a href="/archive" class="text-sm text-gray-500 hover:text-blue-600 no-underline">&larr; Back to archive</a>
+  <div class="mt-16 pt-6 border-t border-stone-200">
+    <a href="/archive" class="text-xs text-stone-400 hover:text-stone-700 no-underline uppercase tracking-widest">&larr; Archive</a>
   </div>
 </BaseLayout>
