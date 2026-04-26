@@ -13,8 +13,9 @@
   --color-stone-700: #44403c;
   --color-stone-800: #292524;
   --color-stone-900: #1c1917;
-  --color-accent: #57534e;
-  --color-accent-hover: #292524;
+  --color-clay: #a3856a;
+  --color-clay-light: #c4a882;
+  --color-clay-muted: #d4c4b0;
 }
 
 html {
@@ -32,14 +33,14 @@ body {
 a {
   color: var(--color-stone-800);
   text-decoration: underline;
-  text-decoration-color: var(--color-stone-300);
+  text-decoration-color: var(--color-clay-muted);
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   transition: text-decoration-color 0.15s ease;
 }
 
 a:hover {
-  text-decoration-color: var(--color-stone-800);
+  text-decoration-color: var(--color-clay);
 }
 
 .prose {
@@ -87,7 +88,7 @@ a:hover {
 }
 
 .prose blockquote {
-  border-left: 2px solid var(--color-stone-300);
+  border-left: 2px solid var(--color-clay-muted);
   padding-left: 1.25em;
   margin-left: 0;
   font-style: italic;

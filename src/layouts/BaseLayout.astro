@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Shingai Thornton — systems scientist" } = Astro.props;
+const { title, description = "Shingai Thornton — systems researcher" } = Astro.props;
 ---
 
 <!doctype html>
@@ -33,7 +33,7 @@ const { title, description = "Shingai Thornton — systems scientist" } = Astro.
       <main>
         <slot />
       </main>
-      <footer class="mt-20 pt-6 border-t border-stone-200 text-xs text-stone-400 tracking-wide">
+      <footer class="mt-20 pt-6 border-t text-xs text-stone-400 tracking-wide" style="border-color: #d4c4b0;">
         <p>&copy; {new Date().getFullYear()}</p>
       </footer>
     </div>

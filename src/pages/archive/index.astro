@@ -26,7 +26,7 @@ const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 
   {years.map((year) => (
     <section class="mb-10">
-      <h2 class="text-xs font-medium text-stone-400 uppercase tracking-widest mb-4">{year}</h2>
+      <h2 class="text-xs font-medium uppercase tracking-widest mb-4" style="color: #a3856a;">{year}</h2>
       <ul class="space-y-2">
         {postsByYear[Number(year)].map((post) => (
           <li class="flex items-baseline justify-between gap-4 py-1 group">
