@@ -21,7 +21,7 @@
 
 html {
   font-family: var(--font-family-sans);
-  font-feature-settings: 'kern' 1, 'liga' 1;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
   background-color: #fafaf9;
   color: var(--color-stone-800);
 }
