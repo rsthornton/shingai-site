@@ -27,3 +27,4 @@ dist/
 !package-lock.json
 !tsconfig.json
 reinsert_images.py
+!src/data/*.json
