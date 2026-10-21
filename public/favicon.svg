@@ -1,3 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text y="0.9em" font-size="90">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0a3d91"/><stop offset="1" stop-color="#1a73e8"/></linearGradient></defs>
+  <rect width="32" height="32" rx="5" fill="url(#g)"/>
+  <text x="16" y="23" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="20" font-weight="700" fill="#fff">S</text>
+  <circle cx="26" cy="6" r="3.5" fill="#ffd60a" stroke="#0a3d91" stroke-width="1"/>
 </svg>

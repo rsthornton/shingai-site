@@ -1,10 +1,8 @@
 # shingai.xyz
 
-Personal site for Shingai Thornton. Astro 5 + Tailwind 4.
+Personal site for Shingai Thornton. Astro 5, no CSS framework.
 
-## URLs
-
-- **Production**: https://deft-squirrel-462088.netlify.app/ (pending custom domain)
+- **Production**: https://shingai.xyz (GitHub Pages)
 - **GitHub**: https://github.com/rsthornton/shingai-site
 
 ## Development
@@ -19,35 +17,25 @@ npm run build   # outputs to dist/
 
 ```
 src/
-├── content/archive/    # 36 published posts (from Ghost export)
-├── layouts/            # BaseLayout.astro
+├── components/Win.astro   # AIM-style window: minimize, maximize, close, taskbar
+├── content/archive/       # 32 essays, 2019–2023 (from Ghost export)
+├── data/site.ts           # all copy: headline, top projects, talks, contact, icons
+├── layouts/BaseLayout.astro
 ├── pages/
-│   ├── index.astro     # Home
-│   ├── about.astro     # About
-│   └── archive/        # Archive index + post template
-└── styles/global.css   # Tailwind + prose styles
+│   ├── index.astro        # home
+│   ├── cv.astro
+│   ├── about.astro        # redirects to /
+│   ├── archive/           # archive index + post template
+│   └── talks/             # one page per talk
+└── styles/global.css      # design tokens + prose
+public/
+├── images/icon/           # profile and IM icons (switch with profileIcon in site.ts)
+├── images/top8/           # project screenshots
+└── talks/                 # slide PDFs
 ```
 
-## Archive Posts
-
-Posts transformed from Ghost export using `transform_posts.py`:
-- Source: `halcyonic-projects/archive/shingai-ghost-export/published/`
-- Frontmatter: `title`, `permalink`, `date`, `updated` (optional)
-
-**Current behavior**: Archive links redirect to `shingai.xyz/[permalink]/` (Ghost site) to preserve embeds and images.
-
-To switch to local rendering, edit `src/pages/archive/index.astro`:
-```diff
-- href={`https://shingai.xyz/${post.data.permalink}/`}
-+ href={`/archive/${post.data.permalink}`}
-```
+Most edits are to `src/data/site.ts`.
 
 ## Deployment
 
-Auto-deploys via Netlify on push to `main`. Config in `netlify.toml`.
-
-## TODO
-
-- [ ] Add custom domain (shingai.xyz) in Netlify
-- [ ] Migrate content locally (handle embeds/images)
-- [ ] Cancel Ghost Pro after DNS cutover
+Pushing to `main` builds and deploys through `.github/workflows/deploy.yml` to GitHub Pages (custom domain in `public/CNAME`).

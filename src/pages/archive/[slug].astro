@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { name } from '../../data/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('archive');
@@ -20,18 +21,15 @@ const formattedDate = post.data.date.toLocaleDateString('en-US', {
 });
 ---
 
-<BaseLayout title={`${post.data.title} | Shingai Thornton`}>
+<BaseLayout title={`${post.data.title} | ${name}`} description={post.data.description} window={`archive — ${post.data.date.getFullYear()}`} windowId="post">
+  <p class="back"><a href="/archive">← archive</a></p>
   <article class="prose">
-    <header class="mb-10">
-      <a href="/archive" class="text-xs hover:text-stone-700 no-underline mb-4 inline-block uppercase tracking-widest" style="color: #a3856a;">&larr; Archive</a>
-      <h1 class="text-3xl font-semibold text-stone-900 mb-3 mt-2" style="font-family: 'Source Serif 4', Georgia, serif;">{post.data.title}</h1>
-      <time class="text-xs text-stone-400 tracking-wide">{formattedDate}</time>
-    </header>
-    <div class="text-stone-700">
-      <Content />
-    </div>
+    <h1>{post.data.title}</h1>
+    <p class="date"><time datetime={post.data.date.toISOString().slice(0, 10)}>{formattedDate}</time> <span>· archived essay</span></p>
+    <Content />
   </article>
-  <div class="mt-16 pt-6 border-t" style="border-color: #d4c4b0;">
-    <a href="/archive" class="text-xs hover:text-stone-700 no-underline uppercase tracking-widest" style="color: #a3856a;">&larr; Archive</a>
-  </div>
 </BaseLayout>
+
+<style>
+  .date { font: 13px var(--mono); color: var(--muted); margin: -0.4em 0 1.6em; }
+</style>

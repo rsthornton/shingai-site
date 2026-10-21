@@ -1,20 +1,365 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Win from '../components/Win.astro';
+import { name, headline, thesis, now, links, updated, email, callUrl, top8, meet, talks, icons, profileIcon } from '../data/site';
+
+const version = 'v' + updated.slice(0, 7).replace('-', '.');
+const essays = (await getCollection('archive')).length;
+const resolve = (to: string) => (to === 'mail' ? '#im' : to === 'call' ? callUrl : to);
+const contact = [
+  { label: 'Instant message', href: '#im', im: true },
+  { label: 'Copy email', href: `mailto:${email}`, copy: true },
+  { label: 'Book 20 min', href: callUrl },
+  { label: 'Follow on X', href: links.find((l) => l.label === 'X')!.href },
+  { label: 'GitHub', href: links.find((l) => l.label === 'GitHub')!.href },
+  { label: 'CV', href: '/cv' },
+];
+const files = [
+  { file: 'ideas.halcyonic.systems', kind: 'substack', years: 'now', status: 'live', href: 'https://ideas.halcyonic.systems' },
+  { file: `archive/ (${essays} essays)`, kind: 'essays', years: '2019–23', status: 'archived', href: '/archive' },
+];
+const badges = [
+  { l: 'CCS', r: '2026 SPEAKER', c: '#b4232a', href: 'https://ccs26.cssociety.org/' },
+  { l: 'M&S', r: 'MERCATUS 2026', c: '#1e3a8a', href: 'https://www.marketsandsociety.org' },
+  { l: 'SoP', r: 'PROTOCOL SYMPOSIUM', c: '#6d28d9', href: 'https://summerofprotocols.com' },
+  { l: 'PHD', r: 'SSIE · BU', c: '#005a43', href: 'https://www.binghamton.edu/ssie/' },
+  { l: 'IDEAS', r: 'SUBSTACK', c: '#c2410c', href: 'https://ideas.halcyonic.systems' },
+  { l: 'FUNDED', r: 'RESEARCH HUB', c: '#0e7490', href: 'https://www.researchhub.com/proposal/32374/' },
+];
+const icon = icons[profileIcon];
+const imIcon = icons[profileIcon === 'headshot' ? 'kid' : 'headshot'];
+const fmt = (d: string) =>
+  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 ---
 
-<BaseLayout title="Shingai Thornton">
-  <div class="space-y-6">
-    <p class="text-stone-700 leading-relaxed max-w-md">
-      Building <a href="https://halcyonic.systems" style="color: #0d9488; text-decoration-color: rgba(13,148,136,0.3);" class="hover:opacity-80">Halcyonic Systems</a>, a research organization focused on formal systems modeling — being precise about how complex systems actually work.
-    </p>
-    <p class="text-stone-700 leading-relaxed max-w-md">
-      <span style="font-variant: small-caps; letter-spacing: 0.05em;">Previously</span> political economy, then crypto — both were going to make the world better. Then I stumbled across <a href="https://en.wikipedia.org/wiki/Systems_science">systems science</a>, which seemed to offer a formal foundation for reasoning about complex systems across every domain. Except the field itself turned out to be fragmented. So now I work on that.
-    </p>
-    <p class="now-line max-w-md">
-      Currently: building a backyard bee observatory with a Raspberry Pi; reading <a href="https://www.amazon.com/Mathematics-Form-Function-Saunders-MacLane/dp/0387962174" style="color: #6b5361;">Mathematics Form and Function</a> by Saunders Mac Lane.
-    </p>
-    <div class="pt-2">
-      <a href="/archive" class="text-sm hover:text-stone-900 arrow-link" style="color: #a3856a;">Writing, 2019–2023 <span class="arrow">&rarr;</span></a>
+<BaseLayout title={name} description={`${headline} ${thesis}`}>
+    <div class="frame">
+      <Win as="aside" id="profile" class="buddy" closable={false} title={`${name.toLowerCase().replace(' ', '')} — profile`}>
+        <div class="id">
+          <img id="icon" class="px" src={icon.pixel} width="64" height="64" alt={icon.alt} />
+          <div>
+            <h1>{name}</h1>
+            <p class="status"><span class="dot" aria-hidden="true"></span>online <span>· {version}</span></p>
+            <button type="button" class="swap" id="swap">photo icon</button>
+          </div>
+        </div>
+
+        <section class="away" aria-label="Now">
+          <p class="label">away message</p>
+          {now.map((line) => <p>{line}</p>)}
+          <p class="stamp">set {updated}</p>
+        </section>
+
+        <section class="contact" aria-label="Contact">
+          <p class="label">contacting shingai</p>
+          <ul>
+            {contact.map((c) => (
+              <li><a href={c.href} data-im={c.im ? '' : undefined} data-copy={c.copy ? '' : undefined}>{c.label}</a></li>
+            ))}
+          </ul>
+        </section>
+
+        <ul class="badges" aria-label="Talks and affiliations">
+          {badges.map((b) => (
+            <li><a href={b.href} class="badge" style={`--c:${b.c}`}><span class="l">{b.l}</span><span class="r">{b.r}</span></a></li>
+          ))}
+        </ul>
+      </Win>
+
+      <main>
+        <header class="who full">
+          <p class="lede">{headline}</p>
+          <p class="thesis">{thesis}</p>
+        </header>
+
+        <Win id="top" class="full" title={`shingai’s top ${top8.length}`} meta={`1 / ${top8.length}`} metaId="reel-count">
+          <ol class="track" id="reel-track" tabindex="0" aria-roledescription="carousel" aria-label="Top projects">
+            {top8.map((t, i) => (
+              <li class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${top8.length}`}>
+                <a href={t.href} tabindex="-1"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading={i < 2 ? 'eager' : 'lazy'} /></a>
+                <div class="cap">
+                  <a class="t" href={t.href}>{t.title}</a>
+                  <span class={`tag t-${t.tag}`}>{t.tag}</span>
+                  <span class="note">{t.note}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div class="controls">
+            <button type="button" id="reel-prev" aria-label="Previous project">◂ prev</button>
+            <ol class="thumbs">
+              {top8.map((t, i) => (
+                <li><button type="button" data-i={i} aria-label={t.title} aria-current={i === 0 ? 'true' : 'false'}><img src={`/images/top8/${t.img}.jpg`} width="96" height="60" alt="" loading="lazy" /></button></li>
+              ))}
+            </ol>
+            <button type="button" id="reel-next" aria-label="Next project">next ▸</button>
+          </div>
+        </Win>
+
+        <Win id="shows" title="shows" meta={`${talks.length} dates`}>
+          <ul class="shows">
+            {talks.map((t) => (
+              <li>
+                <span class="when">{fmt(t.date)}</span>
+                <span class={`flag ${t.status}`}>{t.status}</span>
+                <a class="what" href={t.href}>{t.title}</a>
+                <span class="where">{t.venue} · {t.place}</span>
+              </li>
+            ))}
+          </ul>
+        </Win>
+
+        <Win id="meet" title="who i’d like to meet">
+          <ul class="meet">
+            {meet.map((m) => (
+              <li>
+                <p><strong>{m.who}</strong> {m.what}</p>
+                <a href={resolve(m.to)} data-im={m.to === 'mail' ? '' : undefined}>{m.action} →</a>
+              </li>
+            ))}
+          </ul>
+        </Win>
+
+        <Win id="writing" class="full" title="writing">
+          <table class="files">
+            <thead><tr><th>filename</th><th>type</th><th>years</th><th>status</th></tr></thead>
+            <tbody>
+              {files.map((f) => (
+                <tr>
+                  <td><a href={f.href}>{f.file}</a></td>
+                  <td>{f.kind}</td>
+                  <td>{f.years}</td>
+                  <td><span class={`led ${f.status}`} aria-hidden="true"></span>{f.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Win>
+
+        <footer class="full">
+          <span>&copy; {updated.slice(0, 4)} {name}</span>
+          <span>end of file.</span>
+        </footer>
+      </main>
     </div>
-  </div>
+
+    <div class="im" id="im" data-open="false">
+      <button type="button" class="im-tab" id="im-tab">IM shingai ▴</button>
+      <div class="im-win" id="im-form">
+        <div class="titlebar"><span>IM — shingai</span><button type="button" class="ctl im-x" id="im-x" aria-label="Close">×</button></div>
+        <div class="im-log"><img class="im-icon" src={imIcon.pixel} width="48" height="48" alt={imIcon.alt} /><p><span class="me">shingai:</span> hey, what are you working on?</p></div>
+        <label class="sr" for="im-text">Message</label>
+        <textarea id="im-text" rows="4" placeholder="type a message…"></textarea>
+        <div class="im-send" role="group" aria-labelledby="im-via">
+          <span id="im-via">send with</span>
+          <button type="button" data-via="gmail">Gmail</button>
+          <button type="button" data-via="outlook">Outlook</button>
+          <button type="button" data-via="app">Mail app</button>
+          <button type="button" data-via="copy">Copy</button>
+        </div>
+        <p class="im-note" id="im-note" aria-live="polite">goes to {email}</p>
+      </div>
+    </div>
+
+    <script is:inline define:vars={{ email, icon }}>
+      (function () {
+        var img = document.getElementById('icon'), btn = document.getElementById('swap');
+        btn.addEventListener('click', function () {
+          var pixel = img.getAttribute('src') !== icon.pixel;
+          img.src = pixel ? icon.pixel : icon.photo;
+          img.classList.toggle('px', pixel);
+          btn.textContent = pixel ? 'photo icon' : 'pixel icon';
+        });
+
+        var track = document.getElementById('reel-track'), count = document.getElementById('reel-count');
+        var thumbs = document.querySelectorAll('.thumbs button'), n = thumbs.length, cur = 0;
+        var slides = track.querySelectorAll('.slide');
+        function go(i) { i = (i + n) % n; track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft }); }
+        function sync() {
+          var x = track.scrollLeft + slides[0].offsetLeft, i = 0, best = Infinity;
+          slides.forEach(function (s, j) { var d = Math.abs(s.offsetLeft - x); if (d < best) { best = d; i = j; } });
+          if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) i = n - 1;
+          if (i === cur) return;
+          cur = i;
+          count.textContent = (i + 1) + ' / ' + n;
+          thumbs.forEach(function (b, j) { b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
+        }
+        var raf;
+        track.addEventListener('scroll', function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); });
+        document.getElementById('reel-prev').addEventListener('click', function () { go(cur - 1); });
+        document.getElementById('reel-next').addEventListener('click', function () { go(cur + 1); });
+        thumbs.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.i); }); });
+        track.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+          if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        });
+
+        var im = document.getElementById('im'), text = document.getElementById('im-text');
+        function setOpen(open) {
+          im.dataset.open = open ? 'true' : 'false';
+          if (open) text.focus();
+        }
+        document.getElementById('im-tab').addEventListener('click', function () { setOpen(true); });
+        document.getElementById('im-x').addEventListener('click', function () { setOpen(false); });
+        document.querySelectorAll('[data-im]').forEach(function (a) {
+          a.addEventListener('click', function (e) { e.preventDefault(); setOpen(true); });
+        });
+        var note = document.getElementById('im-note'), subject = 'IM from shingai.xyz';
+        function remember(v) { try { localStorage.setItem('im:via', v); } catch (e) {} }
+        function marked() {
+          var last = null; try { last = localStorage.getItem('im:via'); } catch (e) {}
+          document.querySelectorAll('[data-via]').forEach(function (b) { b.classList.toggle('last', b.dataset.via === last); });
+        }
+        function copy(str, done) {
+          if (navigator.clipboard) navigator.clipboard.writeText(str).then(done, function () { done(false); });
+          else done(false);
+        }
+        var compose = {
+          gmail: function (s, b) { return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b); },
+          outlook: function (s, b) { return 'https://outlook.live.com/mail/0/deeplink/compose?to=' + encodeURIComponent(email) + '&subject=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b); },
+        };
+        document.querySelectorAll('[data-via]').forEach(function (b) {
+          b.addEventListener('click', function () {
+            var via = b.dataset.via, body = text.value;
+            remember(via); marked();
+            if (compose[via]) window.open(compose[via](subject, body), '_blank', 'noopener');
+            else if (via === 'app') window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            else copy(body ? body : email, function (ok) {
+              note.textContent = ok === false ? 'copy failed: write to ' + email
+                : body ? 'message copied: paste it into an email to ' + email : 'address copied: ' + email;
+            });
+          });
+        });
+        marked();
+        document.querySelectorAll('[data-copy]').forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            e.preventDefault();
+            var label = a.textContent;
+            copy(email, function (ok) {
+              a.textContent = ok === false ? email : 'copied ✓';
+              if (ok !== false) setTimeout(function () { a.textContent = label; }, 1600);
+            });
+          });
+        });
+      })();
+    </script>
 </BaseLayout>
+
+<style>
+  .frame { max-width: 1320px; margin: 0 auto; padding: 24px 16px 96px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: start; }
+  @media (min-width: 960px) {
+    .frame { grid-template-columns: 312px minmax(0, 1fr); gap: 32px; padding: 40px 32px 96px; }
+    :global(.buddy) { position: sticky; top: 24px; align-self: start; }
+  }
+  @media (min-width: 1200px) {
+    main { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    main > :global(.full) { grid-column: 1 / -1; }
+  }
+
+  .win { background: var(--panel); border: 1px solid var(--rule); box-shadow: 2px 2px 0 rgb(30 41 59 / 0.18); overflow: hidden; }
+  .titlebar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 12px; background: var(--title); color: #fff; font: 600 13px/1.4 var(--mono); }
+  .ctl { letter-spacing: 0.3em; opacity: 0.9; }
+
+  :global(.buddy .win-body > *) { padding: 14px 16px; margin: 0; }
+  :global(.buddy .win-body > * + *) { border-top: 1px solid var(--line); }
+  .id { display: flex; gap: 14px; align-items: center; background: var(--tint); }
+  #icon { width: 64px; height: 64px; border: 1px solid var(--rule); background: #fff; flex: none; }
+  #icon.px { image-rendering: pixelated; }
+  h1 { font: 600 18px/1.25 var(--sans); margin: 0; }
+  .status { margin: 4px 0 0; font: 13px var(--mono); color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; background: var(--yellow); border: 1px solid #a68500; border-radius: 50%; margin-right: 6px; }
+  .swap { font: 12px var(--mono); color: var(--muted); background: none; border: 0; border-bottom: 1px dotted var(--muted); padding: 0; margin-top: 4px; cursor: pointer; }
+  .label { font: 600 13px var(--mono); color: var(--ink-2); margin: 0 0 6px; }
+  .away { background: #fff8d6; box-shadow: inset 4px 0 0 var(--yellow); }
+  .away p:not(.label) { margin: 0; font-size: 15px; line-height: 1.5; }
+  .away .stamp { color: var(--muted); font: 12px var(--mono); margin-top: 8px; }
+
+  .contact ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); }
+  .contact li { border-bottom: 1px solid var(--line); }
+  .contact li:nth-child(odd) { border-right: 1px solid var(--line); }
+  .contact li:nth-last-child(-n + 2) { border-bottom: 0; }
+  .contact a { display: block; padding: 7px 10px; font-size: 14px; text-decoration: none; }
+
+  .badges { list-style: none; display: grid; grid-template-columns: repeat(3, 88px); justify-content: space-between; gap: 8px 0; }
+  .badge { display: flex; width: 88px; height: 31px; box-sizing: border-box; border: 1px solid var(--c); text-decoration: none; font: 600 8.5px/1.1 var(--sans); letter-spacing: -0.01em; overflow: hidden; background: #fff; }
+  .badge:hover { background: #fff; outline: 2px solid var(--yellow); }
+  .badge .l { background: var(--c); color: #fff; padding: 0 4px; display: flex; align-items: center; }
+  .badge .r { color: var(--c); padding: 0 4px; display: flex; align-items: center; }
+
+  .who { padding: 4px 4px 0; }
+  .lede { font-size: 22px; line-height: 1.4; font-weight: 600; max-width: 36em; margin-bottom: 8px; letter-spacing: -0.005em; }
+  .thesis { font-size: 17px; color: var(--ink-2); max-width: 40em; margin: 0; }
+
+  .track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; scrollbar-width: none; list-style: none; margin: 0; padding: 16px; border-bottom: 1px solid var(--line); }
+  .track::-webkit-scrollbar { display: none; }
+  :global([data-win='top'][data-state='max']) .track { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); overflow: visible; border-bottom: 0; }
+  :global([data-win='top'][data-state='max']) .slide:last-child { margin-right: 0; }
+  :global([data-win='top'][data-state='max']) .controls { display: none; }
+  .track:focus-visible { outline: 2px solid var(--yellow); outline-offset: -2px; }
+  @media (prefers-reduced-motion: no-preference) { .track { scroll-behavior: smooth; } }
+  .slide { flex: 0 0 min(440px, 84%); scroll-snap-align: start; min-width: 0; border: 1px solid var(--rule); background: var(--tint); }
+  .slide:last-child { margin-right: 16px; }
+  .slide > a { display: block; }
+  .slide img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; border-bottom: 1px solid var(--rule); }
+  .slide > a:hover { background: none; }
+  .slide > a:hover img { outline: 2px solid var(--yellow); outline-offset: -2px; }
+  .cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 10px 12px 12px; }
+  .cap .t { font-weight: 600; font-size: 16px; }
+  .cap .note { color: var(--muted); font-size: 14px; }
+  .controls { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--tint); }
+  .controls > button { flex: none; font: 600 13px var(--mono); color: var(--ink); background: #fff; border: 1px solid var(--rule); padding: 4px 12px; cursor: pointer; }
+  .controls > button:hover { background: var(--yellow); }
+  .thumbs { flex: 1; display: flex; justify-content: center; gap: 6px; list-style: none; margin: 0; padding: 0; min-width: 0; }
+  .thumbs button { display: block; width: 60px; padding: 0; border: 1px solid var(--line); background: #fff; cursor: pointer; opacity: 0.75; }
+  .thumbs button:hover, .thumbs button[aria-current='true'] { opacity: 1; border-color: var(--rule); }
+  .thumbs button[aria-current='true'] { outline: 2px solid var(--yellow); }
+  .thumbs img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; }
+  @media (max-width: 600px) { .thumbs { display: none; } .controls { justify-content: space-between; } }
+  .tag { display: inline-block; padding: 0 7px; border-radius: 3px; font: 600 12px/1.6 var(--mono); }
+  .t-lean { color: #5b21b6; background: #f1eafe; }
+  .t-atlas { color: #0a4fbf; background: #e3edff; }
+  .t-data { color: #166534; background: #e2f5e8; }
+  .t-app { color: #155e75; background: #ddf2f7; }
+  .t-talk { color: #9a3412; background: #fdeee4; }
+  .t-page { color: #86198f; background: #fae8fb; }
+
+  .shows, .meet { list-style: none; margin: 0; padding: 4px 16px; }
+  .shows li, .meet li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .shows li:last-child, .meet li:last-child { border-bottom: 0; }
+  .shows li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; }
+  .shows .when { font: 600 13px var(--mono); color: var(--ink-2); }
+  .shows .flag { font: 600 12px/1.6 var(--mono); padding: 0 7px; border-radius: 3px; align-self: start; }
+  .flag.upcoming { color: #854d0e; background: #fef08a; }
+  .flag.given { color: var(--ink-2); background: #e2e8f0; }
+  .shows .what { grid-column: 1 / -1; font-weight: 600; line-height: 1.4; }
+  .shows .where { grid-column: 1 / -1; font-size: 14px; color: var(--muted); }
+  .meet p { margin: 0 0 6px; line-height: 1.55; }
+  .meet a { font-size: 15px; font-weight: 600; }
+
+  .files { width: 100%; border-collapse: collapse; font: 14px var(--mono); }
+  .files th { text-align: left; font-weight: 600; font-size: 13px; color: var(--ink-2); background: var(--tint); border-bottom: 1px solid var(--line); padding: 6px 16px; }
+  .files td { padding: 8px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .files tr:last-child td { border-bottom: 0; }
+  @media (max-width: 600px) { .files { font-size: 13px; } .files th:nth-child(2), .files td:nth-child(2) { display: none; } .files th, .files td { padding-left: 10px; padding-right: 10px; } .files td:first-child { white-space: normal; overflow-wrap: anywhere; } }
+
+  footer { display: flex; justify-content: space-between; padding: 4px; color: var(--muted); font: 13px var(--mono); }
+
+  .im { position: fixed; right: 16px; bottom: 0; z-index: 10; }
+  .im-tab { font: 600 13px var(--mono); color: #fff; background: var(--title); border: 1px solid var(--rule); border-bottom: 0; padding: 7px 14px; cursor: pointer; }
+  .im-win { display: none; width: min(320px, calc(100vw - 32px)); background: var(--panel); border: 1px solid var(--rule); border-bottom: 0; margin: 0; box-shadow: 0 -4px 16px rgb(15 23 42 / 0.15); }
+  .im[data-open='true'] .im-tab { display: none; }
+  .im[data-open='true'] .im-win { display: block; }
+  .im-x { background: none; border: 0; color: #fff; font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; }
+  .im-log { display: flex; gap: 10px; align-items: flex-start; margin: 12px 12px 8px; font-size: 14px; }
+  .im-log p { margin: 0; }
+  .im-icon { flex: none; width: 48px; height: 48px; border: 1px solid var(--rule); image-rendering: pixelated; }
+  .im-log .me { color: #b4232a; font-weight: 600; }
+  .im-win textarea { display: block; box-sizing: border-box; width: calc(100% - 24px); margin: 0 12px; font: 14px var(--sans); border: 1px solid var(--line); padding: 8px; resize: vertical; }
+  .im-send { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px 4px; font: 12px var(--mono); color: var(--muted); }
+  .im-send span { flex-basis: 100%; }
+  .im-send button { font: 600 13px var(--mono); color: var(--ink); background: #fff; border: 1px solid var(--rule); padding: 4px 10px; cursor: pointer; }
+  .im-send button:hover, .im-send button.last { background: var(--yellow); }
+  .im-note { margin: 0; padding: 4px 12px 12px; font: 12px var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+</style>

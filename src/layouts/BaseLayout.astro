@@ -1,55 +1,74 @@
 ---
+import Win from '../components/Win.astro';
+import { name, updated, top8 } from '../data/site';
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
+  window?: string;
+  windowId?: string;
 }
 
-const { title, description = "Shingai Thornton — systems researcher" } = Astro.props;
+const {
+  title,
+  description = 'Shingai Thornton: PhD student in Systems Science at Binghamton University; runs Halcyonic Systems.',
+  window: winTitle,
+  windowId = 'page',
+} = Astro.props;
+
+const essays = (await getCollection('archive')).length;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { label: 'home', href: '/' },
+  { label: 'archive', href: '/archive' },
+  { label: 'cv', href: '/cv' },
+];
+const current = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
 ---
 
 <!doctype html>
-<!-- precise about how complex systems actually work -->
 <html lang="en">
   <head>
-    <meta name="view-transition" content="same-origin" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="view-transition" content="same-origin" />
     <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen" style="font-family: 'Inter', system-ui, sans-serif;">
-    <div class="max-w-xl mx-auto px-6 py-12">
-      <header class="mb-16">
-        <nav class="flex items-center justify-between">
-          <a href="/" class="font-serif text-lg font-semibold text-stone-900 no-underline hover:no-underline" style="font-family: 'Source Serif 4', Georgia, serif;">Shingai Thornton</a>
-          <div class="flex gap-5 text-sm">
-            <a href="/about" class="text-stone-500 hover:text-stone-900 no-underline">About</a>
-            <a href="/archive" class="text-stone-500 hover:text-stone-900 no-underline">Archive</a>
-          </div>
-        </nav>
-      </header>
-      <main>
-        <slot />
-      </main>
-      <footer class="mt-20 pt-6 border-t text-xs text-stone-400 tracking-wide" style="border-color: #d4c4b0;">
-        <div class="flex items-center gap-2">
-          <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="4" cy="8" r="2.5" fill="#d4c4b0"/>
-            <circle cx="28" cy="8" r="2.5" fill="#d4c4b0"/>
-            <line x1="6.5" y1="8" x2="24" y2="8" stroke="#d4c4b0" stroke-width="1"/>
-            <path d="M22 5 L25.5 8 L22 11" stroke="#d4c4b0" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>{new Date().getFullYear()}</span>
-        </div>
-      </footer>
+  <body>
+    <div class="strip">
+      <span><span class="led" aria-hidden="true"></span>connected<span class="hide-sm"> · sharing {top8.length} projects · {essays} essays</span></span>
+      <nav aria-label="Site">
+        {nav.map((n) => <a href={n.href} aria-current={current(n.href) ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+      <span class="hide-sm">last online {updated}</span>
     </div>
+
+    {winTitle ? (
+      <div class="column">
+        <Win id={windowId} title={winTitle}>
+          <div class="doc"><slot /></div>
+        </Win>
+        <footer class="page-foot">
+          <span>&copy; {updated.slice(0, 4)} {name}</span>
+          <span>end of file.</span>
+        </footer>
+      </div>
+    ) : (
+      <slot />
+    )}
   </body>
 </html>
-
-<style is:global>
-  @import "../styles/global.css";
-</style>

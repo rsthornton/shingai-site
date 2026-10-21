@@ -1,44 +1,42 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { name } from '../../data/site';
 
-const posts = await getCollection('archive');
+const posts = (await getCollection('archive')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const sortedPosts = posts.sort((a, b) =>
-  b.data.date.getTime() - a.data.date.getTime()
-);
-
-const postsByYear = sortedPosts.reduce((acc, post) => {
+const postsByYear = posts.reduce((acc, post) => {
   const year = post.data.date.getFullYear();
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(post);
+  (acc[year] ??= []).push(post);
   return acc;
 }, {} as Record<number, typeof posts>);
 
 const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
 ---
 
-<BaseLayout title="Archive | Shingai Thornton">
-  <div class="mb-12">
-    <h1 class="text-3xl font-semibold text-stone-900 mb-3" style="font-family: 'Source Serif 4', Georgia, serif;">Archive</h1>
-    <p class="text-stone-500">Essays and notes, 2019–2023.</p>
-  </div>
+<BaseLayout title={`Archive | ${name}`} description="Essays and notes by Shingai Thornton, 2019–2023: crypto, governance, early systems science." window={`archive — ${posts.length} essays`} windowId="archive">
+  <p class="intro">Essays and notes, 2019–2023: crypto, governance, early systems science. Newer writing is at <a href="https://ideas.halcyonic.systems">ideas.halcyonic.systems</a>.</p>
 
   {years.map((year) => (
-    <section class="mb-10">
-      <h2 class="text-xs font-medium uppercase tracking-widest mb-4" style="color: #a3856a;">{year}</h2>
-      <ul class="space-y-2">
+    <section>
+      <h2>{year}</h2>
+      <ul>
         {postsByYear[Number(year)].map((post) => (
-          <li class="flex items-baseline justify-between gap-4 py-1 group">
-            <a href={`/archive/${post.data.permalink}/`} class="text-stone-800 group-hover:text-stone-900 no-underline hover:no-underline transition-colors">
-              {post.data.title}
-            </a>
-            <span class="text-xs text-stone-400 whitespace-nowrap tabular-nums">
-              {post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </span>
+          <li>
+            <a href={`/archive/${post.data.permalink}/`}>{post.data.title}</a>
+            <span class="date">{post.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
           </li>
         ))}
       </ul>
     </section>
   ))}
 </BaseLayout>
+
+<style>
+  .intro { color: var(--ink-2); margin-bottom: 20px; }
+  section + section { margin-top: 22px; }
+  h2 { font: 600 13px var(--mono); color: var(--ink-2); margin: 0 0 4px; padding: 4px 8px; background: var(--tint); border: 1px solid var(--line); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  .date { flex: none; font: 13px var(--mono); color: var(--muted); }
+</style>
