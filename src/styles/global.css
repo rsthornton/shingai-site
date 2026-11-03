@@ -1,20 +1,25 @@
 /* Blocks: bordered boxes and filled word chips on warm stone. Light only, R8 corners, no shadows. */
 :root {
-  --page: #f4f2ee;         /* warm stone, not yellow */
   --paper: #ffffff;
-  --ink: #1c2026;
-  --ink-2: #3a414b;
-  --muted: #6b7079;
-  --line: #d6d2ca;
-  --accent: #1f3a5f;       /* ink navy: heading, logo, footer */
-  --link: #1f3a5f;
-  --chip-1: #d9e3ee;       /* slate blue */
-  --chip-2: #ebe3d4;       /* sand */
-  --chip-3: #e3e2de;       /* stone gray */
+  --ink: #1b1f24;
+  --ink-2: #39404a;
+  --muted: #687080;
   --edge: 1.5px solid var(--ink);
   --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  /* theme: overridden by [data-theme] below; default is "gray" */
+  --page: #f4f5f7;
+  --line: #d4d8de;
+  --accent: #1f3a5f;
+  --chip-1: #dbe4ee;
+  --chip-2: #e6e8ec;
+  --chip-3: #ebedf0;
 }
+/* gray: cool paper gray, ink navy */
+:root[data-theme='white'] { --page: #ffffff; --line: #dfe3e8; --accent: #1d3557; --chip-1: #e3ebf5; --chip-2: #eef1f5; --chip-3: #f2f4f7; }
+:root[data-theme='fog']   { --page: #edf1f6; --line: #cdd6e1; --accent: #1e3a8a; --chip-1: #d6e2f5; --chip-2: #e1e7f0; --chip-3: #e8edf4; }
+:root[data-theme='sage']  { --page: #f1f4f2; --line: #cfd8d2; --accent: #1f4237; --chip-1: #dbe8e1; --chip-2: #e4e9f0; --chip-3: #e9ecea; }
+:root { --link: var(--accent); }
 
 html {
   background: var(--page);
@@ -94,3 +99,7 @@ body > .column { padding-top: 20px; padding-bottom: 96px; flex: 1; }
 
 @view-transition { navigation: auto; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 150ms; }
+
+/* dev-only background switcher */
+.themes { position: fixed; left: 16px; bottom: 16px; z-index: 20; display: flex; gap: 6px; padding: 6px; background: var(--paper); border: var(--edge); border-radius: 8px; font: 500 12px var(--mono); }
+.themes button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); color: var(--ink); cursor: pointer; }
