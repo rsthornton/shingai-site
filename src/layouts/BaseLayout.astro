@@ -74,7 +74,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
 
     {import.meta.env.DEV && (
       <div class="themes" aria-label="Background (dev only)">
-        {['gray', 'white', 'fog', 'sage'].map((t) => <button type="button" data-theme-pick={t}>{t}</button>)}
+        {['white', 'gray', 'fog', 'sage'].map((t) => <button type="button" data-theme-pick={t}>{t}</button>)}
       </div>
     )}
 
@@ -82,7 +82,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
       document.querySelectorAll('[data-theme-pick]').forEach(function (b) {
         b.addEventListener('click', function () {
           var t = b.dataset.themePick;
-          if (t === 'gray') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
+          if (t === 'white') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
           try { localStorage.setItem('theme', t); } catch (e) {}
         });
       });

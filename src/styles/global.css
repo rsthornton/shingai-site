@@ -7,16 +7,15 @@
   --edge: 1.5px solid var(--ink);
   --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
-  /* theme: overridden by [data-theme] below; default is "gray" */
-  --page: #f4f5f7;
-  --line: #d4d8de;
-  --accent: #1f3a5f;
-  --chip-1: #dbe4ee;
-  --chip-2: #e6e8ec;
-  --chip-3: #ebedf0;
+  /* theme: default is "white"; [data-theme] below overrides */
+  --page: #ffffff;
+  --line: #dfe3e8;
+  --accent: #1d3557;
+  --chip-1: #e3ebf5;
+  --chip-2: #eef1f5;
+  --chip-3: #f2f4f7;
 }
-/* gray: cool paper gray, ink navy */
-:root[data-theme='white'] { --page: #ffffff; --line: #dfe3e8; --accent: #1d3557; --chip-1: #e3ebf5; --chip-2: #eef1f5; --chip-3: #f2f4f7; }
+:root[data-theme='gray']  { --page: #f4f5f7; --line: #d4d8de; --accent: #1f3a5f; --chip-1: #dbe4ee; --chip-2: #e6e8ec; --chip-3: #ebedf0; }
 :root[data-theme='fog']   { --page: #edf1f6; --line: #cdd6e1; --accent: #1e3a8a; --chip-1: #d6e2f5; --chip-2: #e1e7f0; --chip-3: #e8edf4; }
 :root[data-theme='sage']  { --page: #f1f4f2; --line: #cfd8d2; --accent: #1f4237; --chip-1: #dbe8e1; --chip-2: #e4e9f0; --chip-3: #e9ecea; }
 :root { --link: var(--accent); }
