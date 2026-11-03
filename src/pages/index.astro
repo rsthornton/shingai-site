@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { name, headline, thesis, now, updated, links, email, callUrl, top8, icons, theories, thesisUrl, explorersUrl } from '../data/site';
+import { name, headline, thesis, now, updated, links, email, callUrl, top8, icons, theories } from '../data/site';
 
 const x = links.find((l) => l.label === 'X')!.href;
 const github = links.find((l) => l.label === 'GitHub')!.href;
@@ -9,14 +8,6 @@ const github = links.find((l) => l.label === 'GitHub')!.href;
 const parts = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
 const variants = Object.entries(theories);
 const featured = top8.filter((t) => t.featured);
-const others = top8.length - featured.length;
-const essays = (await getCollection('archive')).length;
-const doors = [
-  { label: 'More projects', note: `${others} more`, href: '/projects' },
-  { label: 'Essays', note: `${essays} essays, 2019–23`, href: '/archive' },
-  { label: 'System Explorers', note: 'the newsletter archive', href: explorersUrl },
-  { label: 'Academic', note: 'MS thesis, 2026', href: thesisUrl || '/cv' },
-];
 const imIcon = icons.kid;
 const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
 ---
@@ -57,12 +48,6 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
         ))}
       </ul>
     </section>
-
-    <nav class="doors" aria-label="More">
-      {doors.map((d) => (
-        <a class="box" href={d.href}><span class="t">{d.label} →</span><span class="n">{d.note}</span></a>
-      ))}
-    </nav>
   </main>
 
   {import.meta.env.DEV && (
@@ -191,15 +176,6 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
   .feature .t:hover { color: var(--accent); text-decoration: underline; }
   .feature p { margin: 4px 0 6px; color: var(--ink-2); }
   .talk { font-size: 0.9rem; }
-
-  .doors { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  @media (min-width: 560px) { .doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 900px) { .doors { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .doors a { display: flex; flex-direction: column; gap: 2px; padding: 16px 18px; text-decoration: none; color: var(--ink); }
-  .doors a:hover { border-color: var(--accent); }
-  .doors a:hover .t { color: var(--accent); }
-  .doors .t { font-weight: 600; }
-  .doors .n { font-size: 0.9rem; color: var(--muted); }
 
   .tocs { position: fixed; left: 16px; bottom: 60px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--paper); border: 1px solid var(--ink); border-radius: 8px; font: 500 12px var(--mono); }
   .tocs button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); cursor: pointer; }

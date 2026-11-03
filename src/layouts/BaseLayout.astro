@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { name, updated, explorersUrl } from '../data/site';
+import { name, updated, explorersUrl, thesisUrl } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
@@ -19,9 +19,10 @@ const {
 const essays = (await getCollection('archive')).length;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const writing = [
-  { label: 'Ideas', note: 'Substack, current', href: 'https://ideas.halcyonic.systems' },
+  { label: 'Ideas', note: 'newsletter, current', href: 'https://ideas.halcyonic.systems' },
   { label: 'System Explorers', note: 'newsletter archive', href: explorersUrl },
-  { label: 'Archive', note: `${essays} essays, 2019–23`, href: '/archive' },
+  { label: 'Essays', note: `${essays} essays, 2019–23`, href: '/archive' },
+  { label: 'Thesis', note: 'MS, 2026', href: thesisUrl || '/cv' },
 ];
 const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
 ---
@@ -52,14 +53,13 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
         <a class="logo" href="/">Shingai Thornton</a>
         <nav aria-label="Site">
           <a href="/projects" aria-current={path.startsWith('/projects') ? 'page' : undefined}>Projects</a>
-          <a href="/about" aria-current={path.startsWith('/about') ? 'page' : undefined}>About</a>
           <details class="menu">
             <summary aria-current={path.startsWith('/archive') ? 'page' : undefined}>Writing</summary>
             <ul class="box">
               {writing.map((w) => <li><a href={w.href}><span>{w.label}</span><span class="note">{w.note}</span></a></li>)}
             </ul>
           </details>
-          <a href="/cv" aria-current={path.startsWith('/cv') ? 'page' : undefined}>CV</a>
+          <a href="/about" aria-current={path.startsWith('/about') || path.startsWith('/cv') ? 'page' : undefined}>About</a>
 
         </nav>
       </header>

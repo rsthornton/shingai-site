@@ -14,6 +14,7 @@ const fmt = (d: string) =>
       I run Halcyonic Systems, a small lab for <mark>formal systems research</mark>.
     </p>
     <p>{bio}</p>
+    <p>Degrees, positions and papers are in the <a href="/cv">CV</a>.</p>
 
     <h2>Talks</h2>
     <ul class="talks">
@@ -25,8 +26,6 @@ const fmt = (d: string) =>
         </li>
       ))}
     </ul>
-
-    <p class="more">Full record in the <a href="/cv">CV</a>.</p>
   </div>
 </BaseLayout>
 
@@ -37,5 +36,4 @@ const fmt = (d: string) =>
   .talks .when { font: 14px/1.75 var(--sans); color: var(--muted); grid-row: span 2; }
   .talks a { font-weight: 500; line-height: 1.45; }
   .talks .where { font-size: 0.9rem; color: var(--muted); }
-  .more { margin-top: 20px; }
 </style>
