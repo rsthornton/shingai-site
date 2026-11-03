@@ -1,23 +1,20 @@
-/* Blocks: graph paper, bordered boxes, word chips. Frost palette, light only, R8 corners. */
+/* Blocks: bordered boxes and filled word chips on warm stone. Light only, R8 corners, no shadows. */
 :root {
-  --page: #f3f6fa;
-  --grid: rgb(46 79 143 / 0.07);
+  --page: #f4f2ee;         /* warm stone, not yellow */
   --paper: #ffffff;
-  --ink: #0f172a;
-  --ink-2: #334155;
-  --muted: #5b6b80;
-  --line: #c3cedc;
-  --accent: #2e4f8f;       /* frost, deepened: heading, logo, footer */
-  --link: #2e4f8f;
-  --chip-1: #cfe7f0;       /* #88c0d0 lifted */
-  --chip-2: #d3ecea;       /* #8fbcbb lifted */
-  --chip-3: #dde5f2;       /* #81a1c1 lifted */
+  --ink: #1c2026;
+  --ink-2: #3a414b;
+  --muted: #6b7079;
+  --line: #d6d2ca;
+  --accent: #1f3a5f;       /* ink navy: heading, logo, footer */
+  --link: #1f3a5f;
+  --chip-1: #d9e3ee;       /* slate blue */
+  --chip-2: #ebe3d4;       /* sand */
+  --chip-3: #e3e2de;       /* stone gray */
   --edge: 1.5px solid var(--ink);
-  --lift: none;            /* the shadow switch; see [data-lift] */
   --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 }
-:root[data-lift] { --lift: 3px 3px 0 var(--ink); }
 
 html {
   background: var(--page);
@@ -28,9 +25,7 @@ html {
 }
 body {
   margin: 0;
-  background-color: var(--page);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background: var(--page);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -47,8 +42,8 @@ p { margin: 0 0 12px; }
 body > .column { padding-top: 20px; padding-bottom: 96px; flex: 1; }
 
 /* the two block primitives */
-.box { background: var(--paper); border: var(--edge); border-radius: 8px; box-shadow: var(--lift); }
-.chip { display: inline-block; padding: 0 8px; margin: 3px 1px; line-height: 1.5; background: var(--paper); border: var(--edge); border-radius: 4px; box-shadow: var(--lift); color: var(--ink); white-space: nowrap; }
+.box { background: var(--paper); border: var(--edge); border-radius: 8px; }
+.chip { display: inline-block; padding: 0 8px; margin: 3px 1px; line-height: 1.5; background: var(--paper); border: var(--edge); border-radius: 4px; color: var(--ink); white-space: nowrap; }
 .chip.c1 { background: var(--chip-1); }
 .chip.c2 { background: var(--chip-2); }
 .chip.c3 { background: var(--chip-3); }
@@ -56,7 +51,7 @@ body > .column { padding-top: 20px; padding-bottom: 96px; flex: 1; }
 .rule { border: 0; border-top: 1.5px dashed var(--line); margin: 0; }
 
 /* header bar */
-.bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: var(--paper); border: var(--edge); border-radius: 8px; box-shadow: var(--lift); margin-bottom: 64px; position: relative; z-index: 5; }
+.bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: var(--chip-1); border: var(--edge); border-radius: 8px; margin-bottom: 64px; position: relative; z-index: 5; }
 .logo { font: 700 20px var(--sans); color: var(--accent); text-decoration: none; letter-spacing: -0.02em; }
 .bar nav { display: flex; gap: 18px; align-items: center; font: 500 14px var(--mono); }
 .bar nav a, .bar summary { color: var(--accent); text-decoration: none; cursor: pointer; }

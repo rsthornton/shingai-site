@@ -21,7 +21,7 @@ const imIcon = icons.kid;
       <!-- chip copy lives here, not in site.ts, while the design settles -->
       <p class="lede">
         I'm a PhD student in <span class="chip c1">systems science</span> at Binghamton.
-        I run <span class="chip">Halcyonic Systems</span>, a small lab for <span class="chip c2">formal systems research</span>.
+        I run <span class="chip">Halcyonic Systems</span>, a small lab for <span class="nobr"><span class="chip c2">formal systems research</span>.</span>
       </p>
       <p class="thesis">{thesis}</p>
     </section>
@@ -42,6 +42,7 @@ const imIcon = icons.kid;
               <div class="cap">
                 <a class="t" href={t.href}>{t.title}</a>
                 <span class="chip tag">{t.note}</span>
+                {t.talk && <a class="chip talk" href={t.talk.href}>▶ {t.talk.label}</a>}
               </div>
             </li>
           ))}
@@ -54,15 +55,7 @@ const imIcon = icons.kid;
           <button type="button" class="chip" id="reel-next" aria-label="Next project">next &gt;</button>
         </div>
       </div>
-    </section>
-
-    <section>
-      <h2 class="label">talks</h2>
-      <ul class="rows">
-        {talks.map((t) => (
-          <li><a href={t.href}>{t.title}</a><span class="note">{t.venue.split(',')[0].replace(/ \(.*\)/, '')} · {fmt(t.date)}</span></li>
-        ))}
-      </ul>
+      <p class="spoken"><span class="label">spoken at:</span> {talks.map((t) => <a class="chip c2" href={t.href} title={t.title}>{t.short} · {fmt(t.date)}</a>)}</p>
     </section>
 
     <section>
@@ -162,11 +155,12 @@ const imIcon = icons.kid;
 </BaseLayout>
 
 <style>
-  main { display: grid; gap: 48px; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
 
   .px { image-rendering: pixelated; border-radius: 8px; border: var(--edge); display: block; background: #fff; }
   .hello h1 { font: 700 3rem/1.1 var(--sans); color: var(--accent); letter-spacing: -0.03em; margin: 24px 0 20px; }
   .lede { font-size: 1.3rem; line-height: 1.9; margin-bottom: 16px; }
+  .nobr { white-space: nowrap; }
   .thesis { color: var(--ink-2); font-size: 1.05rem; margin: 0; }
 
   .now p { font: 14px/1.6 var(--mono); color: var(--ink-2); margin: 0 0 6px; }
@@ -175,7 +169,7 @@ const imIcon = icons.kid;
 
   .head { display: flex; justify-content: space-between; }
 
-  .reel { overflow: hidden; }
+  .reel { overflow: hidden; background: var(--paper); }
   .track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; scrollbar-width: none; list-style: none; margin: 0; padding: 16px; }
   .track::-webkit-scrollbar { display: none; }
   .track:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
@@ -185,16 +179,23 @@ const imIcon = icons.kid;
   .slide > a { display: block; border: var(--edge); border-radius: 4px; overflow: hidden; }
   .slide img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
   .slide > a:hover img { transform: scale(1.02); }
-  .cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 12px 2px 0; }
+  .cap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 2px 0; }
+  .cap .t { margin-right: auto; }
+  .talk { font: 500 12px/1.6 var(--mono); background: var(--chip-1); text-decoration: none; margin: 0; }
+  .talk:hover { text-decoration: underline; }
+  .spoken { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0 0; }
+  .spoken .label { margin: 0 4px 0 0; }
+  .spoken .chip { font: 500 13px/1.6 var(--mono); text-decoration: none; margin: 0; }
+  .spoken .chip:hover { text-decoration: underline; }
   .cap .t { font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
   .cap .t:hover { color: var(--accent); text-decoration: underline; }
-  .tag { font: 12px/1.6 var(--mono); background: var(--chip-3); }
+  .tag { font: 12px/1.6 var(--mono); background: var(--chip-3); margin: 0; }
 
-  .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 1.5px dashed var(--line); }
+  .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 1.5px dashed var(--line); background: var(--chip-3); }
   .controls .chip { font: 500 13px/1.6 var(--mono); cursor: pointer; margin: 0; }
   .controls .chip:hover { background: var(--chip-1); }
   .pips { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
-  .pips button { display: block; width: 10px; height: 10px; padding: 0; border: var(--edge); border-radius: 50%; background: #fff; cursor: pointer; }
+  .pips button { display: block; width: 10px; height: 10px; padding: 0; border: var(--edge); border-radius: 0; background: #fff; cursor: pointer; }
   .pips button[aria-current='true'] { background: var(--accent); }
 
   .rows { list-style: none; margin: 0; padding: 0; }

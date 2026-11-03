@@ -72,13 +72,14 @@ export const profileIcon: keyof typeof icons = 'headshot';
 export const email = 'rsthornton@gmail.com';
 export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 
-export const top8 = [
+export const top8: { title: string; note: string; tag: string; img: string; href: string; talk?: { label: string; href: string } }[] = [
   { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
   { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems' },
-  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems' },
+  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
+  { title: 'Hayekian Systems lab', note: 'anticipatory simulation', tag: 'app', img: 'hayek', href: 'https://lab-production-2e5e.up.railway.app', talk: { label: 'Markets & Society', href: 'https://www.marketsandsociety.org' } },
   { title: 'Information Processing Systems', note: 'visual essay', tag: 'page', img: 'ips', href: 'https://rsthornton.github.io/information-processing-systems/' },
   { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems' },
-  { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href },
+  { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
 
 export const meet = [
@@ -91,14 +92,16 @@ export const talks = [
   {
     date: '2026-10-26',
     venue: 'Markets & Society, Mercatus Center',
+    short: 'Markets & Society',
     place: 'Falls Church, VA',
     title: 'Building Infrastructure for Hayek: An Anticipatory Systems Simulation',
     href: 'https://www.marketsandsociety.org',
-    status: 'upcoming',
+    status: 'given',
   },
   {
     date: '2026-10-16',
     venue: 'Conference on Complex Systems (CCS 2026)',
+    short: 'CCS',
     place: 'Binghamton, NY',
     title: 'Eigenvector Centrality Reveals Structural Undervaluation in U.S. Interstate Commerce Networks',
     href: '/talks/ccs-2026',
@@ -107,6 +110,7 @@ export const talks = [
   {
     date: '2026-09-24',
     venue: 'Protocol Symposium 2026',
+    short: 'Protocol Symposium',
     place: 'online',
     title: 'Protocols are Systems',
     href: 'https://halcyonic.systems/protocols-are-systems/',
