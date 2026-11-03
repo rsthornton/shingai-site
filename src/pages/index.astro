@@ -1,12 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, headline, thesis, now, updated, links, email, callUrl, top8, icons, theories } from '../data/site';
+import { getCollection } from 'astro:content';
+import { name, headline, thesis, now, updated, links, email, callUrl, top8, icons, theories, thesisUrl, explorersUrl } from '../data/site';
 
 const x = links.find((l) => l.label === 'X')!.href;
 const github = links.find((l) => l.label === 'GitHub')!.href;
 // "[word]" marks a chip; split into text and chip parts
 const parts = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
 const variants = Object.entries(theories);
+const featured = top8.filter((t) => t.featured);
+const others = top8.length - featured.length;
+const essays = (await getCollection('archive')).length;
+const doors = [
+  { label: 'More projects', note: `${others} more`, href: '/projects' },
+  { label: 'Essays', note: `${essays} essays, 2019–23`, href: '/archive' },
+  { label: 'System Explorers', note: 'the newsletter archive', href: explorersUrl },
+  { label: 'Academic', note: 'MS thesis, 2026', href: thesisUrl || '/cv' },
+];
 const imIcon = icons.kid;
 const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
 ---
@@ -35,29 +45,24 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
     </section>
 
     <section aria-labelledby="work-h">
-      <div class="head"><h2 id="work-h">Work</h2><span class="count" id="reel-count">1 / {top8.length}</span></div>
-      <div class="reel box">
-        <ol class="track" id="reel-track" tabindex="0" aria-roledescription="carousel" aria-label="Work">
-          {top8.map((t, i) => (
-            <li class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${top8.length}`}>
-              <a href={t.href} tabindex="-1"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading={i < 3 ? 'eager' : 'lazy'} /></a>
-              <div class="cap">
-                <a class="t" href={t.href}>{t.title}</a>
-                <span class="tag">{t.note}</span>
-                {t.talk && <a class="talk" href={t.talk.href}>Talk: {t.talk.label}</a>}
-              </div>
-            </li>
-          ))}
-        </ol>
-        <div class="controls">
-          <button type="button" class="nav" id="reel-prev" aria-label="Previous project">← Prev</button>
-          <ol class="pips">
-            {top8.map((t, i) => <li><button type="button" data-i={i} aria-label={t.title} aria-current={i === 0 ? 'true' : 'false'}></button></li>)}
-          </ol>
-          <button type="button" class="nav" id="reel-next" aria-label="Next project">Next →</button>
-        </div>
-      </div>
+      <h2 id="work-h">Working on</h2>
+      <ul class="feature">
+        {featured.map((t) => (
+          <li>
+            <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" /></a>
+            <a class="t" href={t.href}>{t.title}</a>
+            <p>{t.blurb}</p>
+            {t.talk && <a class="talk" href={t.talk.href}>Talk: {t.talk.label}</a>}
+          </li>
+        ))}
+      </ul>
     </section>
+
+    <nav class="doors" aria-label="More">
+      {doors.map((d) => (
+        <a class="box" href={d.href}><span class="t">{d.label} →</span><span class="n">{d.note}</span></a>
+      ))}
+    </nav>
   </main>
 
   {import.meta.env.DEV && (
@@ -105,28 +110,6 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
       if (!pick) try { pick = localStorage.getItem('toc'); } catch (e) {}
       if (pick) showToc(pick);
       document.querySelectorAll('[data-toc-pick]').forEach(function (b) { b.addEventListener('click', function () { showToc(b.dataset.tocPick); }); });
-
-      var track = document.getElementById('reel-track'), count = document.getElementById('reel-count');
-      var pips = document.querySelectorAll('.pips button'), slides = track.querySelectorAll('.slide'), n = slides.length, cur = 0;
-      function go(i) { i = (i + n) % n; track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft }); }
-      function sync() {
-        var x = track.scrollLeft + slides[0].offsetLeft, i = 0, best = Infinity;
-        slides.forEach(function (s, j) { var d = Math.abs(s.offsetLeft - x); if (d < best) { best = d; i = j; } });
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 2) i = n - 1;
-        if (i === cur) return;
-        cur = i;
-        count.textContent = (i + 1) + ' / ' + n;
-        pips.forEach(function (b, j) { b.setAttribute('aria-current', j === i ? 'true' : 'false'); });
-      }
-      var raf;
-      track.addEventListener('scroll', function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); });
-      document.getElementById('reel-prev').addEventListener('click', function () { go(cur - 1); });
-      document.getElementById('reel-next').addEventListener('click', function () { go(cur + 1); });
-      pips.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.i); }); });
-      track.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
-      });
 
       // IM: the one way to message. Open by default on wide screens until closed once.
       var im = document.getElementById('im'), text = document.getElementById('im-text');
@@ -197,33 +180,26 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
     .portrait img { width: 240px; height: 240px; }
   }
 
-  .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
-  .head h2 { font: 600 1.6rem/1.2 var(--serif); margin: 0; }
-  .count { font: 13px var(--mono); color: var(--muted); }
-
-  .reel { overflow: hidden; }
-  .track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none; list-style: none; margin: 0; padding: 20px; }
-  .track::-webkit-scrollbar { display: none; }
-  .track:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
-  @media (prefers-reduced-motion: no-preference) { .track { scroll-behavior: smooth; } }
-  .slide { flex: 0 0 min(460px, 88%); scroll-snap-align: start; min-width: 0; }
-  @media (min-width: 900px) { .slide { flex-basis: calc((100% - 20px) / 2); } }
-  .slide:last-child { margin-right: 20px; }
-  .slide > a { display: block; border: var(--edge); border-radius: 4px; overflow: hidden; }
-  .slide img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
-  .slide > a:hover img { transform: scale(1.02); }
-  .cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding: 12px 2px 0; }
-  .cap .t { margin-right: auto; font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
-  .cap .t:hover { color: var(--accent); text-decoration: underline; }
-  .tag { font-size: 0.9rem; color: var(--muted); }
+  #work-h { font: 600 1.6rem/1.2 var(--serif); margin: 0 0 20px; }
+  .feature { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; list-style: none; margin: 0; padding: 0; }
+  @media (min-width: 700px) { .feature { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 32px; } }
+  .feature li { margin: 0; }
+  .shot { display: block; border: var(--edge); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
+  .shot:hover img { transform: scale(1.02); }
+  .feature .t { font: 600 1.25rem var(--serif); color: var(--ink); text-decoration: none; }
+  .feature .t:hover { color: var(--accent); text-decoration: underline; }
+  .feature p { margin: 4px 0 6px; color: var(--ink-2); }
   .talk { font-size: 0.9rem; }
 
-  .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 20px; border-top: var(--edge); background: var(--tint); }
-  .controls .nav { font: 500 14px var(--sans); color: var(--ink-2); background: none; border: 0; padding: 4px 0; cursor: pointer; }
-  .controls .nav:hover { color: var(--accent); text-decoration: underline; }
-  .pips { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
-  .pips button { display: block; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 0; background: var(--line); cursor: pointer; }
-  .pips button[aria-current='true'] { background: var(--accent); }
+  .doors { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  @media (min-width: 560px) { .doors { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .doors { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .doors a { display: flex; flex-direction: column; gap: 2px; padding: 16px 18px; text-decoration: none; color: var(--ink); }
+  .doors a:hover { border-color: var(--accent); }
+  .doors a:hover .t { color: var(--accent); }
+  .doors .t { font-weight: 600; }
+  .doors .n { font-size: 0.9rem; color: var(--muted); }
 
   .tocs { position: fixed; left: 16px; bottom: 60px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--paper); border: 1px solid var(--ink); border-radius: 8px; font: 500 12px var(--mono); }
   .tocs button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); cursor: pointer; }

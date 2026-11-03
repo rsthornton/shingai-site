@@ -81,15 +81,20 @@ export const profileIcon: keyof typeof icons = 'headshot';
 export const email = 'rsthornton@gmail.com';
 export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 
-export const top8: { title: string; note: string; tag: string; img: string; href: string; talk?: { label: string; href: string } }[] = [
+// featured: true puts a project on the home page (2 or 3 of them); the rest live on /projects
+export const top8: { title: string; note: string; tag: string; img: string; href: string; featured?: boolean; blurb?: string; talk?: { label: string; href: string } }[] = [
   { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
   { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems' },
-  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
+  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems', featured: true, blurb: 'Who depends on whom in U.S. interstate trade.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
   { title: 'Hayekian Systems lab', note: 'anticipatory simulation', tag: 'app', img: 'hayek', href: 'https://lab-production-2e5e.up.railway.app', talk: { label: 'Markets & Society', href: 'https://www.marketsandsociety.org' } },
   { title: 'Information Processing Systems', note: 'visual essay', tag: 'page', img: 'ips', href: 'https://rsthornton.github.io/information-processing-systems/' },
-  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems' },
+  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, blurb: 'A modeling instrument for systems science.' },
   { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
+
+// MS thesis on ProQuest: paste the link here once it's live; until then the Academic door opens the CV
+export const thesisUrl = '';
+export const explorersUrl = 'https://ideas.halcyonic.systems/archive';
 
 export const meet = [
   { who: 'Researchers', what: 'in systems science, category theory, or formal methods who want to compare notes.', action: 'Send a message', to: 'mail' },

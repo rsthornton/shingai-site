@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { name, updated } from '../data/site';
+import { name, updated, explorersUrl } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
@@ -20,6 +20,7 @@ const essays = (await getCollection('archive')).length;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const writing = [
   { label: 'Ideas', note: 'Substack, current', href: 'https://ideas.halcyonic.systems' },
+  { label: 'System Explorers', note: 'newsletter archive', href: explorersUrl },
   { label: 'Archive', note: `${essays} essays, 2019–23`, href: '/archive' },
 ];
 const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
@@ -50,6 +51,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
       <header class="top">
         <a class="logo" href="/">Shingai Thornton</a>
         <nav aria-label="Site">
+          <a href="/projects" aria-current={path.startsWith('/projects') ? 'page' : undefined}>Projects</a>
           <a href="/about" aria-current={path.startsWith('/about') ? 'page' : undefined}>About</a>
           <details class="menu">
             <summary aria-current={path.startsWith('/archive') ? 'page' : undefined}>Writing</summary>
