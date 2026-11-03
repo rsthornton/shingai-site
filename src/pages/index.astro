@@ -133,18 +133,18 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
 <style>
   main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 72px; }
 
-  .hello { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: center; }
+  .hello { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: center; }
   .hello h1 { font: 600 2.75rem/1.1 var(--serif); color: var(--ink); letter-spacing: -0.015em; margin: 0 0 24px; }
   .lede { font-size: 1.25rem; line-height: 1.75; color: var(--ink-2); margin: 0; max-width: 34em; }
   .lede[hidden] { display: none; }
-  .portrait { margin: 0; justify-self: start; }
+  .portrait { margin: 0; justify-self: start; order: -1; }
   .portrait img { display: block; width: 96px; height: 96px; image-rendering: pixelated; border-radius: 8px; }
 
   @media (min-width: 900px) {
     .hello { grid-template-columns: minmax(0, 1fr) auto; gap: 80px; padding: 8px 0; }
     .hello h1 { font-size: 3.75rem; }
     .lede { font-size: 1.35rem; }
-    .portrait { justify-self: end; }
+    .portrait { justify-self: end; order: 0; }
     .portrait img { width: 240px; height: 240px; }
   }
 
