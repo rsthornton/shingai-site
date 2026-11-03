@@ -50,6 +50,9 @@ mark { background: var(--mark); color: inherit; padding: 1px 3px; border-radius:
 .top nav { display: flex; gap: 24px; align-items: baseline; font-size: 15px; }
 .top nav a, .top summary { color: var(--ink-2); text-decoration: none; cursor: pointer; }
 .top nav a:hover, .top summary:hover, .top [aria-current='page'] { color: var(--accent); text-decoration: underline; }
+.top .social { display: flex; gap: 2px; align-self: center; margin-left: -8px; }
+.top .icon { display: grid; place-items: center; width: 30px; height: 30px; color: var(--ink-2); border-radius: 4px; }
+.top .icon:hover { color: var(--accent); background: var(--tint); }
 .menu { position: relative; }
 .menu summary { list-style: none; }
 .menu summary::-webkit-details-marker { display: none; }
