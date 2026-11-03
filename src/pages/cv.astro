@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, email, talks } from '../data/site';
+import { name, email, talks, thesisUrl } from '../data/site';
 
 const fmt = (d: string) =>
   new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -11,7 +11,8 @@ const education = [
     what: 'MS, Systems Science',
     where: 'Binghamton University (SUNY)',
     when: '2026',
-    note: 'Thesis: Testing Network Centrality for Economic Power Measurement: Structure and Boundaries in U.S. Interstate Trade. Advisor: Cliff Joslyn. Committee chair: Carlos Gershenson.',
+    thesis: 'Testing Network Centrality for Economic Power Measurement: Structure and Boundaries in U.S. Interstate Trade',
+    note: 'Advisor: Cliff Joslyn. Committee chair: Carlos Gershenson.',
   },
   { what: 'BA, Social Sciences (Psychology)', where: 'University of Southern California', when: '2012' },
 ];
@@ -57,6 +58,7 @@ const software = [
     {education.map((e) => (
       <li>
         <p class="row"><span><strong>{e.what}</strong>, {e.where}</span><span class="when">{e.when}</span></p>
+        {e.thesis && <p class="note">Thesis: <a href={thesisUrl}>{e.thesis}</a>.</p>}
         {e.note && <p class="note">{e.note}</p>}
       </li>
     ))}
