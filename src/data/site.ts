@@ -92,8 +92,8 @@ export const top8: { title: string; note: string; tag: string; img: string; href
   { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
 
-// MS thesis on ProQuest: paste the link here once it's live; until then the Academic door opens the CV
-export const thesisUrl = '';
+// MS thesis on ProQuest (Writing menu)
+export const thesisUrl = 'https://www.proquest.com/docview/3343535100';
 export const explorersUrl = 'https://ideas.halcyonic.systems/archive';
 
 export const meet = [
