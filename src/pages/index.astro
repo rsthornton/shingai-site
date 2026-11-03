@@ -1,35 +1,37 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, headline, thesis, now, links, email, callUrl, top8, talks, icons } from '../data/site';
+import { name, headline, thesis, now, updated, links, email, callUrl, top8, icons, theories } from '../data/site';
 
-const fmt = (d: string) =>
-  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toLowerCase();
-const reach = [
-  { label: 'message', href: '#im', im: true },
-  { label: 'book 20 min', href: callUrl },
-  { label: 'x', href: links.find((l) => l.label === 'X')!.href },
-  { label: 'github', href: links.find((l) => l.label === 'GitHub')!.href },
-];
+const x = links.find((l) => l.label === 'X')!.href;
+const github = links.find((l) => l.label === 'GitHub')!.href;
+// "[word]" marks a chip; split into text and chip parts
+const parts = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1, c: ((i - 1) / 2) % 3 + 1 }));
+const variants = Object.entries(theories);
 const imIcon = icons.kid;
+const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
 ---
 
 <BaseLayout title={name} description={`${headline} ${thesis}`}>
   <main>
     <section class="hello">
-      <img class="px" src={icons.headshot.pixel} width="56" height="56" alt="" />
-      <h1>Hi, I'm Shingai.</h1>
-      <!-- chip copy lives here, not in site.ts, while the design settles -->
-      <p class="lede">
-        I'm a PhD student in <span class="chip c1">systems science</span> at Binghamton.
-        I run <span class="chip">Halcyonic Systems</span>, a small lab for <span class="nobr"><span class="chip c2">formal systems research</span>.</span>
-      </p>
-      <p class="thesis">{thesis}</p>
-    </section>
-
-    <hr class="rule" />
-
-    <section class="now">
-      {now.map((l, i) => <p><span class={i === 0 ? 'dot' : 'dot off'} aria-hidden="true"></span>{i === 0 ? 'currently' : 'also'}: {l.replace(/\.$/, '')}</p>)}
+      <div class="intro">
+        <h1>Hi, I'm Shingai.</h1>
+        {variants.map(([k, v], i) => (
+          <p class="lede" data-toc={k} hidden={i !== 0}>{parts(v).map((p) => (p.chip ? <span class={`chip c${p.c}`}>{p.t}</span> : p.t))}</p>
+        ))}
+        <div class="reach">
+          <a class="chip book" href={callUrl}>book 20 min &gt;</a>
+          <a class="icon" href={x} aria-label="X">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a class="icon" href={github} aria-label="GitHub">
+            <svg viewBox="0 0 16 16" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+        </div>
+      </div>
+      <figure class="portrait box">
+        <img src={icons.headshot.pixel} width="64" height="64" alt="Shingai Thornton" />
+      </figure>
     </section>
 
     <section aria-labelledby="work-h">
@@ -38,7 +40,7 @@ const imIcon = icons.kid;
         <ol class="track" id="reel-track" tabindex="0" aria-roledescription="carousel" aria-label="Work">
           {top8.map((t, i) => (
             <li class="slide" aria-roledescription="slide" aria-label={`${i + 1} of ${top8.length}`}>
-              <a href={t.href} tabindex="-1"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading={i < 2 ? 'eager' : 'lazy'} /></a>
+              <a href={t.href} tabindex="-1"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading={i < 3 ? 'eager' : 'lazy'} /></a>
               <div class="cap">
                 <a class="t" href={t.href}>{t.title}</a>
                 <span class="chip tag">{t.note}</span>
@@ -55,22 +57,29 @@ const imIcon = icons.kid;
           <button type="button" class="chip" id="reel-next" aria-label="Next project">next &gt;</button>
         </div>
       </div>
-      <p class="spoken"><span class="label">spoken at:</span> {talks.map((t) => <a class="chip c2" href={t.href} title={t.title}>{t.short} · {fmt(t.date)}</a>)}</p>
-    </section>
-
-    <section>
-      <h2 class="label">say hi</h2>
-      <p class="reach">{reach.map((r) => <a class="chip" href={r.href} data-im={r.im ? '' : undefined}>{r.label} &gt;</a>)}</p>
     </section>
   </main>
+
+  {import.meta.env.DEV && (
+    <div class="tocs" aria-label="Theory of change draft (dev only)">
+      <span>draft</span>
+      {variants.map(([k], i) => <button type="button" data-toc-pick={k} aria-pressed={i === 0 ? 'true' : 'false'}>{k}</button>)}
+    </div>
+  )}
 
   <div class="im" id="im" data-open="false">
     <button type="button" class="im-tab" id="im-tab">IM shingai ▴</button>
     <div class="im-win box" id="im-form">
       <div class="im-bar"><span>IM — shingai</span><button type="button" class="im-x" id="im-x" aria-label="Close">×</button></div>
-      <div class="im-log"><img class="im-icon" src={imIcon.pixel} width="48" height="48" alt={imIcon.alt} /><p><span class="me">shingai:</span> hey, what are you working on?</p></div>
+      <div class="im-log">
+        <img class="im-icon" src={imIcon.pixel} width="48" height="48" alt={imIcon.alt} />
+        <div>
+          <p class="auto">auto response from shingai <span>· set {set}</span></p>
+          {now.map((l) => <p>{l}</p>)}
+        </div>
+      </div>
       <label class="sr" for="im-text">Message</label>
-      <textarea id="im-text" rows="4" placeholder="type a message…"></textarea>
+      <textarea id="im-text" rows="4" placeholder="leave a message…"></textarea>
       <div class="im-send" role="group" aria-labelledby="im-via">
         <span id="im-via">send with</span>
         <button type="button" class="chip" data-via="gmail">Gmail</button>
@@ -84,6 +93,19 @@ const imIcon = icons.kid;
 
   <script is:inline define:vars={{ email }}>
     (function () {
+      // theory-of-change drafts (dev switcher, or ?toc=B)
+      function showToc(k) {
+        var found = false;
+        document.querySelectorAll('[data-toc]').forEach(function (p) { var on = p.dataset.toc === k; p.hidden = !on; found = found || on; });
+        if (!found) return;
+        document.querySelectorAll('[data-toc-pick]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.tocPick === k ? 'true' : 'false'); });
+        try { localStorage.setItem('toc', k); } catch (e) {}
+      }
+      var pick = new URLSearchParams(location.search).get('toc');
+      if (!pick) try { pick = localStorage.getItem('toc'); } catch (e) {}
+      if (pick) showToc(pick);
+      document.querySelectorAll('[data-toc-pick]').forEach(function (b) { b.addEventListener('click', function () { showToc(b.dataset.tocPick); }); });
+
       var track = document.getElementById('reel-track'), count = document.getElementById('reel-count');
       var pips = document.querySelectorAll('.pips button'), slides = track.querySelectorAll('.slide'), n = slides.length, cur = 0;
       function go(i) { i = (i + n) % n; track.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft }); }
@@ -106,7 +128,7 @@ const imIcon = icons.kid;
         if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
       });
 
-      // IM: open by default on wide screens until the visitor closes it once
+      // IM: the one way to message. Open by default on wide screens until closed once.
       var im = document.getElementById('im'), text = document.getElementById('im-text');
       function setOpen(open, focus) {
         im.dataset.open = open ? 'true' : 'false';
@@ -117,9 +139,6 @@ const imIcon = icons.kid;
       document.getElementById('im-tab').addEventListener('click', function () { setOpen(true, true); });
       document.getElementById('im-x').addEventListener('click', function () {
         setOpen(false); try { localStorage.setItem('im:closed', '1'); } catch (e) {}
-      });
-      document.querySelectorAll('[data-im]').forEach(function (a) {
-        a.addEventListener('click', function (e) { e.preventDefault(); a.closest('details') && (a.closest('details').open = false); setOpen(true, true); });
       });
       if (location.hash === '#im') setOpen(true, true);
 
@@ -155,17 +174,28 @@ const imIcon = icons.kid;
 </BaseLayout>
 
 <style>
-  main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 64px; }
 
-  .px { image-rendering: pixelated; border-radius: 8px; border: var(--edge); display: block; background: #fff; }
-  .hello h1 { font: 700 3rem/1.1 var(--sans); color: var(--accent); letter-spacing: -0.03em; margin: 24px 0 20px; }
-  .lede { font-size: 1.3rem; line-height: 1.9; margin-bottom: 16px; }
-  .nobr { white-space: nowrap; }
-  .thesis { color: var(--ink-2); font-size: 1.05rem; margin: 0; }
+  .hello { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: center; }
+  .hello h1 { font: 700 3rem/1.1 var(--sans); color: var(--accent); letter-spacing: -0.03em; margin: 0 0 24px; }
+  .lede { font-size: 1.3rem; line-height: 1.95; margin: 0 0 28px; max-width: 34em; }
+  .lede[hidden] { display: none; }
+  .portrait { margin: 0; padding: 16px; justify-self: start; }
+  .portrait img { display: block; width: 96px; height: 96px; image-rendering: pixelated; border-radius: 4px; }
 
-  .now p { font: 14px/1.6 var(--mono); color: var(--ink-2); margin: 0 0 6px; }
-  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3fa66b; border: 1px solid var(--ink); margin-right: 10px; vertical-align: 0; }
-  .dot.off { background: transparent; border-color: transparent; }
+  .reach { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .book { font: 600 15px/1.7 var(--mono); padding: 4px 14px; margin: 0; background: var(--accent); color: #fff; border-color: var(--accent); text-decoration: none; }
+  .book:hover { text-decoration: underline; }
+  .icon { display: grid; place-items: center; width: 36px; height: 36px; box-sizing: border-box; border: var(--edge); border-radius: 4px; background: var(--paper); color: var(--ink); }
+  .icon:hover { background: var(--chip-1); }
+
+  @media (min-width: 900px) {
+    .hello { grid-template-columns: minmax(0, 1fr) auto; gap: 64px; padding: 24px 0 16px; }
+    .hello h1 { font-size: 4rem; }
+    .lede { font-size: 1.45rem; }
+    .portrait { justify-self: end; padding: 20px; }
+    .portrait img { width: 224px; height: 224px; }
+  }
 
   .head { display: flex; justify-content: space-between; }
 
@@ -175,21 +205,17 @@ const imIcon = icons.kid;
   .track:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
   @media (prefers-reduced-motion: no-preference) { .track { scroll-behavior: smooth; } }
   .slide { flex: 0 0 min(460px, 88%); scroll-snap-align: start; min-width: 0; }
+  @media (min-width: 900px) { .slide { flex-basis: calc((100% - 16px) / 2); } }
   .slide:last-child { margin-right: 16px; }
   .slide > a { display: block; border: var(--edge); border-radius: 4px; overflow: hidden; }
   .slide img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
   .slide > a:hover img { transform: scale(1.02); }
   .cap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 2px 0; }
-  .cap .t { margin-right: auto; }
-  .talk { font: 500 12px/1.6 var(--mono); background: var(--chip-1); text-decoration: none; margin: 0; }
-  .talk:hover { text-decoration: underline; }
-  .spoken { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0 0; }
-  .spoken .label { margin: 0 4px 0 0; }
-  .spoken .chip { font: 500 13px/1.6 var(--mono); text-decoration: none; margin: 0; }
-  .spoken .chip:hover { text-decoration: underline; }
-  .cap .t { font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+  .cap .t { margin-right: auto; font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
   .cap .t:hover { color: var(--accent); text-decoration: underline; }
   .tag { font: 12px/1.6 var(--mono); background: var(--chip-3); margin: 0; }
+  .talk { font: 500 12px/1.6 var(--mono); background: var(--chip-1); text-decoration: none; margin: 0; }
+  .talk:hover { text-decoration: underline; }
 
   .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 1.5px dashed var(--line); background: var(--chip-3); }
   .controls .chip { font: 500 13px/1.6 var(--mono); cursor: pointer; margin: 0; }
@@ -198,16 +224,9 @@ const imIcon = icons.kid;
   .pips button { display: block; width: 10px; height: 10px; padding: 0; border: var(--edge); border-radius: 0; background: #fff; cursor: pointer; }
   .pips button[aria-current='true'] { background: var(--accent); }
 
-  .rows { list-style: none; margin: 0; padding: 0; }
-  .rows li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 10px 0; border-bottom: 1.5px dashed var(--line); }
-  .rows li:first-child { border-top: 1.5px dashed var(--line); }
-  .rows a { color: var(--ink); text-decoration: none; font-weight: 500; }
-  .rows a:hover { color: var(--accent); text-decoration: underline; }
-  .rows .note { color: var(--muted); font-size: 0.9rem; text-align: right; flex-shrink: 0; max-width: 45%; }
-
-  .reach { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
-  .reach .chip { font: 500 15px/1.7 var(--mono); text-decoration: none; padding: 2px 12px; }
-  .reach .chip:hover { background: var(--chip-1); }
+  .tocs { position: fixed; left: 16px; bottom: 60px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--paper); border: var(--edge); border-radius: 8px; font: 500 12px var(--mono); }
+  .tocs button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); cursor: pointer; }
+  .tocs button[aria-pressed='true'] { background: var(--accent); color: #fff; border-color: var(--accent); }
 
   .im { position: fixed; right: 16px; bottom: 0; z-index: 10; }
   .im-tab { font: 600 13px var(--mono); color: #fff; background: var(--accent); border: var(--edge); border-bottom: 0; border-radius: 8px 8px 0 0; padding: 7px 14px; cursor: pointer; }
@@ -216,10 +235,11 @@ const imIcon = icons.kid;
   .im[data-open='true'] .im-win { display: block; }
   .im-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--accent); color: #fff; font: 600 13px var(--mono); }
   .im-x { background: none; border: 0; color: #fff; font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; }
-  .im-log { display: flex; gap: 10px; align-items: flex-start; margin: 12px 12px 8px; font-size: 14px; }
-  .im-log p { margin: 0; }
+  .im-log { display: flex; gap: 10px; align-items: flex-start; margin: 12px 12px 10px; font-size: 14px; line-height: 1.5; }
+  .im-log p { margin: 0 0 2px; }
+  .im-log .auto { font: 600 12px var(--mono); color: var(--accent); margin-bottom: 4px; }
+  .im-log .auto span { font-weight: 400; color: var(--muted); }
   .im-icon { flex: none; width: 48px; height: 48px; border: var(--edge); border-radius: 4px; image-rendering: pixelated; }
-  .im-log .me { color: var(--accent); font-weight: 600; }
   .im-win textarea { display: block; box-sizing: border-box; width: calc(100% - 24px); margin: 0 12px; font: 14px var(--sans); border: 1px solid var(--line); border-radius: 4px; padding: 8px; resize: vertical; }
   .im-send { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px 4px; font: 12px var(--mono); color: var(--muted); }
   .im-send span { flex-basis: 100%; }
@@ -230,7 +250,5 @@ const imIcon = icons.kid;
   @media (max-width: 520px) {
     .hello h1 { font-size: 2.4rem; }
     .lede { font-size: 1.15rem; }
-    .rows li { flex-direction: column; gap: 0; }
-    .rows .note { text-align: left; max-width: none; }
   }
 </style>

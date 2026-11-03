@@ -50,6 +50,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
       <header class="bar top">
         <a class="logo" href="/">shingai.</a>
         <nav aria-label="Site">
+          <a href="/about" aria-current={path.startsWith('/about') ? 'page' : undefined}>about&gt;</a>
           <details class="menu">
             <summary aria-current={path.startsWith('/archive') ? 'page' : undefined}>writing&gt;</summary>
             <ul class="box">
@@ -57,7 +58,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
             </ul>
           </details>
           <a href="/cv" aria-current={path.startsWith('/cv') ? 'page' : undefined}>cv&gt;</a>
-          <a href="/#im" data-im>im&gt;</a>
+
         </nav>
       </header>
 

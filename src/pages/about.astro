@@ -1,13 +1,42 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Shingai Thornton</title>
-    <meta http-equiv="refresh" content="0; url=/" />
-    <link rel="canonical" href="https://shingai.xyz/" />
-    <meta name="robots" content="noindex" />
-  </head>
-  <body>
-    <p>Moved to <a href="/">shingai.xyz</a>.</p>
-  </body>
-</html>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { name, headline, bio, talks } from '../data/site';
+
+const fmt = (d: string) =>
+  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toLowerCase();
+---
+
+<BaseLayout title={`About | ${name}`} description={headline} window="about" windowId="about">
+  <div class="prose">
+    <h1>About</h1>
+    <p class="lede">
+      I'm a PhD student in <span class="chip c1">systems science</span> at Binghamton University.
+      I run <span class="chip">Halcyonic Systems</span>, a small lab for <span class="nobr"><span class="chip c2">formal systems research</span>.</span>
+    </p>
+    <p>{bio}</p>
+
+    <h2>Talks</h2>
+    <ul class="talks">
+      {talks.map((t) => (
+        <li>
+          <span class="when">{fmt(t.date)}</span>
+          <a href={t.href}>{t.title}</a>
+          <span class="where">{t.venue}, {t.place}</span>
+        </li>
+      ))}
+    </ul>
+
+    <p class="more">Full record: <a href="/cv">cv&gt;</a></p>
+  </div>
+</BaseLayout>
+
+<style>
+  .lede { font-size: 1.15rem; line-height: 1.9; }
+  .nobr { white-space: nowrap; }
+  .talks { list-style: none; padding: 0; }
+  .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 0 12px; padding: 10px 0; border-bottom: 1.5px dashed var(--line); margin: 0; }
+  .talks .when { font: 13px/1.9 var(--mono); color: var(--muted); grid-row: span 2; }
+  .talks a { font-weight: 500; line-height: 1.45; }
+  .talks .where { font-size: 0.9rem; color: var(--muted); }
+  .more { font: 14px var(--mono); margin-top: 20px; }
+</style>

@@ -43,6 +43,15 @@ export const research = [
   },
 ];
 
+// Theory-of-change drafts (vault quest site-launch, 2026-10-23). Not chosen yet.
+// [brackets] mark the words set as chips.
+export const theories: Record<string, string> = {
+  A: 'Give people [rigorous, visual tools] to see the systems they live inside, built in the open by [small trusted teams], so that [understanding], not top-down control, shapes how society changes.',
+  B: '[Rigorous, visual tools], built in the open, that help us observe and influence the systems we live inside increase our capacity to [steer them toward what we value] and to [adapt to the unexpected].',
+  C: '[Open-source visual tools] that support rigorous systems reasoning and help us observe and influence the systems we live inside increase our capacity to [steer them toward what we value] and to [adapt to the unexpected].',
+  D: "We can't steer systems we can't see. I build [open-source tools] that make the systems we live inside [legible], so people can push them toward what they value and adapt when they surprise us. I think that happens [from the bottom up]: a few people who see clearly, working together, not a mandate from above.",
+};
+
 export const now = [
   'First year of the PhD.',
   'Reading Mac Lane, Mathematics Form and Function.',
