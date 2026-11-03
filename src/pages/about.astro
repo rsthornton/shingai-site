@@ -3,15 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { name, headline, bio, talks } from '../data/site';
 
 const fmt = (d: string) =>
-  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toLowerCase();
+  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 ---
 
 <BaseLayout title={`About | ${name}`} description={headline} window="about" windowId="about">
   <div class="prose">
     <h1>About</h1>
     <p class="lede">
-      I'm a PhD student in <span class="chip c1">systems science</span> at Binghamton University.
-      I run <span class="chip">Halcyonic Systems</span>, a small lab for <span class="nobr"><span class="chip c2">formal systems research</span>.</span>
+      I'm a PhD student in <mark>systems science</mark> at Binghamton University.
+      I run Halcyonic Systems, a small lab for <mark>formal systems research</mark>.
     </p>
     <p>{bio}</p>
 
@@ -26,17 +26,16 @@ const fmt = (d: string) =>
       ))}
     </ul>
 
-    <p class="more">Full record: <a href="/cv">cv&gt;</a></p>
+    <p class="more">Full record in the <a href="/cv">CV</a>.</p>
   </div>
 </BaseLayout>
 
 <style>
   .lede { font-size: 1.15rem; line-height: 1.9; }
-  .nobr { white-space: nowrap; }
   .talks { list-style: none; padding: 0; }
-  .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 0 12px; padding: 10px 0; border-bottom: 1.5px dashed var(--line); margin: 0; }
-  .talks .when { font: 13px/1.9 var(--mono); color: var(--muted); grid-row: span 2; }
+  .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 0 12px; padding: 12px 0; border-bottom: var(--edge); margin: 0; }
+  .talks .when { font: 14px/1.75 var(--sans); color: var(--muted); grid-row: span 2; }
   .talks a { font-weight: 500; line-height: 1.45; }
   .talks .where { font-size: 0.9rem; color: var(--muted); }
-  .more { font: 14px var(--mono); margin-top: 20px; }
+  .more { margin-top: 20px; }
 </style>

@@ -5,7 +5,7 @@ import { name, headline, thesis, now, updated, links, email, callUrl, top8, icon
 const x = links.find((l) => l.label === 'X')!.href;
 const github = links.find((l) => l.label === 'GitHub')!.href;
 // "[word]" marks a chip; split into text and chip parts
-const parts = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1, c: ((i - 1) / 2) % 3 + 1 }));
+const parts = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
 const variants = Object.entries(theories);
 const imIcon = icons.kid;
 const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
@@ -17,10 +17,10 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
       <div class="intro">
         <h1>Hi, I'm Shingai.</h1>
         {variants.map(([k, v], i) => (
-          <p class="lede" data-toc={k} hidden={i !== 0}>{parts(v).map((p) => (p.chip ? <span class={`chip c${p.c}`}>{p.t}</span> : p.t))}</p>
+          <p class="lede" data-toc={k} hidden={i !== 0}>{parts(v).map((p) => (p.chip ? <mark>{p.t}</mark> : p.t))}</p>
         ))}
         <div class="reach">
-          <a class="chip book" href={callUrl}>book 20 min &gt;</a>
+          <a class="book" href={callUrl}>Book 20 minutes</a>
           <a class="icon" href={x} aria-label="X">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
@@ -29,13 +29,13 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
           </a>
         </div>
       </div>
-      <figure class="portrait box">
+      <figure class="portrait">
         <img src={icons.headshot.pixel} width="64" height="64" alt="Shingai Thornton" />
       </figure>
     </section>
 
     <section aria-labelledby="work-h">
-      <div class="head"><h2 id="work-h" class="label">work</h2><span class="label" id="reel-count">1 / {top8.length}</span></div>
+      <div class="head"><h2 id="work-h">Work</h2><span class="count" id="reel-count">1 / {top8.length}</span></div>
       <div class="reel box">
         <ol class="track" id="reel-track" tabindex="0" aria-roledescription="carousel" aria-label="Work">
           {top8.map((t, i) => (
@@ -43,18 +43,18 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
               <a href={t.href} tabindex="-1"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading={i < 3 ? 'eager' : 'lazy'} /></a>
               <div class="cap">
                 <a class="t" href={t.href}>{t.title}</a>
-                <span class="chip tag">{t.note}</span>
-                {t.talk && <a class="chip talk" href={t.talk.href}>▶ {t.talk.label}</a>}
+                <span class="tag">{t.note}</span>
+                {t.talk && <a class="talk" href={t.talk.href}>Talk: {t.talk.label}</a>}
               </div>
             </li>
           ))}
         </ol>
         <div class="controls">
-          <button type="button" class="chip" id="reel-prev" aria-label="Previous project">&lt; prev</button>
+          <button type="button" class="nav" id="reel-prev" aria-label="Previous project">← Prev</button>
           <ol class="pips">
             {top8.map((t, i) => <li><button type="button" data-i={i} aria-label={t.title} aria-current={i === 0 ? 'true' : 'false'}></button></li>)}
           </ol>
-          <button type="button" class="chip" id="reel-next" aria-label="Next project">next &gt;</button>
+          <button type="button" class="nav" id="reel-next" aria-label="Next project">Next →</button>
         </div>
       </div>
     </section>
@@ -69,7 +69,7 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
 
   <div class="im" id="im" data-open="false">
     <button type="button" class="im-tab" id="im-tab">IM shingai ▴</button>
-    <div class="im-win box" id="im-form">
+    <div class="im-win" id="im-form">
       <div class="im-bar"><span>IM — shingai</span><button type="button" class="im-x" id="im-x" aria-label="Close">×</button></div>
       <div class="im-log">
         <img class="im-icon" src={imIcon.pixel} width="48" height="48" alt={imIcon.alt} />
@@ -82,10 +82,10 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
       <textarea id="im-text" rows="4" placeholder="leave a message…"></textarea>
       <div class="im-send" role="group" aria-labelledby="im-via">
         <span id="im-via">send with</span>
-        <button type="button" class="chip" data-via="gmail">Gmail</button>
-        <button type="button" class="chip" data-via="outlook">Outlook</button>
-        <button type="button" class="chip" data-via="app">Mail app</button>
-        <button type="button" class="chip" data-via="copy">Copy</button>
+        <button type="button" data-via="gmail">Gmail</button>
+        <button type="button" data-via="outlook">Outlook</button>
+        <button type="button" data-via="app">Mail app</button>
+        <button type="button" data-via="copy">Copy</button>
       </div>
       <p class="im-note" id="im-note" aria-live="polite">goes to {email}</p>
     </div>
@@ -146,7 +146,7 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
       function remember(v) { try { localStorage.setItem('im:via', v); } catch (e) {} }
       function marked() {
         var last = null; try { last = localStorage.getItem('im:via'); } catch (e) {}
-        document.querySelectorAll('[data-via]').forEach(function (b) { b.classList.toggle('c1', b.dataset.via === last); });
+        document.querySelectorAll('[data-via]').forEach(function (b) { b.classList.toggle('last', b.dataset.via === last); });
       }
       function copy(str, done) {
         if (navigator.clipboard) navigator.clipboard.writeText(str).then(done, function () { done(false); });
@@ -174,63 +174,64 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
 </BaseLayout>
 
 <style>
-  main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 64px; }
+  main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 72px; }
 
   .hello { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: center; }
-  .hello h1 { font: 700 3rem/1.1 var(--sans); color: var(--accent); letter-spacing: -0.03em; margin: 0 0 24px; }
-  .lede { font-size: 1.3rem; line-height: 1.95; margin: 0 0 28px; max-width: 34em; }
+  .hello h1 { font: 600 2.75rem/1.1 var(--serif); color: var(--ink); letter-spacing: -0.015em; margin: 0 0 24px; }
+  .lede { font-size: 1.25rem; line-height: 1.75; color: var(--ink-2); margin: 0 0 32px; max-width: 34em; }
   .lede[hidden] { display: none; }
-  .portrait { margin: 0; padding: 16px; justify-self: start; }
-  .portrait img { display: block; width: 96px; height: 96px; image-rendering: pixelated; border-radius: 4px; }
+  .portrait { margin: 0; justify-self: start; }
+  .portrait img { display: block; width: 96px; height: 96px; image-rendering: pixelated; border-radius: 8px; }
 
-  .reach { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-  .book { font: 600 15px/1.7 var(--mono); padding: 4px 14px; margin: 0; background: var(--accent); color: #fff; border-color: var(--accent); text-decoration: none; }
+  .reach { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+  .book { font-weight: 600; font-size: 15px; padding: 8px 16px; border-radius: 4px; background: var(--accent); color: #fff; text-decoration: none; }
   .book:hover { text-decoration: underline; }
-  .icon { display: grid; place-items: center; width: 36px; height: 36px; box-sizing: border-box; border: var(--edge); border-radius: 4px; background: var(--paper); color: var(--ink); }
-  .icon:hover { background: var(--chip-1); }
+  .icon { display: grid; place-items: center; width: 32px; height: 32px; color: var(--ink-2); border-radius: 4px; }
+  .icon:hover { color: var(--accent); background: var(--tint); }
 
   @media (min-width: 900px) {
-    .hello { grid-template-columns: minmax(0, 1fr) auto; gap: 64px; padding: 24px 0 16px; }
-    .hello h1 { font-size: 4rem; }
-    .lede { font-size: 1.45rem; }
-    .portrait { justify-self: end; padding: 20px; }
-    .portrait img { width: 224px; height: 224px; }
+    .hello { grid-template-columns: minmax(0, 1fr) auto; gap: 80px; padding: 8px 0; }
+    .hello h1 { font-size: 3.75rem; }
+    .lede { font-size: 1.35rem; }
+    .portrait { justify-self: end; }
+    .portrait img { width: 240px; height: 240px; }
   }
 
-  .head { display: flex; justify-content: space-between; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+  .head h2 { font: 600 1.6rem/1.2 var(--serif); margin: 0; }
+  .count { font: 13px var(--mono); color: var(--muted); }
 
-  .reel { overflow: hidden; background: var(--paper); }
-  .track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px; scrollbar-width: none; list-style: none; margin: 0; padding: 16px; }
+  .reel { overflow: hidden; }
+  .track { display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px; scrollbar-width: none; list-style: none; margin: 0; padding: 20px; }
   .track::-webkit-scrollbar { display: none; }
   .track:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
   @media (prefers-reduced-motion: no-preference) { .track { scroll-behavior: smooth; } }
   .slide { flex: 0 0 min(460px, 88%); scroll-snap-align: start; min-width: 0; }
-  @media (min-width: 900px) { .slide { flex-basis: calc((100% - 16px) / 2); } }
-  .slide:last-child { margin-right: 16px; }
+  @media (min-width: 900px) { .slide { flex-basis: calc((100% - 20px) / 2); } }
+  .slide:last-child { margin-right: 20px; }
   .slide > a { display: block; border: var(--edge); border-radius: 4px; overflow: hidden; }
   .slide img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
   .slide > a:hover img { transform: scale(1.02); }
-  .cap { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 2px 0; }
+  .cap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding: 12px 2px 0; }
   .cap .t { margin-right: auto; font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
   .cap .t:hover { color: var(--accent); text-decoration: underline; }
-  .tag { font: 12px/1.6 var(--mono); background: var(--chip-3); margin: 0; }
-  .talk { font: 500 12px/1.6 var(--mono); background: var(--chip-1); text-decoration: none; margin: 0; }
-  .talk:hover { text-decoration: underline; }
+  .tag { font-size: 0.9rem; color: var(--muted); }
+  .talk { font-size: 0.9rem; }
 
-  .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 1.5px dashed var(--line); background: var(--chip-3); }
-  .controls .chip { font: 500 13px/1.6 var(--mono); cursor: pointer; margin: 0; }
-  .controls .chip:hover { background: var(--chip-1); }
+  .controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 20px; border-top: var(--edge); background: var(--tint); }
+  .controls .nav { font: 500 14px var(--sans); color: var(--ink-2); background: none; border: 0; padding: 4px 0; cursor: pointer; }
+  .controls .nav:hover { color: var(--accent); text-decoration: underline; }
   .pips { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
-  .pips button { display: block; width: 10px; height: 10px; padding: 0; border: var(--edge); border-radius: 0; background: #fff; cursor: pointer; }
+  .pips button { display: block; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 0; background: var(--line); cursor: pointer; }
   .pips button[aria-current='true'] { background: var(--accent); }
 
-  .tocs { position: fixed; left: 16px; bottom: 60px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--paper); border: var(--edge); border-radius: 8px; font: 500 12px var(--mono); }
+  .tocs { position: fixed; left: 16px; bottom: 60px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--paper); border: 1px solid var(--ink); border-radius: 8px; font: 500 12px var(--mono); }
   .tocs button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); cursor: pointer; }
   .tocs button[aria-pressed='true'] { background: var(--accent); color: #fff; border-color: var(--accent); }
 
   .im { position: fixed; right: 16px; bottom: 0; z-index: 10; }
-  .im-tab { font: 600 13px var(--mono); color: #fff; background: var(--accent); border: var(--edge); border-bottom: 0; border-radius: 8px 8px 0 0; padding: 7px 14px; cursor: pointer; }
-  .im-win { display: none; width: min(320px, calc(100vw - 32px)); border-bottom: 0; border-radius: 8px 8px 0 0; overflow: hidden; }
+  .im-tab { font: 600 13px var(--mono); color: #fff; background: var(--accent); border: 1px solid var(--accent); border-bottom: 0; border-radius: 8px 8px 0 0; padding: 7px 14px; cursor: pointer; }
+  .im-win { display: none; width: min(320px, calc(100vw - 32px)); background: var(--paper); border: 1px solid var(--ink); border-bottom: 0; border-radius: 8px 8px 0 0; overflow: hidden; }
   .im[data-open='true'] .im-tab { display: none; }
   .im[data-open='true'] .im-win { display: block; }
   .im-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--accent); color: #fff; font: 600 13px var(--mono); }
@@ -239,12 +240,12 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
   .im-log p { margin: 0 0 2px; }
   .im-log .auto { font: 600 12px var(--mono); color: var(--accent); margin-bottom: 4px; }
   .im-log .auto span { font-weight: 400; color: var(--muted); }
-  .im-icon { flex: none; width: 48px; height: 48px; border: var(--edge); border-radius: 4px; image-rendering: pixelated; }
+  .im-icon { flex: none; width: 48px; height: 48px; border: 1px solid var(--ink); border-radius: 4px; image-rendering: pixelated; }
   .im-win textarea { display: block; box-sizing: border-box; width: calc(100% - 24px); margin: 0 12px; font: 14px var(--sans); border: 1px solid var(--line); border-radius: 4px; padding: 8px; resize: vertical; }
   .im-send { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px 4px; font: 12px var(--mono); color: var(--muted); }
   .im-send span { flex-basis: 100%; }
-  .im-send .chip { font: 500 13px/1.6 var(--mono); cursor: pointer; margin: 0; }
-  .im-send .chip:hover { background: var(--chip-1); }
+  .im-send button { font: 500 13px/1.6 var(--mono); color: var(--ink); background: var(--paper); border: 1px solid var(--ink); border-radius: 4px; padding: 0 8px; cursor: pointer; }
+  .im-send button:hover, .im-send button.last { background: var(--mark); }
   .im-note { margin: 0; padding: 4px 12px 12px; font: 12px var(--mono); color: var(--muted); overflow-wrap: anywhere; }
 
   @media (max-width: 520px) {
