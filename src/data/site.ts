@@ -76,8 +76,6 @@ export const icons = {
   kid: { pixel: '/images/icon/pixel.png', photo: '/images/icon/raw.jpg', alt: 'Shingai as a kid' },
 };
 // Profile icon; the other one shows in the IM window. Switch to 'kid' to swap them.
-export const profileIcon: keyof typeof icons = 'headshot';
-
 export const email = 'rsthornton@gmail.com';
 export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 
@@ -95,12 +93,6 @@ export const top8: { title: string; note: string; tag: string; img: string; href
 // MS thesis on ProQuest (Writing menu)
 export const thesisUrl = 'https://www.proquest.com/docview/3343535100';
 export const explorersUrl = 'https://ideas.halcyonic.systems/archive';
-
-export const meet = [
-  { who: 'Researchers', what: 'in systems science, category theory, or formal methods who want to compare notes.', action: 'Send a message', to: 'mail' },
-  { who: 'People with a hard problem', what: 'in a complex system (trade, finance, health, institutions) who want a modeler to think it through with them.', action: 'Book 20 minutes', to: 'call' },
-  { who: 'Builders', what: 'who want to use or extend open systems tools.', action: 'See GitHub', to: 'https://github.com/rsthornton' },
-];
 
 export const talks = [
   {
