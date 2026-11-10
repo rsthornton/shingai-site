@@ -23,7 +23,7 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
         <h1>{claim}</h1>
         <p class="lede">{parts.map((p) => (p.chip ? <mark>{p.t}</mark> : p.t))}</p>
       </div>
-      <figure class="portrait"><img src={icons.headshot.pixel} width="64" height="64" alt="Shingai Thornton" /></figure>
+      <figure class="portrait"><img src={icons.headshot.photo} width="512" height="512" alt="Shingai Thornton" /></figure>
     </section>
 
     <section aria-labelledby="work-h">
@@ -128,7 +128,7 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
   .a h1 { font: 600 2.4rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0 0 24px; }
   .a .lede { font-size: 1.15rem; line-height: 1.75; color: var(--ink-2); margin: 0; max-width: 34em; }
   .a .portrait { margin: 0; justify-self: start; order: -1; }
-  .a .portrait img { display: block; width: 96px; height: 96px; image-rendering: pixelated; border-radius: 8px; }
+  .a .portrait img { display: block; width: 96px; height: 96px; border-radius: 8px; }
   .a h2 { font: 600 1.6rem/1.2 var(--serif); margin: 0 0 20px; }
   .a .cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .a .shot { margin-bottom: 14px; }
