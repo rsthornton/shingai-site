@@ -1,0 +1,99 @@
+---
+// The IM window: the one way to message. Used by home options A and C.
+import { now, updated, email, icons } from '../data/site';
+const imIcon = icons.kid;
+const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
+---
+
+  <div class="im" id="im" data-open="false">
+    <button type="button" class="im-tab" id="im-tab">IM shingai ▴</button>
+    <div class="im-win" id="im-form">
+      <div class="im-bar"><span>IM — shingai</span><button type="button" class="im-x" id="im-x" aria-label="Close">×</button></div>
+      <div class="im-log">
+        <img class="im-icon" src={imIcon.pixel} width="48" height="48" alt={imIcon.alt} />
+        <div>
+          <p class="auto">auto response from shingai <span>· set {set}</span></p>
+          {now.map((l) => <p>{l}</p>)}
+        </div>
+      </div>
+      <label class="sr" for="im-text">Message</label>
+      <textarea id="im-text" rows="4" placeholder="leave a message…"></textarea>
+      <div class="im-send" role="group" aria-labelledby="im-via">
+        <span id="im-via">send with</span>
+        <button type="button" data-via="gmail">Gmail</button>
+        <button type="button" data-via="outlook">Outlook</button>
+        <button type="button" data-via="app">Mail app</button>
+        <button type="button" data-via="copy">Copy</button>
+      </div>
+      <p class="im-note" id="im-note" aria-live="polite">goes to {email}</p>
+    </div>
+  </div>
+
+
+  <script is:inline define:vars={{ email }}>
+    (function () {
+      // IM: the one way to message. Open by default on wide screens until closed once.
+      var im = document.getElementById('im'), text = document.getElementById('im-text');
+      function setOpen(open, focus) {
+        im.dataset.open = open ? 'true' : 'false';
+        if (open && focus) text.focus();
+      }
+      var closed = null; try { closed = localStorage.getItem('im:closed'); } catch (e) {}
+      if (!closed && window.matchMedia('(min-width: 900px)').matches) setOpen(true, false);
+      document.getElementById('im-tab').addEventListener('click', function () { setOpen(true, true); });
+      document.getElementById('im-x').addEventListener('click', function () {
+        setOpen(false); try { localStorage.setItem('im:closed', '1'); } catch (e) {}
+      });
+      if (location.hash === '#im') setOpen(true, true);
+
+      var note = document.getElementById('im-note'), subject = 'IM from shingai.xyz';
+      function remember(v) { try { localStorage.setItem('im:via', v); } catch (e) {} }
+      function marked() {
+        var last = null; try { last = localStorage.getItem('im:via'); } catch (e) {}
+        document.querySelectorAll('[data-via]').forEach(function (b) { b.classList.toggle('last', b.dataset.via === last); });
+      }
+      function copy(str, done) {
+        if (navigator.clipboard) navigator.clipboard.writeText(str).then(done, function () { done(false); });
+        else done(false);
+      }
+      var compose = {
+        gmail: function (s, b) { return 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(email) + '&su=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b); },
+        outlook: function (s, b) { return 'https://outlook.live.com/mail/0/deeplink/compose?to=' + encodeURIComponent(email) + '&subject=' + encodeURIComponent(s) + '&body=' + encodeURIComponent(b); },
+      };
+      document.querySelectorAll('[data-via]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var via = b.dataset.via, body = text.value;
+          remember(via); marked();
+          if (compose[via]) window.open(compose[via](subject, body), '_blank', 'noopener');
+          else if (via === 'app') window.location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          else copy(body ? body : email, function (ok) {
+            note.textContent = ok === false ? 'copy failed: write to ' + email
+              : body ? 'message copied: paste it into an email to ' + email : 'address copied: ' + email;
+          });
+        });
+      });
+      marked();
+    })();
+  </script>
+
+<style>
+  .im { position: fixed; right: 16px; bottom: 0; z-index: 10; }
+  .im-tab { font: 600 13px var(--mono); color: #fff; background: var(--accent); border: 1px solid var(--accent); border-bottom: 0; border-radius: 8px 8px 0 0; padding: 7px 14px; cursor: pointer; }
+  .im-win { display: none; width: min(320px, calc(100vw - 32px)); background: var(--paper); border: 1px solid var(--ink); border-bottom: 0; border-radius: 8px 8px 0 0; overflow: hidden; }
+  .im[data-open='true'] .im-tab { display: none; }
+  .im[data-open='true'] .im-win { display: block; }
+  .im-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 12px; background: var(--accent); color: #fff; font: 600 13px var(--mono); }
+  .im-x { background: none; border: 0; color: #fff; font-size: 18px; line-height: 1; cursor: pointer; padding: 0 2px; }
+  .im-log { display: flex; gap: 10px; align-items: flex-start; margin: 12px 12px 10px; font-size: 14px; line-height: 1.5; }
+  .im-log p { margin: 0 0 2px; }
+  .im-log .auto { font: 600 12px var(--mono); color: var(--accent); margin-bottom: 4px; }
+  .im-log .auto span { font-weight: 400; color: var(--muted); }
+  .im-icon { flex: none; width: 48px; height: 48px; border: 1px solid var(--ink); border-radius: 4px; image-rendering: pixelated; }
+  .im-win textarea { display: block; box-sizing: border-box; width: calc(100% - 24px); margin: 0 12px; font: 14px var(--sans); border: 1px solid var(--line); border-radius: 4px; padding: 8px; resize: vertical; }
+  .im-send { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px 4px; font: 12px var(--mono); color: var(--muted); }
+  .im-send span { flex-basis: 100%; }
+  .im-send button { font: 500 13px/1.6 var(--mono); color: var(--ink); background: var(--paper); border: 1px solid var(--ink); border-radius: 4px; padding: 0 8px; cursor: pointer; }
+  .im-send button:hover, .im-send button.last { background: var(--mark); }
+  .im-note { margin: 0; padding: 4px 12px 12px; font: 12px var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+
+</style>

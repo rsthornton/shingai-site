@@ -1,4 +1,4 @@
-export const updated = '2026-10-21';
+export const updated = '2026-11-10';
 
 export const name = 'Shingai Thornton';
 
@@ -43,14 +43,15 @@ export const research = [
   },
 ];
 
-// Theory-of-change drafts (vault quest site-launch, 2026-10-23). Not chosen yet.
-// [brackets] mark the words set as chips.
-export const theories: Record<string, string> = {
-  A: 'Give people [rigorous, visual tools] to see the systems they live inside, built in the open by [small trusted teams], so that [understanding], not top-down control, shapes how society changes.',
-  B: '[Rigorous, visual tools], built in the open, that help us observe and influence the systems we live inside increase our capacity to [steer them toward what we value] and to [adapt to the unexpected].',
-  C: '[Open-source visual tools] that support rigorous systems reasoning and help us observe and influence the systems we live inside increase our capacity to [steer them toward what we value] and to [adapt to the unexpected].',
-  D: "We can't steer systems we can't see. I build [open-source tools] that make the systems we live inside [legible], so people can push them toward what they value and adapt when they surprise us. I think that happens [from the bottom up]: a few people who see clearly, working together, not a mandate from above.",
-};
+// Which home page ships: 'a' statement, 'b' text index, 'c' profile and work. Preview all three in dev at /options/a, /b, /c.
+export const home: 'a' | 'b' | 'c' = 'a';
+
+// The big line on home option A.
+export const claim = 'Systems theorist and builder.';
+
+// The home paragraph. [brackets] mark the highlighted words (two or three).
+export const lede =
+  "I'm a PhD student in [systems science] at Binghamton University. I run Halcyonic Systems, a small lab for [formal systems research], and build [open-source tools] for modeling real systems.";
 
 export const now = [
   'First year of the PhD.',
@@ -79,14 +80,14 @@ export const icons = {
 export const email = 'rsthornton@gmail.com';
 export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 
-// featured: true puts a project on the home page (2 or 3 of them); the rest live on /projects
-export const top8: { title: string; note: string; tag: string; img: string; href: string; featured?: boolean; blurb?: string; talk?: { label: string; href: string } }[] = [
-  { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
+// featured: true puts a project on the home page (three fit), with a one-word kind and a one-line blurb; /projects lists all of them
+export const top8: { title: string; note: string; tag: string; img: string; href: string; featured?: boolean; kind?: string; blurb?: string; talk?: { label: string; href: string } }[] = [
+  { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/', featured: true, kind: 'theory', blurb: 'What the traditions’ definitions of “system” share, formalized in Lean.' },
   { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems' },
-  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems', featured: true, blurb: 'Who depends on whom in U.S. interstate trade.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
+  { title: 'ustradeflow', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://ustradeflow.systems', featured: true, kind: 'empirical', blurb: 'Who depends on whom in U.S. interstate trade.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
   { title: 'Hayekian Systems lab', note: 'anticipatory simulation', tag: 'app', img: 'hayek', href: 'https://lab-production-2e5e.up.railway.app', talk: { label: 'Markets & Society', href: 'https://www.marketsandsociety.org' } },
   { title: 'Information Processing Systems', note: 'visual essay', tag: 'page', img: 'ips', href: 'https://rsthornton.github.io/information-processing-systems/' },
-  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, blurb: 'A modeling instrument for systems science.' },
+  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, kind: 'tool', blurb: 'A modeling instrument for systems science.' },
   { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
 
