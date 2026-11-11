@@ -85,12 +85,6 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
     </footer>
 
     {import.meta.env.DEV && (
-      <div class="themes opts" aria-label="Home layout (dev only)">
-        <span>home</span>
-        {['a', 'b', 'c'].map((v) => <a href={`/options/${v}`} aria-current={path === `/options/${v}` ? 'page' : undefined}>{v.toUpperCase()}</a>)}
-      </div>
-    )}
-    {import.meta.env.DEV && (
       <div class="themes" aria-label="Background (dev only)">
         {['white', 'gray', 'fog', 'sage'].map((t) => <button type="button" data-theme-pick={t}>{t}</button>)}
       </div>

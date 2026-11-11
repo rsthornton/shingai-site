@@ -43,19 +43,12 @@ export const research = [
   },
 ];
 
-// Which home page ships: 'a' statement, 'b' text index, 'c' profile and work. Preview all three in dev at /options/a, /b, /c.
-export const home: 'a' | 'b' | 'c' = 'a';
-
-// The big line on home option A.
+// The big line on home.
 export const claim = 'Systems theorist and builder.';
 
-// The theory of change, shown under the big line on home option A. Empty until Shingai has one in his own words;
+// The theory of change, shown under the big line on home. Empty until Shingai has one in his own words;
 // nothing shows while it is empty. [brackets] mark highlighted words (two or three).
 export const theory = '';
-
-// The paragraph on home options B and C. [brackets] mark the highlighted words (two or three).
-export const lede =
-  "I'm a PhD student in [systems science] at Binghamton University. I run Halcyonic Systems, a small lab for [formal systems research], and build [open-source tools] for modeling real systems.";
 
 export const now = [
   'First year of the PhD.',

@@ -1,5 +1,5 @@
 ---
-// The IM window: the one way to message. Used by home options A and C.
+// The IM window: the one way to message, on home only. It starts closed.
 import { now, updated, email, icons } from '../data/site';
 const imIcon = icons.kid;
 const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toLowerCase();
@@ -32,18 +32,14 @@ const set = new Date(updated + 'T12:00:00').toLocaleDateString('en-US', { month:
 
   <script is:inline define:vars={{ email }}>
     (function () {
-      // IM: the one way to message. Open by default on wide screens until closed once.
+      // IM: the one way to message. Closed until the tab is clicked (or the page is opened at #im).
       var im = document.getElementById('im'), text = document.getElementById('im-text');
       function setOpen(open, focus) {
         im.dataset.open = open ? 'true' : 'false';
         if (open && focus) text.focus();
       }
-      var closed = null; try { closed = localStorage.getItem('im:closed'); } catch (e) {}
-      if (!closed && window.matchMedia('(min-width: 900px)').matches) setOpen(true, false);
       document.getElementById('im-tab').addEventListener('click', function () { setOpen(true, true); });
-      document.getElementById('im-x').addEventListener('click', function () {
-        setOpen(false); try { localStorage.setItem('im:closed', '1'); } catch (e) {}
-      });
+      document.getElementById('im-x').addEventListener('click', function () { setOpen(false); });
       if (location.hash === '#im') setOpen(true, true);
 
       var note = document.getElementById('im-note'), subject = 'IM from shingai.xyz';
