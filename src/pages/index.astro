@@ -2,14 +2,14 @@
 // Home: one big claim (and the theory of change once there is one), then the featured projects.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Im from '../components/Im.astro';
-import { name, headline, thesis, claim, theory, top8 } from '../data/site';
+import { name, headline, claim, theory, top8 } from '../data/site';
 
 // "[word]" marks a highlight; split into text and highlighted parts
 const parts = theory.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
 const featured = top8.filter((t) => t.featured);
 ---
 
-<BaseLayout title={name} description={`${headline} ${thesis}`}>
+<BaseLayout title={name} description={headline}>
   <main>
     <section class="hello">
       <h1>{claim}</h1>

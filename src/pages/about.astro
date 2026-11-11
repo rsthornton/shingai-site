@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, headline, bio, talks, callUrl, icons } from '../data/site';
+import { name, headline, talks, callUrl, icons } from '../data/site';
 
 const fmt = (d: string) =>
   new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -14,7 +14,6 @@ const fmt = (d: string) =>
       I'm a PhD student in <mark>systems science</mark> at Binghamton University.
       I run Halcyonic Systems, a small lab for <mark>formal systems research</mark>.
     </p>
-    <p>{bio}</p>
     <p>Degrees, positions and papers are in the <a href="/cv">CV</a>. Want to talk? <a href={callUrl}>Book 20 minutes</a>.</p>
 
     <h2 id="talks">Talks</h2>

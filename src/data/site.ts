@@ -5,11 +5,6 @@ export const name = 'Shingai Thornton';
 export const headline =
   'PhD student in Systems Science at Binghamton University. I run Halcyonic Systems, a small lab for formal systems research.';
 
-export const bio =
-  'Political economy, then crypto, then systems science. The field is fragmented; I work on what its traditions share.';
-
-export const thesis = 'The field is fragmented; I work on what its traditions share.';
-
 export const research = [
   {
     title: 'Common core',
