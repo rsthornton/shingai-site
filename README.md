@@ -31,7 +31,7 @@ src/
 │   ├── site.ts            # all copy: the big line, theory of change, projects, talks, links, away message
 │   └── ccs-2026-abstract.json
 ├── components/Im.astro    # the IM window
-├── layouts/BaseLayout.astro   # head, OG tags, header, footer, dev-only background picker
+├── layouts/BaseLayout.astro   # head, OG tags, header, footer
 ├── pages/
 │   ├── index.astro        # home
 │   ├── projects.astro
@@ -60,8 +60,6 @@ Most changes are one edit to `src/data/site.ts`.
 | Add a talk | add to `talks` (newest first, `status: 'upcoming' \| 'given'`). For a talk page, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
 | Change links | `links` (X, GitHub), `callUrl` (Book 20 minutes, on About), `email`, `thesisUrl` (ProQuest), `explorersUrl` |
 
-Dev-only tool, absent from the build: the background picker (white, gray, fog, sage; also `?theme=`).
-
 ## Trying a new design
 
 There is one home page and one version of each thing. To try a different direction, make a branch, change it there, and merge it or delete it; do not keep alternatives side by side in `main`. Earlier directions stay in git history if one is wanted back: a text-only index and a profile-with-sidebar home are in commit `5416f11` (`src/components/Home.astro`), and the theory-of-change drafts are in `c45dee3` (`src/data/site.ts`).
@@ -70,7 +68,7 @@ Email: the IM window never relies on a mail app alone. It offers Gmail, Outlook,
 
 ## Style rules
 
-White page, one navy accent, one highlight color. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only in the IM window and small counters. Borders only where a box means something (the IM window, project screenshots, menus). Corners 8px for boxes, 4px inside them. No shadows, no beige. Colors come from the tokens in `global.css`.
+Pale gray-blue page (`--page`), white boxes, one navy accent, one highlight color. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only in the IM window and small counters. Borders only where a box means something (the IM window, project screenshots, menus). Corners 8px for boxes, 4px inside them. No shadows, no beige. Colors come from the tokens in `global.css`.
 
 ## Archive import
 

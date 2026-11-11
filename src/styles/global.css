@@ -1,4 +1,4 @@
-/* Restraint: white page, one navy accent, one highlight color. Boxes only where a box means something
+/* Restraint: pale gray-blue page, one navy accent, one highlight color. Boxes only where a box means something
    (the IM window, the carousel). Serif headings, sans body, mono only for small machine bits. Light only, R8 corners, no shadows. */
 :root {
   --paper: #ffffff;
@@ -8,16 +8,12 @@
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
-  /* theme: default is "white"; [data-theme] below overrides */
-  --page: #ffffff;
-  --line: #e1e5ea;
-  --accent: #1d3557;
-  --mark: #e3ebf5;         /* the one highlight color */
-  --tint: #f4f6f9;         /* quiet fills: carousel controls, hovers */
+  --page: #edf1f6;         /* pale gray-blue; cards and boxes stay white (--paper) */
+  --line: #cdd6e1;
+  --accent: #1e3a8a;
+  --mark: #d6e2f5;         /* the one highlight color */
+  --tint: #e8edf4;         /* quiet fills: hovers */
 }
-:root[data-theme='gray']  { --page: #f4f5f7; --line: #d4d8de; --accent: #1f3a5f; --mark: #dbe4ee; --tint: #ebedf0; }
-:root[data-theme='fog']   { --page: #edf1f6; --line: #cdd6e1; --accent: #1e3a8a; --mark: #d6e2f5; --tint: #e8edf4; }
-:root[data-theme='sage']  { --page: #f1f4f2; --line: #cfd8d2; --accent: #1f4237; --mark: #dbe8e1; --tint: #e9ecea; }
 :root { --link: var(--accent); --edge: 1px solid var(--line); }
 
 html {
@@ -99,7 +95,3 @@ mark { background: var(--mark); color: inherit; padding: 1px 3px; border-radius:
 
 @view-transition { navigation: auto; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 150ms; }
-
-/* dev-only switchers */
-.themes { position: fixed; left: 16px; bottom: 16px; z-index: 20; display: flex; gap: 6px; padding: 6px; background: var(--paper); border: 1px solid var(--ink); border-radius: 8px; font: 500 12px var(--mono); }
-.themes button { font: inherit; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--page); color: var(--ink); cursor: pointer; }
