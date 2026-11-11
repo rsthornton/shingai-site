@@ -49,7 +49,11 @@ export const home: 'a' | 'b' | 'c' = 'a';
 // The big line on home option A.
 export const claim = 'Systems theorist and builder.';
 
-// The home paragraph. [brackets] mark the highlighted words (two or three).
+// The theory of change, shown under the big line on home option A. Empty until Shingai has one in his own words;
+// nothing shows while it is empty. [brackets] mark highlighted words (two or three).
+export const theory = '';
+
+// The paragraph on home options B and C. [brackets] mark the highlighted words (two or three).
 export const lede =
   "I'm a PhD student in [systems science] at Binghamton University. I run Halcyonic Systems, a small lab for [formal systems research], and build [open-source tools] for modeling real systems.";
 
@@ -83,11 +87,11 @@ export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 // featured: true puts a project on the home page (three fit), with a one-word kind and a one-line blurb; /projects lists all of them
 export const top8: { title: string; note: string; tag: string; img: string; href: string; featured?: boolean; kind?: string; blurb?: string; talk?: { label: string; href: string } }[] = [
   { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
-  { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems', featured: true, kind: 'theory', blurb: 'Definitions of “system”, sourced and mapped to each other.' },
-  { title: 'State Power', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://statepower.systems', featured: true, kind: 'empirical', blurb: 'Who depends on whom in U.S. interstate trade.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
+  { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems', featured: true, kind: 'theory', blurb: 'Formal definitions of “system,” and the maps between them.' },
+  { title: 'State Power', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://statepower.systems', featured: true, kind: 'empirical', blurb: 'GDP is not equivalent to economic power.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
   { title: 'Hayekian Systems lab', note: 'anticipatory simulation', tag: 'app', img: 'hayek', href: 'https://lab-production-2e5e.up.railway.app', talk: { label: 'Markets & Society', href: 'https://www.marketsandsociety.org' } },
   { title: 'Information Processing Systems', note: 'visual essay', tag: 'page', img: 'ips', href: 'https://rsthornton.github.io/information-processing-systems/' },
-  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, kind: 'tool', blurb: 'A modeling instrument for systems science.' },
+  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, kind: 'tool', blurb: 'A shared language for all systems.' },
   { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
 

@@ -10,7 +10,7 @@ const rest = [...top8.filter((t) => t.featured), ...top8.filter((t) => !t.featur
   <ul class="grid">
     {rest.map((t) => (
       <li>
-        <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" loading="lazy" /></a>
+        <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" loading="lazy" /></a>
         <a class="t" href={t.href}>{t.title}</a>
         <span class="tag">{t.note}</span>
         {t.talk && <a class="talk" href={t.talk.href}>Talk: {t.talk.label}</a>}

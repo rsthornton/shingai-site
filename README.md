@@ -41,7 +41,7 @@ src/
 └── styles/global.css      # color tokens, header, footer, prose styles
 public/
 ├── images/icon/           # headshot and IM icons
-├── images/top8/           # project screenshots, 480×300
+├── images/top8/           # project screenshots, 960×600
 └── talks/                 # slide PDFs
 ```
 
@@ -54,7 +54,7 @@ Most changes are one edit to `src/data/site.ts`.
 | Change the home paragraph | edit `lede`. Wrap a word in `[brackets]` to highlight it; two or three |
 | Change the home layout | set `home` to `'a'`, `'b'` or `'c'`. In dev, `/options/a`, `/b` and `/c` preview each; `claim` is the big line on A |
 | Feature a project on home | `featured: true` and a one-line `blurb` on its `top8` entry. Give it a one-word `kind` too. Three fit side by side |
-| Add a project | add to `top8` with a 480×300 screenshot at `public/images/top8/<img>.jpg`. An optional `talk` adds a "Talk: …" link under it |
+| Add a project | add to `top8` with a 960×600 screenshot at `public/images/top8/<img>.jpg`. An optional `talk` adds a "Talk: …" link under it |
 | Update the away message | `now` lines, and bump `updated` (it shows as "set …" in the IM window) |
 | Add a talk | add to `talks` (newest first, `status: 'upcoming' \| 'given'`). For a talk page, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
 | Change links | `links` (X, GitHub), `callUrl` (Book 20 minutes, on About), `email`, `thesisUrl` (ProQuest), `explorersUrl` |

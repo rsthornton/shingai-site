@@ -1,16 +1,17 @@
 ---
 // The home page in three layouts. `home` in site.ts picks the one that ships.
-//   a: statement. One big claim, the paragraph, three projects with screenshots.
+//   a: statement. One big claim (and the theory of change once there is one), three projects with screenshots.
 //   b: index. Text only: the paragraph, then every project and talk as rows.
 //   c: profile. Who on the left, the work stacked large on the right.
 import Im from './Im.astro';
-import { claim, lede, bio, top8, talks, callUrl, email, icons } from '../data/site';
+import { claim, theory, lede, bio, top8, talks, callUrl, email, icons } from '../data/site';
 
 interface Props { variant: 'a' | 'b' | 'c' }
 const { variant } = Astro.props;
 
 // "[word]" marks a highlight; split into text and highlighted parts
-const parts = lede.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
+const split = (s: string) => s.split(/\[([^\]]+)\]/).map((t, i) => ({ t, chip: i % 2 === 1 }));
+const parts = split(lede);
 const featured = top8.filter((t) => t.featured);
 const ordered = [...featured, ...top8.filter((t) => !t.featured)];
 const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -19,11 +20,8 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
 {variant === 'a' && (
   <main class="a">
     <section class="hello">
-      <div>
-        <h1>{claim}</h1>
-        <p class="lede">{parts.map((p) => (p.chip ? <mark>{p.t}</mark> : p.t))}</p>
-      </div>
-      <figure class="portrait"><img src={icons.headshot.photo} width="512" height="512" alt="Shingai Thornton" /></figure>
+      <h1>{claim}</h1>
+      {theory && <p class="lede">{split(theory).map((p) => (p.chip ? <mark>{p.t}</mark> : p.t))}</p>}
     </section>
 
     <section aria-labelledby="work-h">
@@ -31,7 +29,7 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
       <ul class="cards">
         {featured.map((t) => (
           <li>
-            <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" /></a>
+            <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" /></a>
             <span class="kind">{t.kind}</span>
             <a class="t" href={t.href}>{t.title}</a>
             <p>{t.blurb}</p>
@@ -93,7 +91,7 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
       <ul class="stack">
         {featured.map((t) => (
           <li>
-            <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="480" height="300" alt="" /></a>
+            <a href={t.href} class="shot"><img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" /></a>
             <div>
               <span class="kind">{t.kind}</span>
               <a class="t" href={t.href}>{t.title}</a>
@@ -123,12 +121,9 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
   li { margin: 0; }
 
   /* a: statement */
-  .a { display: grid; grid-template-columns: minmax(0, 1fr); gap: 72px; }
-  .a .hello { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: center; }
-  .a h1 { font: 600 2.4rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0 0 24px; }
-  .a .lede { font-size: 1.15rem; line-height: 1.75; color: var(--ink-2); margin: 0; max-width: 34em; }
-  .a .portrait { margin: 0; justify-self: start; order: -1; }
-  .a .portrait img { display: block; width: 96px; height: 96px; border-radius: 8px; }
+  .a { display: grid; grid-template-columns: minmax(0, 1fr); gap: 64px; }
+  .a h1 { font: 600 2.4rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0; }
+  .a .lede { font-size: 1.15rem; line-height: 1.75; color: var(--ink-2); margin: 24px 0 0; max-width: 34em; }
   .a h2 { font: 600 1.6rem/1.2 var(--serif); margin: 0 0 20px; }
   .a .cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .a .shot { margin-bottom: 14px; }
@@ -136,11 +131,8 @@ const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
   .a .more { margin-top: 36px; }
   @media (min-width: 700px) { .a .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; } }
   @media (min-width: 900px) {
-    .a .hello { grid-template-columns: minmax(0, 1fr) auto; gap: 80px; padding: 8px 0; }
     .a h1 { font-size: 3.75rem; }
     .a .lede { font-size: 1.35rem; }
-    .a .portrait { justify-self: end; order: 0; }
-    .a .portrait img { width: 200px; height: 200px; }
   }
 
   /* b: index */
