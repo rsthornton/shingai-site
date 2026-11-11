@@ -74,12 +74,12 @@ export const callUrl = 'https://calendly.com/shingaithornton/new-meeting';
 
 // featured: true puts a project on the home page (three fit), with a one-word kind and a one-line blurb; /projects lists all of them
 export const top8: { title: string; note: string; tag: string; img: string; href: string; featured?: boolean; kind?: string; blurb?: string; talk?: { label: string; href: string } }[] = [
-  { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
-  { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems', featured: true, kind: 'theory', blurb: 'Formal definitions of “system,” and the maps between them.' },
+  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, kind: 'tool', blurb: 'A shared language for all systems.' },
   { title: 'State Power', note: 'interstate trade', tag: 'data', img: 'trade', href: 'https://statepower.systems', featured: true, kind: 'empirical', blurb: 'GDP is not equivalent to economic power.', talk: { label: 'CCS 2026', href: '/talks/ccs-2026' } },
+  { title: 'math.systems', note: 'definition atlas', tag: 'atlas', img: 'atlas', href: 'https://math.systems', featured: true, kind: 'theory', blurb: 'Formal definitions of “system,” and the maps between them.' },
+  { title: 'What is a system?', note: 'interactive Lean doc', tag: 'lean', img: 'wias', href: 'https://halcyonic.systems/what-is-a-system/' },
   { title: 'Hayekian Systems lab', note: 'anticipatory simulation', tag: 'app', img: 'hayek', href: 'https://lab-production-2e5e.up.railway.app', talk: { label: 'Markets & Society', href: 'https://www.marketsandsociety.org' } },
   { title: 'Information Processing Systems', note: 'visual essay', tag: 'page', img: 'ips', href: 'https://rsthornton.github.io/information-processing-systems/' },
-  { title: 'Facets', note: 'modeling instrument', tag: 'app', img: 'facets', href: 'https://facets.systems', featured: true, kind: 'tool', blurb: 'A shared language for all systems.' },
   { title: 'Protocols are systems', note: 'symposium talk', tag: 'talk', img: 'protocols', href: research[4].href, talk: { label: 'Protocol Symposium', href: research[4].href } },
 ];
 
