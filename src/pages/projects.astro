@@ -5,7 +5,7 @@ import { name, top8 } from '../data/site';
 const rest = [...top8.filter((t) => t.featured), ...top8.filter((t) => !t.featured)];
 ---
 
-<BaseLayout title={`Projects | ${name}`} description="Projects by Shingai Thornton." window="projects">
+<BaseLayout title={`Projects | ${name}`} description="Projects by Shingai Thornton.">
   <h1>Projects</h1>
   <ul class="grid">
     {rest.map((t) => (
@@ -24,6 +24,7 @@ const rest = [...top8.filter((t) => t.featured), ...top8.filter((t) => !t.featur
   .intro { color: var(--ink-2); margin-bottom: 32px; }
   .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px 24px; list-style: none; margin: 0; padding: 0; }
   @media (min-width: 560px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 28px; } }
   .grid li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; margin: 0; }
   .shot { flex-basis: 100%; display: block; border: var(--edge); border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
   .shot img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; }
