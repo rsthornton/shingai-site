@@ -1,0 +1,252 @@
+---
+// Dev mode toolbar. BaseLayout renders it only under `npm run dev`; production never contains it.
+// It overrides src/data/site.ts `look` live (kept in localStorage so every page follows), flips home's
+// drawing through the shortlist or the whole library (← → keys too), and copies a `look` line to paste
+// back into site.ts when a choice should become permanent.
+import { drawings, shortlist } from '../art/registry';
+import { look } from '../data/site';
+
+const lists = {
+  shortlist: shortlist.map((d) => ({ id: d.id, title: d.title, lineage: d.lineage })),
+  all: drawings.map((d) => ({ id: d.id, title: d.title, lineage: d.lineage })),
+};
+---
+
+<div class="lab" role="region" aria-label="Dev mode toolbar">
+  <span class="tag">dev</span>
+  <span class="drawing">
+    <select data-set="set" aria-label="Which drawings">
+      <option value="shortlist">shortlist</option>
+      <option value="all">all</option>
+    </select>
+    <button type="button" data-step="-1" aria-label="Previous drawing">
+      ‹
+    </button>
+    <span class="now">
+      <b data-lab="n"></b> <span data-lab="title"></span>
+    </span>
+    <button type="button" data-step="1" aria-label="Next drawing">
+      ›
+    </button>
+  </span>
+  <label>
+    color{' '}
+    <select data-set="palette">
+      <option>navy</option>
+      <option>frost</option>
+      <option>teal</option>
+      <option>plum</option>
+    </select>
+  </label>
+  <label>
+    drawing{' '}
+    <select data-set="ink">
+      <option value="color">in color</option>
+      <option value="mono">one color</option>
+    </select>
+  </label>
+  <label>
+    heading{' '}
+    <select data-set="heading">
+      <option>ink</option>
+      <option>accent</option>
+    </select>
+  </label>
+  <label class="intro">
+    intro{' '}
+    <select data-set="intro">
+      <option value="who">who</option>
+      <option value="working">working on</option>
+      <option value="work-first">work first</option>
+      <option value="line">line only</option>
+    </select>
+  </label>
+  <a href="/lab">library</a>
+  <button type="button" class="copy" data-copy>
+    copy look
+  </button>
+  <button type="button" class="reset" data-reset title="Forget the toolbar's choices and show site.ts look">
+    reset
+  </button>
+</div>
+
+<script is:inline define:vars={{ lists, look }}>
+  (function () {
+    var root = document.documentElement;
+    var q = new URLSearchParams(location.search);
+    var keys = ['palette', 'ink', 'heading', 'intro', 'drawing', 'set'];
+    var o = {};
+    keys.forEach(function (k) {
+      o[k] =
+        q.get(k === 'drawing' ? 'art' : k) ||
+        localStorage.getItem('lab-' + k) ||
+        look[k] ||
+        (k === 'set' ? 'shortlist' : '');
+    });
+    var onHome = !!document.querySelector('[data-art]');
+    var bar = document.querySelector('.lab');
+    if (!onHome) bar.classList.add('away');
+
+    function list() {
+      var l = lists[o.set] || lists.shortlist;
+      if (
+        !l.some(function (d) {
+          return d.id === o.drawing;
+        })
+      )
+        l = lists.all;
+      return l;
+    }
+    function apply() {
+      root.dataset.palette = o.palette;
+      root.dataset.ink = o.ink;
+      root.dataset.heading = o.heading;
+      if (onHome) {
+        var l = list(),
+          i = l.findIndex(function (d) {
+            return d.id === o.drawing;
+          });
+        if (i < 0) {
+          i = 0;
+          o.drawing = l[0].id;
+        }
+        document.querySelectorAll('[data-art]').forEach(function (el) {
+          el.hidden = el.dataset.art !== o.drawing;
+        });
+        document.querySelectorAll('[data-intro]').forEach(function (el) {
+          el.hidden = el.dataset.intro !== o.intro;
+        });
+        bar.querySelector('[data-lab=n]').textContent = i + 1 + '/' + l.length;
+        bar.querySelector('[data-lab=title]').textContent = l[i].title;
+      }
+      keys.forEach(function (k) {
+        localStorage.setItem('lab-' + k, o[k]);
+        var s = bar.querySelector('[data-set=' + k + ']');
+        if (s) s.value = o[k];
+      });
+    }
+    function step(n) {
+      var l = list(),
+        i = l.findIndex(function (d) {
+          return d.id === o.drawing;
+        });
+      o.drawing = l[(i + n + l.length) % l.length].id;
+      apply();
+    }
+    bar.querySelectorAll('[data-step]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        step(Number(b.dataset.step));
+      });
+    });
+    bar.querySelectorAll('[data-set]').forEach(function (s) {
+      s.addEventListener('change', function () {
+        o[s.dataset.set] = s.value;
+        apply();
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (!onHome || (e.target.closest && e.target.closest('select, input, textarea'))) return;
+      if (e.key === 'ArrowRight') step(1);
+      if (e.key === 'ArrowLeft') step(-1);
+    });
+    bar.querySelector('[data-copy]').addEventListener('click', function (e) {
+      var line =
+        "export const look = { drawing: '" +
+        o.drawing +
+        "', palette: '" +
+        o.palette +
+        "', ink: '" +
+        o.ink +
+        "', heading: '" +
+        o.heading +
+        "', intro: '" +
+        o.intro +
+        "' }";
+      navigator.clipboard.writeText(line).then(
+        function () {
+          e.target.textContent = 'copied';
+          setTimeout(function () {
+            e.target.textContent = 'copy look';
+          }, 1500);
+        },
+        function () {
+          console.log(line);
+          e.target.textContent = 'see console';
+        },
+      );
+    });
+    bar.querySelector('[data-reset]').addEventListener('click', function () {
+      keys.forEach(function (k) {
+        localStorage.removeItem('lab-' + k);
+      });
+      location.href = location.pathname;
+    });
+    apply();
+  })();
+</script>
+
+<style>
+  .lab {
+    position: fixed;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 12px;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    padding: 7px 10px;
+    background: var(--paper);
+    border: 1px dashed var(--accent);
+    border-radius: 8px;
+    font: 13px var(--sans);
+    color: var(--ink-2);
+  }
+  .tag {
+    font: 600 11px var(--mono);
+    color: #fff;
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  .drawing {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .away .drawing,
+  .away .intro {
+    display: none;
+  }
+  button {
+    font: 600 13px/1 var(--sans);
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border: var(--edge);
+    border-radius: 4px;
+    background: var(--page);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .now {
+    min-width: 15em;
+    text-align: center;
+  }
+  .now b {
+    font: 500 12px var(--mono);
+    color: var(--muted);
+  }
+  select {
+    font: inherit;
+    margin-left: 4px;
+  }
+</style>

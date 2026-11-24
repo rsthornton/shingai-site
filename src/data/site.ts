@@ -39,3 +39,26 @@ export const urls = {
   blyg: 'https://blyg.shingai.xyz/',
   source: 'https://github.com/rsthornton/shingai-site',
 };
+
+/**
+ * How the site looks. Production renders exactly this. In `npm run dev` a toolbar at the bottom of every page
+ * overrides it live (README § Dev mode) and offers the line to paste back here.
+ *   drawing: an id from src/art/registry.ts      palette: 'navy' | 'frost' | 'teal' | 'plum'
+ *   ink: drawing 'color' or 'mono' (one color)   heading: 'ink' | 'accent'
+ *   intro: 'who' | 'working' | 'work-first' | 'line'
+ */
+export interface Look {
+  drawing: string;
+  palette: 'navy' | 'frost' | 'teal' | 'plum';
+  ink: 'color' | 'mono';
+  heading: 'ink' | 'accent';
+  intro: 'who' | 'working' | 'work-first' | 'line';
+}
+
+export const look: Look = {
+  drawing: 'mobus-system',
+  palette: 'navy',
+  ink: 'color',
+  heading: 'accent',
+  intro: 'working',
+};

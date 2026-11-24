@@ -1,0 +1,57 @@
+---
+// One of Boulding's nine levels as a small icon centered on (x, y), about 20 units across:
+// 0 frameworks, 1 clockworks, 2 thermostats, 3 cells, 4 plants, 5 animals, 6 humans, 7 social, 8 transcendental.
+import { arc, arcHead } from './geom';
+
+interface Props {
+  i: number;
+  x: number;
+  y: number;
+}
+const { i, x, y } = Astro.props;
+---
+
+{i === 0 && <path d={`M${x - 8} ${y - 8} h16 v16 h-16 Z M${x} ${y - 8} v16 M${x - 8} ${y} h16`} class="k thin" />}
+{i === 1 && (
+  <g class="k">
+    <circle cx={x} cy={y} r="9" />
+    <path d={`M${x} ${y} L${x + 5} ${y - 5}`} />
+  </g>
+)}
+{i === 2 && (
+  <g class="r">
+    <path d={arc(x, y, 8, 0, 290)} />
+    <path d={arcHead(x, y, 8, 290, 4)} class="h" />
+  </g>
+)}
+{i === 3 && (
+  <g class="t">
+    <circle cx={x} cy={y} r="9" class="ft" />
+    <circle cx={x + 2} cy={y - 1} r="3" class="t dot" />
+  </g>
+)}
+{i === 4 && (
+  <g class="g">
+    <path d={`M${x} ${y + 10} V${y - 10} M${x} ${y} q-8 -2 -8 -8 q8 0 8 8 M${x} ${y - 4} q8 -2 8 -8 q-8 0 -8 8`} />
+  </g>
+)}
+{i === 5 && (
+  <g class="o">
+    <ellipse cx={x} cy={y} rx="10" ry="6" />
+    <circle cx={x} cy={y} r="3" class="o dot" />
+  </g>
+)}
+{i === 6 && (
+  <g class="b">
+    <circle cx={x} cy={y - 4} r="5" />
+    <path d={`M${x - 8} ${y + 10} q8 -12 16 0`} />
+  </g>
+)}
+{i === 7 && (
+  <g class="p">
+    {[-8, 0, 8].map((dx) => (
+      <circle cx={x + dx} cy={y - (dx === 0 ? 3 : 0)} r="4" />
+    ))}
+  </g>
+)}
+{i === 8 && <circle cx={x} cy={y} r="9" class="a d" />}

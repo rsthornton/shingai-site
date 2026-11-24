@@ -314,9 +314,8 @@ mark {
   animation-duration: 150ms;
 }
 
-/* LAB (temporary): color palettes and heading color, switched from the home toolbar and kept in
-   localStorage so every page shows the choice. Keep the chosen palette's values in :root above and
-   delete this block. */
+/* Palettes and heading color. src/data/site.ts `look` picks one for production (set on <html>);
+   in dev the toolbar switches them live. Navy is :root above. */
 [data-palette='frost'] {
   --accent: #3f5f8a;
   --mark: #d5e3ef;

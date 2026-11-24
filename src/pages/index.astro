@@ -1,16 +1,18 @@
 ---
-// Home, LAB BUILD: the menu at the top, a drawing, then the introduction.
-// While Shingai chooses, a toolbar at the bottom flips through every drawing in src/art/, four color
-// palettes, full color or one color for the drawing, and four ways to introduce himself.
-// When he has chosen: keep one drawing (move it into components/), one intro, one palette, and delete
-// src/art/, src/pages/lab/, the toolbar below and the lab block in global.css and BaseLayout.
+// Home: the menu at the top, a drawing, the line, then the introduction.
+// Which drawing and which intro come from `look` in src/data/site.ts. In dev mode every drawing and intro is
+// rendered (hidden) so the toolbar can switch between them; production renders only the chosen ones.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Drawing from '../art/Drawing.astro';
 import { drawings } from '../art/registry';
-import { name, claim, who, theory, urls } from '../data/site';
+import { name, claim, who, theory, urls, look } from '../data/site';
 import { projects } from '../data/projects';
 
-const first = 'mobus-system';
+const dev = import.meta.env.DEV;
+const shown = dev ? drawings.map((d) => d.id) : [look.drawing];
+const intros = ['who', 'working', 'work-first', 'line'] as const;
+const hasIntro = (v: (typeof intros)[number]) => dev || look.intro === v;
+
 const halcyonic = 'Halcyonic Systems';
 const [before, after] = who.split(halcyonic);
 const working = projects.slice(0, 3);
@@ -20,158 +22,48 @@ const dots = ['var(--frost-4)', 'var(--aurora-orange)', 'var(--aurora-purple)'];
 <BaseLayout title={name}>
   <section class="home">
     <div class="art">
-      {drawings.map((d) => (
-        <div data-art={d.id} hidden={d.id !== first}>
-          <Drawing id={d.id} />
+      {shown.map((id) => (
+        <div data-art={id} hidden={id !== look.drawing}>
+          <Drawing id={id} />
         </div>
       ))}
     </div>
 
     <h1>{claim}</h1>
 
-    <!-- prettier-ignore -->
-    <div data-intro="who"><p class="who">{before}<a href={urls.halcyonic}>{halcyonic}</a>{after}</p></div>
+    {hasIntro('who') && (
+      <div data-intro="who" hidden={look.intro !== 'who'}>
+        <!-- prettier-ignore -->
+        <p class="who">{before}<a href={urls.halcyonic}>{halcyonic}</a>{after}</p>
+      </div>
+    )}
 
-    <div data-intro="working" hidden>
-      <p class="label">Currently working on</p>
-      <ul class="working">
-        {working.map((p, i) => (
-          <li>
-            <span class="dot" style={`background:${dots[i]}`} />
-            <a href={p.href}>{p.title}</a>
-            <span class="blurb">{p.blurb}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    {hasIntro('working') && (
+      <div data-intro="working" hidden={look.intro !== 'working'}>
+        <p class="label">Currently working on</p>
+        <ul class="working">
+          {working.map((p, i) => (
+            <li>
+              <span class="dot" style={`background:${dots[i]}`} />
+              <a href={p.href}>{p.title}</a>
+              <span class="blurb">{p.blurb}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
 
-    <!-- prettier-ignore -->
-    <div data-intro="work-first" hidden><p class="who">Working on {working.map((p, i) => (<><a href={p.href}>{p.title}</a>{i === 0 ? ', ' : i === 1 ? ' and ' : '. '}</>))}PhD student in systems science at Binghamton; I run <a href={urls.halcyonic}>{halcyonic}</a>.</p></div>
+    {hasIntro('work-first') && (
+      <div data-intro="work-first" hidden={look.intro !== 'work-first'}>
+        <!-- prettier-ignore -->
+        <p class="who">Working on {working.map((p, i) => (<><a href={p.href}>{p.title}</a>{i === 0 ? ', ' : i === 1 ? ' and ' : '. '}</>))}PhD student in systems science at Binghamton; I run <a href={urls.halcyonic}>{halcyonic}</a>.</p>
+      </div>
+    )}
 
-    <div data-intro="line" hidden></div>
+    {hasIntro('line') && <div data-intro="line" hidden={look.intro !== 'line'} />}
 
     {theory && <p class="theory">{theory}</p>}
   </section>
-
-  <!-- LAB toolbar: temporary -->
-  <div class="lab" role="region" aria-label="Design lab (temporary)">
-    <button type="button" data-step="-1" aria-label="Previous drawing">
-      ‹
-    </button>
-    <span class="now">
-      <b data-lab="n"></b> <span data-lab="title"></span> <i data-lab="lineage"></i>
-    </span>
-    <button type="button" data-step="1" aria-label="Next drawing">
-      ›
-    </button>
-    <label>
-      color{' '}
-      <select data-set="palette">
-        <option value="navy">navy</option>
-        <option value="frost">frost</option>
-        <option value="teal">teal</option>
-        <option value="plum">plum</option>
-      </select>
-    </label>
-    <label>
-      drawing{' '}
-      <select data-set="ink">
-        <option value="color">in color</option>
-        <option value="mono">one color</option>
-      </select>
-    </label>
-    <label>
-      heading{' '}
-      <select data-set="heading">
-        <option value="ink">ink</option>
-        <option value="accent">accent</option>
-      </select>
-    </label>
-    <label>
-      intro{' '}
-      <select data-set="intro">
-        <option value="who">who</option>
-        <option value="working">working on</option>
-        <option value="work-first">work first</option>
-        <option value="line">line only</option>
-      </select>
-    </label>
-    <a href="/lab/drawings/">all drawings</a>
-  </div>
-
-  <script
-    is:inline
-    define:vars={{ list: drawings.map((d) => ({ id: d.id, title: d.title, lineage: d.lineage })), first }}
-  >
-    (function () {
-      var q = new URLSearchParams(location.search);
-      var root = document.documentElement;
-      var idx = Math.max(
-        0,
-        list.findIndex(function (d) {
-          return d.id === (q.get('art') || first);
-        }),
-      );
-      var opts = {
-        palette: q.get('palette') || localStorage.getItem('lab-palette') || 'navy',
-        ink: q.get('ink') || localStorage.getItem('lab-ink') || 'color',
-        heading: q.get('heading') || localStorage.getItem('lab-heading') || 'ink',
-        intro: q.get('intro') || localStorage.getItem('lab-intro') || 'who',
-      };
-      function show() {
-        var d = list[idx];
-        document.querySelectorAll('[data-art]').forEach(function (el) {
-          el.hidden = el.getAttribute('data-art') !== d.id;
-        });
-        document.querySelectorAll('[data-intro]').forEach(function (el) {
-          el.hidden = el.getAttribute('data-intro') !== opts.intro;
-        });
-        root.dataset.palette = opts.palette;
-        root.dataset.ink = opts.ink;
-        root.dataset.heading = opts.heading;
-        document.querySelector('[data-lab=n]').textContent = idx + 1 + '/' + list.length;
-        document.querySelector('[data-lab=title]').textContent = d.title;
-        document.querySelector('[data-lab=lineage]').textContent = d.lineage;
-        Object.keys(opts).forEach(function (k) {
-          localStorage.setItem('lab-' + k, opts[k]);
-          var s = document.querySelector('[data-set=' + k + ']');
-          if (s) s.value = opts[k];
-        });
-        var p = new URLSearchParams({
-          art: d.id,
-          palette: opts.palette,
-          ink: opts.ink,
-          heading: opts.heading,
-          intro: opts.intro,
-        });
-        history.replaceState(null, '', '?' + p);
-      }
-      document.querySelectorAll('[data-step]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          idx = (idx + Number(b.dataset.step) + list.length) % list.length;
-          show();
-        });
-      });
-      document.querySelectorAll('[data-set]').forEach(function (s) {
-        s.addEventListener('change', function () {
-          opts[s.dataset.set] = s.value;
-          show();
-        });
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.target.closest && e.target.closest('select')) return;
-        if (e.key === 'ArrowRight') {
-          idx = (idx + 1) % list.length;
-          show();
-        }
-        if (e.key === 'ArrowLeft') {
-          idx = (idx - 1 + list.length) % list.length;
-          show();
-        }
-      });
-      show();
-    })();
-  </script>
 </BaseLayout>
 
 <style>
@@ -240,59 +132,5 @@ const dots = ['var(--frost-4)', 'var(--aurora-orange)', 'var(--aurora-purple)'];
     h1 {
       font-size: 3.2rem;
     }
-  }
-
-  .lab {
-    position: fixed;
-    left: 50%;
-    bottom: 14px;
-    transform: translateX(-50%);
-    z-index: 20;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 6px 14px;
-    width: max-content;
-    max-width: calc(100vw - 24px);
-    padding: 8px 12px;
-    background: var(--paper);
-    border: var(--edge);
-    border-radius: 8px;
-    font-size: 13px;
-    color: var(--ink-2);
-  }
-  .lab button {
-    font: 600 18px/1 var(--sans);
-    width: 30px;
-    height: 30px;
-    border: var(--edge);
-    border-radius: 4px;
-    background: var(--page);
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .lab button:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-  .lab .now {
-    min-width: 17em;
-    text-align: center;
-  }
-  .lab b {
-    font: 500 12px var(--mono);
-    color: var(--muted);
-  }
-  .lab i {
-    color: var(--muted);
-    font-style: normal;
-  }
-  .lab i::before {
-    content: '· ';
-  }
-  .lab select {
-    font: inherit;
-    margin-left: 4px;
   }
 </style>

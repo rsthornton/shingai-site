@@ -8,6 +8,20 @@ interface Props {
 }
 const { id } = Astro.props;
 
+// emergence: six parts on a ring, and where each one starts when scattered (offsets, in drawing units)
+const ring6: [number, number][] = Array.from({ length: 6 }, (_, i) => {
+  const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+  return [Math.round(160 + 40 * Math.cos(a)), Math.round(120 + 40 * Math.sin(a))];
+});
+const scatter = [
+  [-90, -40],
+  [70, -60],
+  [110, 30],
+  [60, 70],
+  [-60, 80],
+  [-120, 10],
+];
+
 const comps: [number, number][] = [0, 1, 2, 3, 4].map((i) => {
   const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
   return [Math.round(160 + 44 * Math.cos(a)), Math.round(120 + 44 * Math.sin(a))];
@@ -194,3 +208,130 @@ const envLinks = [
     <circle cx="254" cy="136" r="3" class="t fw" />
   </g>
 )}
+
+{id === 'bunge-levels-nested' && (
+  <g>
+    {[
+      [260, 204, 'p fp'],
+      [210, 162, 'o fo'],
+      [160, 120, 'g fg'],
+      [110, 80, 't ft'],
+      [60, 40, 'b fb'],
+    ].map(([w, h, c]) => (
+      <rect x={160 - (w as number) / 2} y={124 - (h as number) / 2} width={w} height={h} rx="10" class={c as string} />
+    ))}
+    <g class="p">
+      <rect x="40" y="30" width="14" height="10" rx="2" />
+      <path d="M44 30 V27 M50 30 V27" />
+    </g>
+    <g class="o">
+      {[0, 1, 2].map((k) => (
+        <circle cx={68 + k * 9} cy="53" r="3" class="o fw" />
+      ))}
+    </g>
+    <g class="g">
+      <circle cx="94" cy="74" r="7" />
+      <circle cx="95" cy="74" r="2.4" class="g dot" />
+    </g>
+    <g class="t">
+      <circle cx="118" cy="94" r="3.4" />
+      <circle cx="126" cy="94" r="3.4" />
+    </g>
+    {[0, 1, 2, 3, 4].map((k) => (
+      <circle cx={146 + k * 7} cy="124" r="2" class="b dot" />
+    ))}
+  </g>
+)}
+
+{id === 'bunge-emergence-live' && (
+  <g>
+    <circle cx="160" cy="120" r="58" class="o fy em-glow" style="stroke:none" />
+    {ring6.map(([x, y], i) => (
+      <g class="em-bond">
+        <path d={`M${x} ${y} L${ring6[(i + 1) % 6][0]} ${ring6[(i + 1) % 6][1]}`} class="g" />
+        <path d={`M${x} ${y} L160 120`} class="g thin" />
+      </g>
+    ))}
+    {ring6.map(([x, y], i) => (
+      <circle cx={x} cy={y} r="8" class="b fw em-dot" style={`--dx:${scatter[i][0]}px;--dy:${scatter[i][1]}px`} />
+    ))}
+  </g>
+)}
+
+{id === 'bunge-society-petals' && (
+  <g>
+    <circle cx="160" cy="120" r="104" class="k fw" />
+    <circle cx="160" cy="84" r="44" class="g fg" />
+    <circle cx="196" cy="120" r="44" class="b fb" />
+    <circle cx="160" cy="156" r="44" class="p fp" />
+    <circle cx="124" cy="120" r="44" class="o fo" />
+    <circle cx="160" cy="120" r="6" class="a fa" style="stroke:none" />
+    <text x="160" y="64" class="mono">
+      bio
+    </text>
+    <text x="218" y="120" class="mono">
+      eco
+    </text>
+    <text x="160" y="178" class="mono">
+      pol
+    </text>
+    <text x="102" y="120" class="mono">
+      cul
+    </text>
+  </g>
+)}
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    .art .em-dot {
+      animation: em-move 7s ease-in-out infinite;
+    }
+    .art .em-bond {
+      animation: em-bond 7s ease-in-out infinite;
+    }
+    .art .em-glow {
+      animation: em-glow 7s ease-in-out infinite;
+    }
+  }
+  @keyframes em-move {
+    0%,
+    18% {
+      transform: translate(var(--dx), var(--dy));
+    }
+    42%,
+    86% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(var(--dx), var(--dy));
+    }
+  }
+  @keyframes em-bond {
+    0%,
+    42% {
+      opacity: 0;
+    }
+    52%,
+    84% {
+      opacity: 1;
+    }
+    94%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes em-glow {
+    0%,
+    52% {
+      opacity: 0;
+    }
+    64%,
+    84% {
+      opacity: 1;
+    }
+    92%,
+    100% {
+      opacity: 0;
+    }
+  }
+</style>

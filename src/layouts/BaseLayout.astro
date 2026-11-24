@@ -1,6 +1,7 @@
 ---
 // Every page: head and social tags, the header with the site menu, a main region and the footer.
-import { name, who, updated, portrait, urls } from '../data/site';
+import { name, who, updated, portrait, urls, look } from '../data/site';
+import LabBar from '../lab/LabBar.astro';
 import Icons from '../components/Icons.astro';
 import '../styles/global.css';
 
@@ -23,7 +24,7 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-palette={look.palette} data-ink={look.ink} data-heading={look.heading}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,15 +46,13 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
       rel="stylesheet"
     />
     <title>{title}</title>
-    <!-- LAB (temporary): apply the palette chosen on home before first paint. -->
-    <script is:inline>
-      (function (r, s) {
-        ['palette', 'ink', 'heading'].forEach(function (k) {
-          var v = s.getItem('lab-' + k);
-          if (v) r.dataset[k] = v;
-        });
-      })(document.documentElement, localStorage);
-    </script>
+    {/* dev mode: the toolbar's choices (localStorage) win over `look` before first paint */}
+    {import.meta.env.DEV && (
+      <script
+        is:inline
+        set:html="(function (r, s) { ['palette', 'ink', 'heading'].forEach(function (k) { var v = s.getItem('lab-' + k); if (v) r.dataset[k] = v; }); })(document.documentElement, localStorage);"
+      />
+    )}
   </head>
   <body>
     <a class="skip" href="#main">
@@ -91,5 +90,6 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
         </span>
       </div>
     </footer>
+    {import.meta.env.DEV && <LabBar />}
   </body>
 </html>

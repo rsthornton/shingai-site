@@ -26,7 +26,7 @@ npm run verify    # everything CI checks: format, types, build, internal links
 
 | Address | Shows | File |
 |---|---|---|
-| `/` | Menu, a drawing, the one line and who | `src/pages/index.astro`, `src/components/HomeArt.astro` |
+| `/` | Menu, a drawing, the line and an intro, as set by `look` | `src/pages/index.astro` |
 | `/projects` | Projects with screenshots, then talks | `src/pages/projects.astro` |
 | `/writing` | Essays and blyg field notes in one list, with tabs | `src/pages/writing.astro` |
 | `/archive/<slug>` | One essay | `src/pages/archive/[slug].astro` |
@@ -36,20 +36,24 @@ npm run verify    # everything CI checks: format, types, build, internal links
 | `/rss.xml` | RSS for everything on `/writing` | `src/pages/rss.xml.ts` |
 | `/archive` | Redirects to `/writing` | `astro.config.mjs` |
 | anything else | Not found | `src/pages/404.astro` |
+| `/lab` | The drawing library (dev mode only, never built) | `src/lab/Library.astro` |
 
 ## Where things live
 
 ```
 src/
 ├── data/
-│   ├── site.ts        # name, the line, who, portrait, email, every outside URL (urls)
+│   ├── site.ts        # name, the line, who, portrait, email, every outside URL (urls), and `look`
 │   ├── projects.ts    # the projects, typed, in display order
 │   ├── talks.ts       # the talks, typed, newest first
 │   ├── writing.ts     # builds the writing list: essays + blyg notes (+ talks if asked)
 │   └── ccs-2026-abstract.json
 ├── content/archive/   # 32 essays, 2019–2023, markdown (schema in src/content/config.ts)
+├── art/               # the drawing library: registry.ts (ids, notes, picks), one .astro per lineage,
+│                      #   Drawing.astro (draws one by id), geom.ts (arrows, arcs, gears), art.css (color roles)
+├── lab/               # dev mode only: LabBar.astro (the toolbar) and Library.astro (/lab)
 ├── components/
-│   ├── HomeArt.astro  # the SVG drawing on home
+│   ├── HomeArt.astro  # the first three drawings (one-color), kept in the library
 │   └── Icons.astro    # X, GitHub, email, RSS icons
 ├── layouts/BaseLayout.astro   # head and social tags, header menu, <main>, footer
 ├── pages/             # one file per address (table above)
@@ -78,12 +82,24 @@ scripts/
 | Add a talk | an entry at the top of `src/data/talks.ts`. For a page of its own, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
 | Add an essay | a markdown file in `src/content/archive/` with `title`, `permalink` and `date` |
 | Change a link | `urls` in `site.ts` |
-| Pick the home drawing | `chosen` in `src/pages/index.astro`; then delete the other variants from `HomeArt.astro` and the `?art=` script |
+| Change the drawing, colors or intro | `look` in `src/data/site.ts`; try options first in dev mode (below) |
+| Add a drawing | an entry in `src/art/registry.ts` and its SVG in the lineage's `.astro` file (320×240 frame, color classes from `art.css`) |
+| Mark a pick | `rank: 'favorite'` or `'shortlist'` on its registry entry; the toolbar shows the shortlist by default |
 | Mark a release | bump `updated` in `site.ts` (shown in the footer) |
+
+## Dev mode
+
+`npm run dev` turns on a design lab that production never contains (the build checks `import.meta.env.DEV`).
+
+- **Toolbar** at the bottom of every page, marked *dev*: the drawing (‹ › or the arrow keys, through the shortlist or the whole library), the color palette (navy, frost, teal, plum), the drawing in color or one color, the heading color, and the intro. Choices are kept in the browser, so every page follows them; *reset* goes back to `look`.
+- **Library** at [`/lab`](http://localhost:4321/lab): every drawing, picks first, each with where its idea comes from. Click one to open it on home.
+- **Making a choice permanent:** *copy look* puts a `look = { … }` line on the clipboard; paste it over `look` in `src/data/site.ts`. Production renders exactly `look` and only the chosen drawing.
+
+Dev mode is for trying things. Anything kept goes into `look`, the registry or the CSS tokens, and through `npm run verify` like any other change.
 
 ## Style rules
 
-Light only. Pale gray-blue page (`--page`), white boxes, one navy accent, one highlight color; every color is a token at the top of `global.css`. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only for small machine bits (dates, kinds). Borders only where a box means something (project screenshots). Corners 8px for boxes, 4px inside them. No shadows, no beige. Motion only where it says something, and never when the reader asks for reduced motion.
+Light only. Pale gray-blue page (`--page`), white boxes, one accent and one highlight color (navy unless `look` picks another palette), with Frost and Aurora tokens for color in drawings and labels; every color is a token in `global.css`. Drawings use color roles (matter blue, energy orange, messages green), not ad hoc colors. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only for small machine bits (dates, kinds). Borders only where a box means something (project screenshots). Corners 8px for boxes, 4px inside them. No shadows, no beige. Motion only where it says something, and never when the reader asks for reduced motion.
 
 ## Accessibility
 
@@ -95,7 +111,7 @@ Pushing to `main` builds, checks links and deploys to GitHub Pages (`.github/wor
 
 ## History
 
-Earlier directions are in git, not side by side in `main`: the IM window and the Writing dropdown are in the history before the restructure commit (`git log -- src/components/Im.astro`), and the design explorations that led here were the `explore/*` branches.
+Earlier directions are in git, not side by side in `main`: the IM window and the Writing dropdown are in the history before the restructure commit (`git log -- src/components/Im.astro`), and the design explorations that led here were the `explore/*` branches. The drawing library replaced the one-off toggles those branches used.
 
 ## License
 

@@ -15,6 +15,15 @@ const A: [number, number] = [40, 176],
 const Phi: [number, number] = [210, 72],
   beta: [number, number] = [120, 72];
 
+// Bridges: four traditions' definitions of system as objects (Bunge, Mobus, Klir, Rosen)
+const tr: Record<'B' | 'M' | 'K' | 'R', [number, number]> = { B: [80, 64], M: [240, 64], K: [80, 176], R: [240, 176] };
+const core: [number, number][] = [
+  [52, 178],
+  [124, 190],
+  [196, 190],
+  [268, 178],
+];
+
 const blob =
   'M160 72 C196 60 232 84 226 118 C222 146 244 170 214 182 C186 194 170 170 146 178 C116 188 92 168 98 140 C102 118 84 98 108 84 C124 74 140 78 160 72 Z';
 const partial: [number, number, string, [number, number]][] = [
@@ -136,6 +145,53 @@ const partial: [number, number, string, [number, number]][] = [
     <path d={blob} class="k ft" />
     {partial.map(([x, y, c]) => (
       <rect x={x - 11} y={y - 11} width="22" height="22" rx="3" class={`${c} fw`} />
+    ))}
+  </g>
+)}
+
+{id === 'cat-traditions' && (
+  <g>
+    <path d="M80 64 L240 64 L240 176 Z" class="p fp" style="stroke:none" />
+    <Arrow a={tr.B} b={tr.M} gapA={20} gapB={20} class="k" />
+    <Arrow a={tr.M} b={tr.R} gapA={20} gapB={20} class="k" />
+    <Arrow a={tr.B} b={tr.R} gapA={20} gapB={20} class="a" />
+    <Arrow a={tr.K} b={tr.B} gapA={20} gapB={20} class="m" />
+    <Arrow a={tr.K} b={tr.R} gapA={20} gapB={20} class="m" />
+    {(['B', 'M', 'K', 'R'] as const).map((k, i) => (
+      <g>
+        <circle cx={tr[k][0]} cy={tr[k][1]} r="18" class={`${['b', 'o', 'g', 't'][i]} fw`} />
+        <text x={tr[k][0]} y={tr[k][1]}>
+          {k}
+        </text>
+      </g>
+    ))}
+  </g>
+)}
+
+{id === 'cat-common-core' && (
+  <g>
+    {core.map(
+      (p, i) =>
+        i < 3 && (
+          <path
+            d={`M160 44 L${p[0]} ${p[1]} L${core[i + 1][0]} ${core[i + 1][1]} Z`}
+            class="fb"
+            style="stroke:none;fill-opacity:0.18"
+          />
+        ),
+    )}
+    {core.map((p) => (
+      <Arrow a={[160, 44]} b={p} gapA={16} gapB={18} class="a" />
+    ))}
+    {core.map((p, i) => i < 3 && <Arrow a={p} b={core[i + 1]} gapA={18} gapB={18} class="m thin" size={5} />)}
+    <circle cx="160" cy="44" r="14" class="a fa" />
+    {(['B', 'M', 'K', 'R'] as const).map((k, i) => (
+      <g>
+        <circle cx={core[i][0]} cy={core[i][1]} r="17" class={`${['b', 'o', 'g', 't'][i]} fw`} />
+        <text x={core[i][0]} y={core[i][1]}>
+          {k}
+        </text>
+      </g>
     ))}
   </g>
 )}

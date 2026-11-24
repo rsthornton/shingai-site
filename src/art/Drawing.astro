@@ -24,7 +24,7 @@ const first = d.lineage === 'First three';
   <svg class="art" viewBox="0 0 320 240" aria-hidden="true" focusable="false">
     {d.lineage === 'Mobus' && <Mobus id={id} />}
     {d.lineage === 'Bunge' && <Bunge id={id} />}
-    {d.lineage === 'Rosen' && <Rosen id={id} />}
+    {(d.lineage === 'Rosen' || d.lineage === 'Bridges') && <Rosen id={id} />}
     {d.lineage === 'Cybernetics & GST' && <Cybernetics id={id} />}
     {(d.lineage === 'Dynamics' || d.lineage === 'Networks') && <Dynamics id={id} />}
   </svg>

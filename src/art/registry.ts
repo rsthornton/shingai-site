@@ -1,13 +1,18 @@
 // The drawing library: every candidate for home, with where its idea comes from.
 // These are new drawings in the spirit of each source, not reproductions of published figures.
+// rank marks Shingai's picks: 'favorite' (one) and 'shortlist'. The dev toolbar shows the shortlist by default.
+// variantOf names the drawing a variation grew from.
 
-export type Lineage = 'First three' | 'Mobus' | 'Bunge' | 'Rosen' | 'Cybernetics & GST' | 'Dynamics' | 'Networks';
+export type Lineage =
+  'First three' | 'Mobus' | 'Bunge' | 'Rosen' | 'Bridges' | 'Cybernetics & GST' | 'Dynamics' | 'Networks';
 
 export interface Drawing {
   id: string;
   title: string;
   lineage: Lineage;
   note: string;
+  rank?: 'favorite' | 'shortlist';
+  variantOf?: string;
 }
 
 export const drawings: Drawing[] = [
@@ -29,6 +34,7 @@ export const drawings: Drawing[] = [
   // George Mobus
   {
     id: 'mobus-system',
+    rank: 'favorite',
     title: 'System in its environment',
     lineage: 'Mobus',
     note: 'Sources, sinks and interfaces on the boundary; matter (blue), energy (orange) and messages (green) flow through, and waste heat leaves to the ground.',
@@ -41,6 +47,7 @@ export const drawings: Drawing[] = [
   },
   {
     id: 'mobus-nested',
+    rank: 'shortlist',
     title: 'Subsystems in color',
     lineage: 'Mobus',
     note: 'A system of subsystems, each with its own components, exchanging flows across inner boundaries.',
@@ -85,18 +92,21 @@ export const drawings: Drawing[] = [
   },
   {
     id: 'bunge-levels',
+    rank: 'shortlist',
     title: 'Levels of organization',
     lineage: 'Bunge',
     note: 'Physical, chemical, biological, social, technical: each level built from things of the level below.',
   },
   {
     id: 'bunge-emergence',
+    rank: 'shortlist',
     title: 'Emergence',
     lineage: 'Bunge',
     note: 'The same parts, once bonded, have a property none of them has alone.',
   },
   {
     id: 'bunge-society',
+    rank: 'shortlist',
     title: 'Society’s subsystems',
     lineage: 'Bunge',
     note: 'Biological, economic, political and cultural subsystems, each tied to every other.',
@@ -117,6 +127,7 @@ export const drawings: Drawing[] = [
   },
   {
     id: 'rosen-mr',
+    rank: 'shortlist',
     title: '(M,R) system',
     lineage: 'Rosen',
     note: 'Metabolism f, repair Φ, replication β: every efficient cause (open arrowhead) made inside the system.',
@@ -167,12 +178,14 @@ export const drawings: Drawing[] = [
   },
   {
     id: 'cyb-klir',
+    rank: 'shortlist',
     title: 'Epistemological hierarchy',
     lineage: 'Cybernetics & GST',
     note: 'Source, data, generative, structure and meta systems, each step up knowing more (Klir).',
   },
   {
     id: 'cyb-boulding',
+    rank: 'shortlist',
     title: 'Skeleton of science',
     lineage: 'Cybernetics & GST',
     note: 'Nine levels from frameworks and clockworks to cells, people, societies and beyond (Boulding).',
@@ -247,4 +260,115 @@ export const drawings: Drawing[] = [
     lineage: 'Networks',
     note: 'Traditions on one side, formal definitions on the other, linked where they agree (the math.systems idea).',
   },
+  // Variations on the favorites (2026-11-24): cleaner, some animated, some reworked
+  {
+    id: 'mobus-system-flow',
+    title: 'System in its environment, flowing',
+    lineage: 'Mobus',
+    rank: 'shortlist',
+    variantOf: 'mobus-system',
+    note: 'The favorite with the flows made visible: small parcels of matter, energy and message travel each path.',
+  },
+  {
+    id: 'mobus-system-coupled',
+    title: 'Two coupled systems',
+    lineage: 'Mobus',
+    rank: 'shortlist',
+    variantOf: 'mobus-system',
+    note: 'One system’s product is the next one’s resource: an output port wired to an input port across the environment.',
+  },
+  {
+    id: 'mobus-system-zoom',
+    title: 'System with one subsystem opened',
+    lineage: 'Mobus',
+    rank: 'shortlist',
+    variantOf: 'mobus-system',
+    note: 'The favorite, with its central process opened to show the parts inside: the first step of deep systems analysis.',
+  },
+  {
+    id: 'mobus-system-quiet',
+    title: 'System in its environment, quiet',
+    lineage: 'Mobus',
+    rank: 'shortlist',
+    variantOf: 'mobus-system',
+    note: 'The favorite pared down: one source, one sink, one process, one feedback, heavier lines.',
+  },
+  {
+    id: 'mobus-nested-ports',
+    title: 'Subsystems wired through ports',
+    lineage: 'Mobus',
+    rank: 'shortlist',
+    variantOf: 'mobus-nested',
+    note: 'The colored subsystems exchanging flows through ports on their boundaries, with one flow leaving the whole.',
+  },
+  {
+    id: 'bunge-levels-nested',
+    title: 'Levels as nesting',
+    lineage: 'Bunge',
+    rank: 'shortlist',
+    variantOf: 'bunge-levels',
+    note: 'Each level drawn inside the next, since things at one level are composed of things at the level below.',
+  },
+  {
+    id: 'bunge-emergence-live',
+    title: 'Emergence, animated',
+    lineage: 'Bunge',
+    rank: 'shortlist',
+    variantOf: 'bunge-emergence',
+    note: 'Loose parts drift, find each other and bond; the new property appears only once the whole has formed.',
+  },
+  {
+    id: 'bunge-society-petals',
+    title: 'Society as overlapping subsystems',
+    lineage: 'Bunge',
+    rank: 'shortlist',
+    variantOf: 'bunge-society',
+    note: 'Biological, economic, political and cultural subsystems overlapping like petals around what they share.',
+  },
+  {
+    id: 'cat-traditions',
+    title: 'Definitions and the maps between them',
+    lineage: 'Bridges',
+    rank: 'shortlist',
+    variantOf: 'rosen-mr',
+    note: 'Four traditions’ definitions of system as objects (Bunge, Mobus, Klir, Rosen), with maps between them; one triangle commutes.',
+  },
+  {
+    id: 'cat-common-core',
+    title: 'The common core',
+    lineage: 'Bridges',
+    rank: 'shortlist',
+    variantOf: 'rosen-mr',
+    note: 'One object that maps into every tradition’s definition: what they share, drawn as a cone.',
+  },
+  {
+    id: 'klir-steps',
+    title: 'Epistemological hierarchy, as steps',
+    lineage: 'Cybernetics & GST',
+    rank: 'shortlist',
+    variantOf: 'cyb-klir',
+    note: 'Klir’s five levels as tiles that rise, each with a sharper picture of the same system.',
+  },
+  {
+    id: 'boulding-arc',
+    title: 'Skeleton of science, as a dial',
+    lineage: 'Cybernetics & GST',
+    rank: 'shortlist',
+    variantOf: 'cyb-boulding',
+    note: 'Boulding’s nine levels around an arc, each icon on its own colored disc.',
+  },
+  {
+    id: 'boulding-grid',
+    title: 'Skeleton of science, as a grid',
+    lineage: 'Cybernetics & GST',
+    rank: 'shortlist',
+    variantOf: 'cyb-boulding',
+    note: 'The nine icons in a three-by-three grid, read like a page, simplest at top left.',
+  },
+];
+
+/** The picks first (favorite, then shortlist in library order), for the toolbar's default set. */
+export const shortlist = [
+  ...drawings.filter((d) => d.rank === 'favorite'),
+  ...drawings.filter((d) => d.rank === 'shortlist'),
 ];
