@@ -1,6 +1,7 @@
 name: CI
 
-# Checks every pull request and push the way the deploy builds: types, then a full build.
+# Every pull request, and every push to a branch other than main, gets the same checks:
+# formatting, types and templates, a full build, and internal links in the built site.
 on:
   pull_request:
   push:
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  check:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,5 +20,4 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npm run check
-      - run: npm run build
+      - run: npm run verify

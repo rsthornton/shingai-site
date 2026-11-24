@@ -17,8 +17,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "check:links": "node scripts/check-links.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "verify": "npm run format:check && npm run check && npm run build && npm run check:links",
     "astro": "astro"
   },
   "dependencies": {

@@ -1,0 +1,15 @@
+---
+// GitHub Pages serves this for any address that doesn't exist.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { name } from '../data/site';
+---
+
+<BaseLayout title={`Not found | ${name}`} doc>
+  <h1>Not here</h1>
+  <p>That page doesn't exist, or it moved. Try <a href="/projects">Projects</a>, <a href="/writing">Writing</a> or the <a href="/">home page</a>.</p>
+</BaseLayout>
+
+<style>
+  h1 { font: 600 2.4rem/1.15 var(--serif); margin: 0 0 12px; }
+  p { color: var(--ink-2); }
+</style>
