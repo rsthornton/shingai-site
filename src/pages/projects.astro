@@ -1,78 +1,60 @@
 ---
-// Projects, version C: a gallery. The featured three in a mosaic (one large, two stacked), the rest four across.
-// The pictures do the talking; captions stay short.
+// Projects, version D: a curated few, equal size, two across; then the talks, which are work shown in public.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, top8 } from '../data/site';
+import { name, top8, talks } from '../data/site';
 
-const featured = top8.filter((t) => t.featured);
-const rest = top8.filter((t) => !t.featured);
+const projects = [...top8.filter((t) => t.featured), ...top8.filter((t) => !t.featured)];
+const when = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 ---
 
-<BaseLayout title={`Projects | ${name}`} description="Projects by Shingai Thornton: theory, tools and empirical work in systems science.">
+<BaseLayout title={`Projects | ${name}`} description="Projects and talks by Shingai Thornton: theory, tools and empirical work in systems science.">
   <h1>Projects</h1>
 
-  <ul class="mosaic">
-    {featured.map((t) => (
+  <ul class="grid">
+    {projects.map((t) => (
       <li>
-        <a href={t.href}>
-          <img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" />
-          <span class="cap">
-            <span class="kind">{t.kind}</span>
-            <span class="t">{t.title}</span>
-            <span class="b">{t.blurb}</span>
-          </span>
-        </a>
-        {t.talk && <a class="talk" href={t.talk.href}>Talk: {t.talk.label}</a>}
+        <a class="shot" href={t.href}><img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" /></a>
+        <span class="kind">{t.kind}</span>
+        <a class="t" href={t.href}>{t.title}</a>
+        <p>{t.blurb ?? t.note}</p>
       </li>
     ))}
   </ul>
 
-  <ul class="grid">
-    {rest.map((t) => (
+  <h2 id="talks">Talks</h2>
+  <ul class="talks">
+    {talks.map((t) => (
       <li>
-        <a href={t.href}>
-          <img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" loading="lazy" />
-          <span class="t">{t.title}</span>
-          <span class="b">{t.note}</span>
-        </a>
+        <span class="when">{when(t.date)}</span>
+        <span>
+          <a href={t.href}>{t.title}</a>
+          <span class="where">{t.venue}, {t.place}</span>
+        </span>
       </li>
     ))}
   </ul>
 </BaseLayout>
 
 <style>
-  h1 { font: 600 2.4rem/1.15 var(--serif); letter-spacing: -0.01em; margin: 0 0 28px; }
+  h1 { font: 600 2.4rem/1.15 var(--serif); letter-spacing: -0.01em; margin: 0 0 32px; }
   ul { list-style: none; margin: 0; padding: 0; }
   li { margin: 0; }
-  a { text-decoration: none; color: var(--ink); }
-  img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
-  .mosaic { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
-  .mosaic li { position: relative; }
-  .mosaic li > a:first-child { display: block; position: relative; border: var(--edge); border-radius: 8px; overflow: hidden; background: var(--paper); }
-  .mosaic img { aspect-ratio: 8 / 5; height: auto; }
-  .mosaic .cap { display: grid; gap: 0; padding: 12px 16px; background: var(--paper); border-top: var(--edge); }
-  .mosaic .t { font: 600 1.2rem var(--serif); }
-  .mosaic .b { color: var(--ink-2); font-size: 0.92rem; }
-  .mosaic li > a:first-child:hover .t { color: var(--accent); text-decoration: underline; }
-  .kind { font: 500 11px var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
-  .talk { position: absolute; top: 10px; right: 10px; font-size: 0.82rem; background: var(--paper); border: var(--edge); border-radius: 4px; padding: 2px 8px; color: var(--accent); }
-  .talk:hover { text-decoration: underline; }
-  @media (min-width: 820px) {
-    .mosaic { grid-template-columns: 3fr 2fr; grid-template-rows: 1fr 1fr; }
-    .mosaic li:first-child { grid-row: span 2; }
-    .mosaic li > a:first-child { aspect-ratio: 8 / 5; }
-    .mosaic img { height: 100%; }
-    .mosaic .cap { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.94); }
-    .mosaic li:first-child > a:first-child { aspect-ratio: auto; height: 100%; }
-    .mosaic li:first-child .t { font-size: 1.6rem; }
-  }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px 32px; max-width: 880px; }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .shot { display: block; border: var(--edge); border-radius: 8px; overflow: hidden; margin-bottom: 12px; background: var(--paper); }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
+  .shot:hover img { transform: scale(1.02); }
+  .kind { display: block; font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  .t { font: 600 1.2rem var(--serif); color: var(--ink); text-decoration: none; }
+  .t:hover { color: var(--accent); text-decoration: underline; }
+  .grid p { margin: 2px 0 0; color: var(--ink-2); }
 
-  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; margin-top: 40px; }
-  @media (min-width: 820px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .grid a { display: grid; gap: 2px; }
-  .grid img { aspect-ratio: 8 / 5; height: auto; border: var(--edge); border-radius: 8px; margin-bottom: 8px; background: var(--paper); }
-  .grid .t { font-weight: 600; }
-  .grid a:hover .t { color: var(--accent); text-decoration: underline; }
-  .grid .b { color: var(--muted); font-size: 0.9rem; }
+  h2 { font: 600 1.6rem/1.2 var(--serif); margin: 72px 0 8px; }
+  .talks { max-width: 880px; }
+  .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: var(--edge); }
+  .talks .when { font: 13px/1.9 var(--mono); color: var(--muted); }
+  .talks a { font-weight: 500; color: var(--ink); text-decoration: none; display: block; line-height: 1.45; }
+  .talks a:hover { color: var(--accent); text-decoration: underline; }
+  .where { font-size: 0.9rem; color: var(--muted); }
 </style>

@@ -1,64 +1,66 @@
 ---
-// Writing, version C: a hub. One lane per kind of writing, each showing its newest few and where the rest lives.
-// The site keeps the essays; field notes live on the blyg and the newsletter on Ideas, and this page points to both.
+// Writing, version D: one vertical list, tabs to switch views (radio buttons and CSS, no script).
+// Field notes come from the blyg's feed; essays are kept here. Talks live on /projects.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { name, thesisUrl, explorersUrl } from '../data/site';
-import { writing, shortDate, blygUrl, newsletterUrl } from '../data/writing';
+import { writing, blygUrl, newsletterUrl } from '../data/writing';
 
-const items = await writing();
-const of = (k: string) => items.filter((i) => i.kind === k);
-const year = (d: Date) => d.getFullYear();
-const lanes = [
-  { title: 'Field notes', where: 'on the blyg', more: { href: blygUrl, label: 'blyg.shingai.xyz' }, items: of('note').slice(0, 5) },
-  { title: 'Talks', where: 'given', more: { href: '/about#talks', label: 'all talks' }, items: of('talk').slice(0, 5) },
-  { title: 'Essays', where: '2019–2023, kept here', more: { href: '/archive', label: `all ${of('essay').length} essays` }, items: of('essay').slice(0, 5) },
+const items = await writing(['essay', 'note']);
+const n = (k: string) => items.filter((i) => i.kind === k).length;
+const tabs = [
+  { id: 'all', label: 'All', count: items.length },
+  { id: 'note', label: 'Field notes', count: n('note') },
+  { id: 'essay', label: 'Essays', count: n('essay') },
 ];
+const date = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 ---
 
-<BaseLayout title={`Writing | ${name}`} description="Essays, field notes and talks by Shingai Thornton.">
-  <header class="intro">
+<BaseLayout title={`Writing | ${name}`} description="Essays and field notes by Shingai Thornton.">
+  <div class="doc">
     <h1>Writing</h1>
-    <p>Field notes, talks and essays, all in one <a href="/rss.xml">RSS feed</a>.</p>
-  </header>
+    <p class="intro">
+      Field notes from my <a href={blygUrl}>blyg</a> and essays from 2019 on, in one <a href="/rss.xml">RSS feed</a>.
+      Also: <a href={newsletterUrl}>Ideas</a>, the newsletter (<a href={explorersUrl}>older issues</a>), and the <a href={thesisUrl}>MS thesis</a>.
+    </p>
 
-  <div class="lanes">
-    {lanes.map((l) => (
-      <section>
-        <h2>{l.title} <span>{l.where}</span></h2>
-        <ul>
-          {l.items.map((i) => (
-            <li>
-              <a href={i.href}>{i.title}</a>
-              <span class="when">{i.kind === 'essay' ? year(i.date) : shortDate(i.date)}{i.where && i.kind === 'talk' ? ` · ${i.where}` : ''}</span>
-            </li>
-          ))}
-        </ul>
-        <a class="more" href={l.more.href}>{l.more.label} →</a>
-      </section>
-    ))}
-    <section>
-      <h2>Elsewhere</h2>
-      <ul>
-        <li><a href={newsletterUrl}>Ideas</a><span class="when">the newsletter, current</span></li>
-        <li><a href={explorersUrl}>System Explorers</a><span class="when">newsletter archive</span></li>
-        <li><a href={thesisUrl}>MS thesis</a><span class="when">2026, ProQuest</span></li>
+    <div class="tabs">
+      {tabs.map((t, i) => (
+        <>
+          <input type="radio" name="kind" id={`w-${t.id}`} checked={i === 0} />
+          <label for={`w-${t.id}`}>{t.label} <span>{t.count}</span></label>
+        </>
+      ))}
+      <ul class="list">
+        {items.map((i) => (
+          <li data-kind={i.kind}>
+            <span class="t"><a href={i.href}>{i.title}</a>{i.external && <span class="out"> ↗</span>}</span>
+            <span class="meta">{i.kind === 'note' ? 'note' : 'essay'} · {date(i.date)}</span>
+          </li>
+        ))}
       </ul>
-    </section>
+    </div>
   </div>
 </BaseLayout>
 
 <style>
-  .intro { margin-bottom: 36px; }
-  h1 { font: 600 2.4rem/1.15 var(--serif); letter-spacing: -0.01em; margin: 0 0 8px; }
-  .intro p { color: var(--ink-2); }
-  .lanes { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px 48px; }
-  @media (min-width: 820px) { .lanes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  h2 { font: 600 1.25rem var(--serif); margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-  h2 span { font: 400 13px var(--sans); color: var(--muted); }
-  ul { list-style: none; margin: 0; padding: 0; }
-  li { display: grid; gap: 0; padding: 9px 0; border-bottom: var(--edge); }
-  li a { color: var(--ink); text-decoration: none; font-weight: 500; line-height: 1.4; }
-  li a:hover { color: var(--accent); text-decoration: underline; }
-  .when { font: 12px var(--mono); color: var(--muted); }
-  .more { display: inline-block; margin-top: 10px; font-size: 0.92rem; }
+  h1 { font: 600 2.4rem/1.15 var(--serif); letter-spacing: -0.01em; margin: 0 0 12px; }
+  .intro { color: var(--ink-2); margin-bottom: 28px; }
+
+  .tabs > input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs > label { display: inline-block; margin: 0 20px 8px 0; padding: 6px 0; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tabs > label span { font: 12px var(--mono); }
+  .tabs > label:hover { color: var(--ink); }
+  .tabs > input:checked + label { color: var(--ink); border-bottom-color: var(--accent); }
+  .tabs > input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .list { list-style: none; margin: 0; padding: 0; border-top: var(--edge); }
+  .list li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 16px; padding: 10px 0; border-bottom: var(--edge); margin: 0; }
+  .t { margin-right: auto; }
+  .list a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .list a:hover { color: var(--accent); text-decoration: underline; }
+  .out { color: var(--muted); font-size: 0.85em; }
+  .meta { flex: none; font: 13px var(--mono); color: var(--muted); }
+
+  #w-note:checked ~ .list li:not([data-kind='note']),
+  #w-essay:checked ~ .list li:not([data-kind='essay']) { display: none; }
 </style>

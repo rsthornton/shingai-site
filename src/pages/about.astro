@@ -1,9 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, headline, talks, callUrl, icons } from '../data/site';
-
-const fmt = (d: string) =>
-  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+import { name, headline, callUrl, icons } from '../data/site';
 ---
 
 <BaseLayout title={`About | ${name}`} description={headline} window="about" windowId="about">
@@ -14,18 +11,7 @@ const fmt = (d: string) =>
       I'm a PhD student in <mark>systems science</mark> at Binghamton University.
       I run Halcyonic Systems, a small lab for <mark>formal systems research</mark>.
     </p>
-    <p>Degrees, positions and papers are in the <a href="/cv">CV</a>. Want to talk? <a href={callUrl}>Book 20 minutes</a>.</p>
-
-    <h2 id="talks">Talks</h2>
-    <ul class="talks">
-      {talks.map((t) => (
-        <li>
-          <span class="when">{fmt(t.date)}</span>
-          <a href={t.href}>{t.title}</a>
-          <span class="where">{t.venue}, {t.place}</span>
-        </li>
-      ))}
-    </ul>
+    <p><a href="/cv">CV</a> · <a href={callUrl}>Book 20 minutes</a></p>
   </div>
 </BaseLayout>
 
@@ -33,10 +19,4 @@ const fmt = (d: string) =>
   .lede { font-size: 1.15rem; line-height: 1.9; }
   .prose .face { display: block; width: 120px; height: 120px; border: 0; border-radius: 8px; margin: 0 0 20px; }
   @media (min-width: 640px) { .prose .face { float: right; width: 168px; height: 168px; margin: 6px 0 16px 32px; } }
-  h2 { clear: both; }
-  .talks { list-style: none; padding: 0; }
-  .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 0 12px; padding: 12px 0; border-bottom: var(--edge); margin: 0; }
-  .talks .when { font: 14px/1.75 var(--sans); color: var(--muted); grid-row: span 2; }
-  .talks a { font-weight: 500; line-height: 1.45; }
-  .talks .where { font-size: 0.9rem; color: var(--muted); }
 </style>

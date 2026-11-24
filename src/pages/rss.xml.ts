@@ -8,7 +8,7 @@ const esc = (s: string) =>
 
 export async function GET({ site }: APIContext) {
   const base = site!.href;
-  const items = (await writing())
+  const items = (await writing(['essay', 'note']))
     .map((i) => {
       const link = new URL(i.href, base).href;
       const label = i.kind === 'essay' ? 'Essay' : i.kind === 'note' ? 'Note' : 'Talk';
@@ -27,7 +27,7 @@ export async function GET({ site }: APIContext) {
   <channel>
     <title>${esc(name)}</title>
     <link>${base}</link>
-    <description>Essays, field notes and talks by ${esc(name)}.</description>
+    <description>Essays and field notes by ${esc(name)}.</description>
     <language>en-us</language>
     <atom:link href="${new URL('/rss.xml', base).href}" rel="self" type="application/rss+xml" />
 ${items}
