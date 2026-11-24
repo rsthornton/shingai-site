@@ -1,0 +1,143 @@
+/* Shared look for every drawing. Classes name a color role, not a shape:
+   k ink, m muted, a accent, b matter (Frost blue), o energy (Aurora orange), g message (green),
+   p purple, r red, t teal. f-* are soft fills. d dashed, fl drifting flow, n node, h/hh arrowheads. */
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+.art .k {
+  stroke: var(--ink-2);
+  color: var(--ink-2);
+}
+.art .m {
+  stroke: var(--muted);
+  color: var(--muted);
+}
+.art .a {
+  stroke: var(--accent);
+  color: var(--accent);
+}
+.art .b {
+  stroke: var(--frost-4);
+  color: var(--frost-4);
+  stroke-width: 1.8;
+}
+.art .o {
+  stroke: var(--aurora-orange);
+  color: var(--aurora-orange);
+  stroke-width: 1.8;
+}
+.art .g {
+  stroke: #7f9f69;
+  color: #7f9f69;
+  stroke-width: 1.8;
+}
+.art .p {
+  stroke: var(--aurora-purple);
+  color: var(--aurora-purple);
+  stroke-width: 1.8;
+}
+.art .r {
+  stroke: var(--aurora-red);
+  color: var(--aurora-red);
+  stroke-width: 1.8;
+}
+.art .t {
+  stroke: #5fa3a0;
+  color: #5fa3a0;
+  stroke-width: 1.8;
+}
+.art .thin {
+  stroke-width: 1;
+}
+.art .h {
+  fill: currentColor;
+  stroke: none;
+}
+.art .hh {
+  fill: var(--page);
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.art .d {
+  stroke-dasharray: 4 4;
+}
+.art .n {
+  fill: var(--paper);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.art .dot {
+  fill: currentColor;
+  stroke: none;
+}
+.art .fb {
+  fill: var(--frost-2);
+  fill-opacity: 0.28;
+}
+.art .ft {
+  fill: var(--frost-1);
+  fill-opacity: 0.32;
+}
+.art .fo {
+  fill: var(--aurora-orange);
+  fill-opacity: 0.22;
+}
+.art .fg {
+  fill: var(--aurora-green);
+  fill-opacity: 0.3;
+}
+.art .fp {
+  fill: var(--aurora-purple);
+  fill-opacity: 0.22;
+}
+.art .fy {
+  fill: var(--aurora-yellow);
+  fill-opacity: 0.45;
+}
+.art .fa {
+  fill: var(--accent);
+}
+.art .fw {
+  fill: var(--paper);
+}
+.art text {
+  fill: var(--ink);
+  stroke: none;
+  font: italic 600 15px var(--serif);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.art text.mono {
+  font: 500 11px var(--mono);
+  font-style: normal;
+  fill: var(--muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .art .fl {
+    stroke-dasharray: 4 5;
+    animation: art-drift 2.4s linear infinite;
+  }
+}
+@keyframes art-drift {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+/* One-color mode (the lab's "ink" switch): every role takes the accent. */
+[data-ink='mono'] .art :is(.b, .o, .g, .p, .r, .t) {
+  stroke: var(--accent);
+  color: var(--accent);
+}
+[data-ink='mono'] .art :is(.fb, .ft, .fo, .fg, .fp, .fy) {
+  fill: var(--mark);
+  fill-opacity: 0.7;
+}

@@ -1,0 +1,141 @@
+---
+// Drawings after Robert Rosen: the modeling relation, (M,R) systems, anticipation, the four causes, complexity.
+import Arrow from './Arrow.astro';
+import { arc, arcHead } from './geom';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+
+// (M,R): A → f → B is metabolism; B → Φ → f is repair; f → β → Φ is replication.
+const A: [number, number] = [40, 176],
+  f: [number, number] = [120, 176],
+  B: [number, number] = [210, 176];
+const Phi: [number, number] = [210, 72],
+  beta: [number, number] = [120, 72];
+
+const blob =
+  'M160 72 C196 60 232 84 226 118 C222 146 244 170 214 182 C186 194 170 170 146 178 C116 188 92 168 98 140 C102 118 84 98 108 84 C124 74 140 78 160 72 Z';
+const partial: [number, number, string, [number, number]][] = [
+  [36, 40, 'b', [124, 96]],
+  [264, 36, 'p', [204, 92]],
+  [290, 150, 'o', [220, 160]],
+  [228, 222, 'g', [176, 176]],
+  [70, 214, 't', [122, 164]],
+  [18, 132, 'r', [102, 126]],
+];
+---
+
+{id === 'rosen-modeling' && (
+  <g>
+    <rect x="34" y="72" width="88" height="96" rx="10" class="t ft" />
+    <rect x="198" y="72" width="88" height="96" rx="10" class="p fp" />
+    <text x="78" y="120">
+      N
+    </text>
+    <text x="242" y="120">
+      F
+    </text>
+    <path d={arc(34, 120, 20, 110, 250)} class="t" />
+    <path d={arcHead(34, 120, 20, 250)} class="t h" />
+    <path d={arc(286, 120, 20, -70, 70)} class="p" />
+    <path d={arcHead(286, 120, 20, 70)} class="p h" />
+    <Arrow a={[122, 92]} b={[198, 92]} bend={-14} class="k" />
+    <Arrow a={[198, 148]} b={[122, 148]} bend={-14} class="k" />
+    <text x="160" y="66" class="mono">
+      encode
+    </text>
+    <text x="160" y="176" class="mono">
+      decode
+    </text>
+  </g>
+)}
+
+{id === 'rosen-mr' && (
+  <g>
+    <Arrow a={A} b={f} gapA={12} gapB={13} class="b" />
+    <Arrow a={f} b={B} gapA={13} gapB={13} class="b" hollow />
+    <Arrow a={B} b={Phi} gapA={13} gapB={13} class="p" />
+    <Arrow a={Phi} b={f} gapA={13} gapB={13} class="p" hollow />
+    <Arrow a={f} b={beta} gapA={13} gapB={13} class="g" />
+    <Arrow a={beta} b={Phi} gapA={13} gapB={13} class="g" hollow />
+    {[
+      [A, 'A'],
+      [f, 'f'],
+      [B, 'B'],
+      [Phi, 'Φ'],
+      [beta, 'β'],
+    ].map(([p, l]) => (
+      <g>
+        <circle cx={(p as number[])[0]} cy={(p as number[])[1]} r="12" class="k fw" />
+        <text x={(p as number[])[0]} y={(p as number[])[1]}>
+          {l}
+        </text>
+      </g>
+    ))}
+  </g>
+)}
+
+{id === 'rosen-anticipatory' && (
+  <g>
+    <rect x="56" y="34" width="168" height="116" rx="10" class="k fw" />
+    <ellipse cx="112" cy="78" rx="34" ry="20" class="p fp" />
+    <g class="p thin">
+      <path d="M98 72 l6 6 l-6 6 M108 72 l6 6 l-6 6 M118 72 l6 6 l-6 6" />
+    </g>
+    <rect x="166" y="100" width="34" height="28" rx="3" class="o fo" />
+    <Arrow a={[140, 88]} b={[166, 108]} class="k thin" />
+    <Arrow a={[20, 206]} b={[302, 206]} class="m thin" size={5} />
+    <path d="M120 200 V212" class="k" />
+    <circle cx="262" cy="206" r="6" class="p fw d" />
+    <Arrow a={[146, 70]} b={[258, 198]} bend={-44} class="p d" />
+    <Arrow a={[180, 128]} b={[124, 198]} class="o" />
+  </g>
+)}
+
+{id === 'rosen-causes' && (
+  <g>
+    <circle cx="64" cy="140" r="26" class="b fb" />
+    <circle cx="256" cy="140" r="26" class="g fg" />
+    <circle cx="160" cy="64" r="20" class="o fo" />
+    <Arrow a={[90, 140]} b={[230, 140]} class="k" size={8} />
+    <Arrow a={[160, 84]} b={[160, 132]} class="o d" />
+    <path d="M100 160 Q160 196 220 160" class="m thin d" />
+    <text x="64" y="140">
+      A
+    </text>
+    <text x="256" y="140">
+      B
+    </text>
+    <text x="160" y="64">
+      f
+    </text>
+    <text x="64" y="184" class="mono">
+      material
+    </text>
+    <text x="160" y="28" class="mono">
+      efficient
+    </text>
+    <text x="160" y="204" class="mono">
+      formal
+    </text>
+    <text x="256" y="184" class="mono">
+      final
+    </text>
+  </g>
+)}
+
+{id === 'rosen-complexity' && (
+  <g>
+    {partial.map(([x, y, c, t]) => (
+      <g class={`${c} thin d`}>
+        <path d={`M${x} ${y} L${t[0]} ${t[1]}`} />
+      </g>
+    ))}
+    <path d={blob} class="k ft" />
+    {partial.map(([x, y, c]) => (
+      <rect x={x - 11} y={y - 11} width="22" height="22" rx="3" class={`${c} fw`} />
+    ))}
+  </g>
+)}

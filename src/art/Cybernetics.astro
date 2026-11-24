@@ -1,0 +1,277 @@
+---
+// Drawings after cybernetics and general systems theory: Wiener, Beer, Ashby, Bertalanffy, Klir,
+// Boulding, Maturana and Varela, Koestler, Simon.
+import Arrow from './Arrow.astro';
+import { arc, arcHead, rng } from './geom';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+
+// Simon: a 14×14 interaction matrix with three diagonal blocks
+const blocks = [
+  [0, 5, 'b'],
+  [5, 9, 'g'],
+  [9, 14, 'p'],
+] as const;
+const rand = rng(7);
+const cells: { x: number; y: number; c: string; on: boolean }[] = [];
+for (let i = 0; i < 14; i++)
+  for (let j = 0; j < 14; j++) {
+    const blk = blocks.find(([a, b]) => i >= a && i < b && j >= a && j < b);
+    cells.push({ x: 62 + j * 14, y: 22 + i * 14, c: blk ? blk[2] : 'm', on: blk ? rand() < 0.8 : rand() < 0.07 });
+  }
+
+// Koestler: a three-level holarchy
+const holons: [number, number, number][] = [[160, 44, 0]];
+[96, 160, 224].forEach((x) => holons.push([x, 112, 1]));
+[72, 104, 136, 160, 184, 216, 248].forEach((x) => holons.push([x, 186, 2]));
+const parentOf = (x: number, lvl: number) =>
+  lvl === 1
+    ? holons[0]
+    : holons.filter((h) => h[2] === 1).reduce((a, b) => (Math.abs(b[0] - x) < Math.abs(a[0] - x) ? b : a));
+---
+
+{id === 'cyb-feedback' && (
+  <g>
+    <circle cx="80" cy="96" r="12" class="k fw" />
+    <path d="M72 88 L88 104 M88 88 L72 104" class="k thin" />
+    <rect x="118" y="80" width="56" height="32" rx="4" class="a fw" />
+    <rect x="206" y="80" width="56" height="32" rx="4" class="b fb" />
+    <rect x="162" y="160" width="56" height="30" rx="4" class="r fw" />
+    <Arrow a={[20, 96]} b={[68, 96]} class="k" />
+    <Arrow a={[92, 96]} b={[118, 96]} class="k" />
+    <Arrow a={[174, 96]} b={[206, 96]} class="b" />
+    <Arrow a={[262, 96]} b={[306, 96]} class="b" />
+    <path d="M284 96 V175 H218" class="r" />
+    <path d="M218 175 L226 171 L226 179 Z" class="r h" />
+    <path d="M162 175 H80 V108" class="r" />
+    <path d="M80 108 L76 116 L84 116 Z" class="r h" />
+    <text x="66" y="118" class="mono">
+      −
+    </text>
+  </g>
+)}
+
+{id === 'cyb-vsm' && (
+  <g>
+    <path
+      d="M18 120 C14 60 60 40 76 70 C92 100 60 120 82 150 C104 184 40 214 22 180 C12 160 20 140 18 120 Z"
+      class="t ft"
+    />
+    {[80, 124, 168].map((y) => (
+      <ellipse cx="46" cy={y} rx="14" ry="10" class="t fw" />
+    ))}
+    {[22, 56, 90].map((y, i) => (
+      <g>
+        <rect x="244" y={y} width="48" height="28" rx="3" class="p fp" />
+        <text x="268" y={y + 14} class="mono">
+          {5 - i}
+        </text>
+      </g>
+    ))}
+    <path d="M268 50 V56 M268 84 V90" class="p thin" />
+    <path d="M268 118 V190" class="k thin" />
+    {[102, 146, 190].map((y, i) => (
+      <g>
+        <path d={`M60 ${[80, 124, 168][i]} L125 ${y}`} class="m thin" />
+        <path d={`M155 ${y} H196 M224 ${y} H268`} class="k thin" />
+        <circle cx="140" cy={y} r="15" class="b fb" />
+        <rect x="199" y={y - 11} width="22" height="22" rx="2" class="a fw" transform={`rotate(45 210 ${y})`} />
+      </g>
+    ))}
+    <path d="M244 70 C170 58 120 34 70 54" class="p d thin" />
+  </g>
+)}
+
+{id === 'cyb-variety' && (
+  <g>
+    <Arrow a={[60, 80]} b={[160, 80]} gapA={18} gapB={18} class="r" />
+    <Arrow a={[60, 80]} b={[110, 170]} gapA={18} gapB={18} class="r" />
+    <Arrow a={[110, 170]} b={[160, 80]} gapA={18} gapB={18} class="a" />
+    <Arrow a={[160, 80]} b={[260, 80]} gapA={18} gapB={18} class="k" />
+    <circle cx="60" cy="80" r="18" class="r fw" />
+    <circle cx="110" cy="170" r="18" class="a fb" />
+    <circle cx="160" cy="80" r="18" class="k fw" />
+    <circle cx="260" cy="80" r="18" class="g fg" />
+    <text x="60" y="80">
+      D
+    </text>
+    <text x="110" y="170">
+      R
+    </text>
+    <text x="160" y="80">
+      T
+    </text>
+    <text x="260" y="80">
+      E
+    </text>
+  </g>
+)}
+
+{id === 'cyb-open' && (
+  <g>
+    {[70, 100, 120, 140, 170].map((y) => (
+      <path d={`M14 ${y} Q70 ${y} 104 120`} class="b thin" />
+    ))}
+    {[70, 100, 120, 140, 170].map((y) => (
+      <path d={`M216 120 Q250 ${y} 306 ${y}`} class="o thin" />
+    ))}
+    <circle cx="160" cy="120" r="56" class="k fw" />
+    {[14, 27, 40].map((r, i) => (
+      <g class={i === 1 ? 'b' : 't'}>
+        <path d={arc(160, 120, r, 200 + i * 40, 470 + i * 40)} class="fl" />
+        <path d={arcHead(160, 120, r, 470 + i * 40, 5)} class="h" />
+      </g>
+    ))}
+  </g>
+)}
+
+{id === 'cyb-klir' && (
+  <g>
+    {[0, 1, 2, 3, 4].map((i) => (
+      <rect
+        x={20 + i * 58}
+        y={186 - i * 36}
+        width="56"
+        height={36 + i * 36}
+        rx="4"
+        class={['t ft', 'b fb', 'g fg', 'o fo', 'p fp'][i]}
+      />
+    ))}
+    <circle cx="48" cy="170" r="4" class="t dot" />
+    {[0, 1, 2, 3].map((i) => (
+      <circle cx={92 + i * 10} cy="134" r="3" class="b dot" />
+    ))}
+    <path d="M144 98 q6 -10 12 0 t12 0 t12 0" class="g" />
+    <g class="o">
+      <path d="M204 62 L222 50 L240 64 L222 74 Z" />
+    </g>
+    <g class="p">
+      <path d="M258 30 L276 20 L294 32 M276 20 V40" />
+      <circle cx="258" cy="30" r="3" class="p dot" />
+      <circle cx="294" cy="32" r="3" class="p dot" />
+      <circle cx="276" cy="40" r="3" class="p dot" />
+    </g>
+  </g>
+)}
+
+{id === 'cyb-boulding' && (
+  <g>
+    {Array.from({ length: 9 }, (_, i) => [24 + i * 34, 206 - i * 21] as const).map(([x, y], i) => (
+      <g>
+        <path d={`M${x - 14} ${y + 14} H${x + 14}`} class="m thin" />
+        {i === 0 && (
+          <path d={`M${x - 8} ${y - 8} h16 v16 h-16 Z M${x} ${y - 8} v16 M${x - 8} ${y} h16`} class="k thin" />
+        )}
+        {i === 1 && (
+          <g class="k">
+            <circle cx={x} cy={y} r="9" />
+            <path d={`M${x} ${y} L${x + 5} ${y - 5}`} />
+          </g>
+        )}
+        {i === 2 && (
+          <g class="r">
+            <path d={arc(x, y, 8, 0, 290)} />
+            <path d={arcHead(x, y, 8, 290, 4)} class="h" />
+          </g>
+        )}
+        {i === 3 && (
+          <g class="t">
+            <circle cx={x} cy={y} r="9" class="ft" />
+            <circle cx={x + 2} cy={y - 1} r="3" class="t dot" />
+          </g>
+        )}
+        {i === 4 && (
+          <g class="g">
+            <path
+              d={`M${x} ${y + 10} V${y - 10} M${x} ${y} q-8 -2 -8 -8 q8 0 8 8 M${x} ${y - 4} q8 -2 8 -8 q-8 0 -8 8`}
+            />
+          </g>
+        )}
+        {i === 5 && (
+          <g class="o">
+            <ellipse cx={x} cy={y} rx="10" ry="6" />
+            <circle cx={x} cy={y} r="3" class="o dot" />
+          </g>
+        )}
+        {i === 6 && (
+          <g class="b">
+            <circle cx={x} cy={y - 4} r="5" />
+            <path d={`M${x - 8} ${y + 10} q8 -12 16 0`} />
+          </g>
+        )}
+        {i === 7 && (
+          <g class="p">
+            {[-8, 0, 8].map((dx) => (
+              <circle cx={x + dx} cy={y - (dx === 0 ? 3 : 0)} r="4" />
+            ))}
+          </g>
+        )}
+        {i === 8 && <circle cx={x} cy={y} r="9" class="a d" />}
+      </g>
+    ))}
+  </g>
+)}
+
+{id === 'cyb-autopoiesis' && (
+  <g>
+    {[
+      [96, 120, 'b', 'fb'],
+      [224, 120, 'p', 'fp'],
+    ].map(([x, y, c, f]) => (
+      <g>
+        <circle cx={x} cy={y} r="48" class={`${c} ${f}`} />
+        <path d={arc(x as number, y as number, 28, 20, 330)} class={c as string} />
+        <path d={arcHead(x as number, y as number, 28, 330)} class={`${c} h`} />
+      </g>
+    ))}
+    <path d="M146 112 q7 -8 14 0 t14 0" class="k" />
+    <path d="M146 128 q7 8 14 0 t14 0" class="k" />
+    {[
+      [96, 40, 96, 66],
+      [40, 196, 64, 160],
+      [224, 206, 224, 174],
+      [292, 52, 262, 84],
+    ].map(([x1, y1, x2, y2]) => (
+      <Arrow a={[x1, y1]} b={[x2, y2]} class="o thin" size={5} />
+    ))}
+  </g>
+)}
+
+{id === 'cyb-holarchy' && (
+  <g>
+    {holons
+      .filter((h) => h[2] > 0)
+      .map(([x, y, l]) => {
+        const p = parentOf(x, l);
+        return <path d={`M${p[0]} ${p[1]} L${x} ${y}`} class="m thin" />;
+      })}
+    {holons.map(([x, y, l]) => {
+      const r = [18, 13, 9][l];
+      return (
+        <g>
+          <path d={`M${x - r} ${y} A${r} ${r} 0 0 1 ${x + r} ${y} Z`} class="p fp" />
+          <path d={`M${x - r} ${y} A${r} ${r} 0 0 0 ${x + r} ${y} Z`} class="t ft" />
+        </g>
+      );
+    })}
+  </g>
+)}
+
+{id === 'cyb-simon' && (
+  <g>
+    {cells.map((c) => (
+      <rect
+        x={c.x}
+        y={c.y}
+        width="12"
+        height="12"
+        rx="2"
+        class={c.on ? `${c.c} f${c.c === 'm' ? 'b' : c.c}` : 'm thin'}
+        style={c.on ? undefined : 'stroke-opacity:0.25'}
+      />
+    ))}
+  </g>
+)}

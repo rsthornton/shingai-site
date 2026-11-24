@@ -1,0 +1,272 @@
+---
+// Dynamics and networks. The attractor, the bifurcation diagram, the limit cycle and the centralities are
+// computed here at build time from the actual equations, then drawn as plain paths.
+import Arrow from './Arrow.astro';
+import { arc, arcHead, ngon, poly, type Pt } from './geom';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+
+const r1 = (n: number) => Math.round(n * 10) / 10;
+
+// Van der Pol, mu = 1: two trajectories, one from inside, one from outside
+function vdp(x: number, y: number, steps: number): Pt[] {
+  const pts: Pt[] = [];
+  const dt = 0.02,
+    mu = 1;
+  for (let i = 0; i < steps; i++) {
+    const dx = y,
+      dy = mu * (1 - x * x) * y - x;
+    x += dx * dt;
+    y += dy * dt;
+    if (i % 3 === 0) pts.push([160 + x * 38, 120 - y * 34]);
+  }
+  return pts;
+}
+
+// Lorenz, the classic parameters, projected onto x–z
+function lorenz(): string {
+  let x = 0.1,
+    y = 0,
+    z = 0;
+  const dt = 0.008,
+    pts: Pt[] = [];
+  for (let i = 0; i < 4200; i++) {
+    const dx = 10 * (y - x),
+      dy = x * (28 - z) - y,
+      dz = x * y - (8 / 3) * z;
+    x += dx * dt;
+    y += dy * dt;
+    z += dz * dt;
+    if (i > 100 && i % 2 === 0) pts.push([160 + x * 6.2, 226 - z * 4.1]);
+  }
+  return poly(pts);
+}
+
+// Logistic map x -> r x (1 - x), r from 2.8 to 4
+function bifurcation(): string {
+  let d = '';
+  for (let c = 0; c <= 140; c++) {
+    const r = 2.8 + (1.2 * c) / 140;
+    let x = 0.5;
+    for (let i = 0; i < 300; i++) x = r * x * (1 - x);
+    const seen = new Set<number>();
+    for (let i = 0; i < 48; i++) {
+      x = r * x * (1 - x);
+      const y = r1(210 - x * 180);
+      if (seen.has(y)) continue;
+      seen.add(y);
+      d += `M${r1(20 + c * 2)} ${y}h0.9`;
+    }
+  }
+  return d;
+}
+
+// Eigenvector centrality by power iteration on a hand-placed graph
+const nodes: Pt[] = [
+  [60, 60],
+  [120, 40],
+  [180, 70],
+  [250, 50],
+  [90, 120],
+  [160, 125],
+  [230, 115],
+  [290, 140],
+  [50, 180],
+  [120, 190],
+  [200, 185],
+  [260, 200],
+  [150, 170],
+];
+const edges = [
+  [0, 1],
+  [0, 4],
+  [1, 2],
+  [1, 5],
+  [2, 3],
+  [2, 5],
+  [2, 6],
+  [3, 6],
+  [4, 5],
+  [4, 8],
+  [5, 6],
+  [5, 12],
+  [6, 7],
+  [6, 10],
+  [8, 9],
+  [9, 12],
+  [10, 12],
+  [10, 11],
+  [7, 11],
+  [5, 9],
+  [12, 6],
+];
+const adj = nodes.map((_, i) => edges.filter((e) => e.includes(i)).map((e) => (e[0] === i ? e[1] : e[0])));
+let cent = nodes.map(() => 1);
+for (let k = 0; k < 60; k++) {
+  const next = adj.map((nb) => nb.reduce((s, j) => s + cent[j], 0));
+  const m = Math.max(...next);
+  cent = next.map((v) => v / m);
+}
+const shade = (v: number) =>
+  v > 0.8 ? 'var(--accent)' : v > 0.55 ? 'var(--frost-4)' : v > 0.35 ? 'var(--frost-3)' : 'var(--frost-2)';
+
+// Watts–Strogatz: a ring of 20, each tied to two neighbors on each side, plus shortcuts
+const ring: Pt[] = Array.from({ length: 20 }, (_, i) => {
+  const a = (i / 20) * Math.PI * 2 - Math.PI / 2;
+  return [160 + 92 * Math.cos(a), 120 + 92 * Math.sin(a)];
+});
+const shortcuts = [
+  [0, 9],
+  [3, 14],
+  [6, 17],
+  [11, 18],
+];
+
+// Bénard cells: a hex tiling
+const hexes: Pt[] = [];
+for (let row = 0; row < 4; row++)
+  for (let col = 0; col < 7; col++) hexes.push([44 + col * 40 + (row % 2) * 20, 62 + row * 34]);
+
+// Hypercycle: five replicators on a ring
+const hyper: Pt[] = Array.from({ length: 5 }, (_, i) => {
+  const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+  return [160 + 74 * Math.cos(a), 122 + 74 * Math.sin(a)];
+});
+const hyperColors = ['b', 'g', 'o', 'p', 't'];
+
+// math.systems: traditions on the left, definitions on the right
+const trad = [52, 96, 140, 184].map((y) => [70, y] as Pt);
+const defs = [40, 76, 112, 148, 184, 220].map((y) => [250, y] as Pt);
+const maps = [
+  [0, 0],
+  [0, 1],
+  [1, 1],
+  [1, 2],
+  [1, 3],
+  [2, 3],
+  [2, 4],
+  [3, 4],
+  [3, 5],
+  [0, 2],
+];
+const tradColors = ['b', 'g', 'o', 'p'];
+---
+
+{id === 'dyn-limit-cycle' && (
+  <g>
+    <path d="M20 120 H300 M160 16 V224" class="m thin" style="stroke-opacity:0.4" />
+    <path d={poly(vdp(0.1, 0, 900))} class="b thin" />
+    <path d={poly(vdp(-3, 1.5, 700))} class="o thin" />
+    <path d={poly(vdp(2.0, 0, 1400).slice(-120))} class="a" style="stroke-width:2.4" />
+  </g>
+)}
+
+{id === 'dyn-lorenz' && (
+  <g>
+    <defs>
+      <linearGradient id="lorenz-ink" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="var(--frost-4)" />
+        <stop offset="1" stop-color="var(--aurora-purple)" />
+      </linearGradient>
+    </defs>
+    <path d={lorenz()} style="stroke:url(#lorenz-ink);stroke-width:0.6" />
+  </g>
+)}
+
+{id === 'dyn-bifurcation' && (
+  <g>
+    <path d="M20 214 H302" class="m thin" />
+    <path d={bifurcation()} class="p" style="stroke-width:0.8" />
+  </g>
+)}
+
+{id === 'dyn-benard' && (
+  <g>
+    <path d="M14 26 H306" class="b" style="stroke-width:3" />
+    <path d="M14 196 H306" class="o" style="stroke-width:3" />
+    {hexes.map(([x, y], i) => (
+      <g>
+        <polygon points={ngon(x, y, 22, 6, 30)} class={i % 3 === 0 ? 't ft' : 't fw'} />
+        <path d={arc(x, y, 9, 30, 300)} class="t thin" />
+        <path d={arcHead(x, y, 9, 300, 4)} class="t h" />
+      </g>
+    ))}
+    {[60, 120, 180, 240].map((x) => (
+      <Arrow a={[x, 214]} b={[x, 200]} class="o thin" size={4} />
+    ))}
+  </g>
+)}
+
+{id === 'dyn-hypercycle' && (
+  <g>
+    {hyper.map((p, i) => (
+      <Arrow a={p} b={hyper[(i + 1) % 5]} gapA={18} gapB={18} bend={-16} class={hyperColors[i]} />
+    ))}
+    {hyper.map(([x, y], i) => {
+      const out = Math.atan2(y - 122, x - 160);
+      const cx = x + 22 * Math.cos(out),
+        cy = y + 22 * Math.sin(out);
+      const deg = (out * 180) / Math.PI;
+      return (
+        <g>
+          <path d={arc(cx, cy, 10, deg + 200, deg + 480)} class={`${hyperColors[i]} thin`} />
+          <path d={arcHead(cx, cy, 10, deg + 480, 4)} class={`${hyperColors[i]} h`} />
+          <circle cx={x} cy={y} r="13" class={`${hyperColors[i]} fw`} />
+        </g>
+      );
+    })}
+  </g>
+)}
+
+{id === 'net-centrality' && (
+  <g>
+    {edges.map(([a, b]) => (
+      <path d={`M${nodes[a][0]} ${nodes[a][1]} L${nodes[b][0]} ${nodes[b][1]}`} class="m thin" />
+    ))}
+    {nodes.map(([x, y], i) => (
+      <circle
+        cx={x}
+        cy={y}
+        r={r1(5 + cent[i] * 11)}
+        style={`fill:${shade(cent[i])};stroke:var(--paper);stroke-width:2`}
+      />
+    ))}
+  </g>
+)}
+
+{id === 'net-ring' && (
+  <g>
+    {ring.map((p, i) =>
+      [1, 2].map((k) => {
+        const q = ring[(i + k) % 20];
+        return <path d={`M${p[0]} ${p[1]} L${q[0]} ${q[1]}`} class="b thin" />;
+      }),
+    )}
+    {shortcuts.map(([a, b]) => (
+      <path d={`M${ring[a][0]} ${ring[a][1]} L${ring[b][0]} ${ring[b][1]}`} class="o" />
+    ))}
+    {ring.map(([x, y]) => (
+      <circle cx={x} cy={y} r="5" class="a fw" />
+    ))}
+  </g>
+)}
+
+{id === 'net-bipartite' && (
+  <g>
+    {maps.map(([t, d]) => (
+      <path
+        d={`M${trad[t][0]} ${trad[t][1]} C160 ${trad[t][1]} 160 ${defs[d][1]} ${defs[d][0]} ${defs[d][1]}`}
+        class={`${tradColors[t]} thin`}
+      />
+    ))}
+    {trad.map(([x, y], i) => (
+      <circle cx={x} cy={y} r="12" class={`${tradColors[i]} fw`} />
+    ))}
+    {defs.map(([x, y]) => (
+      <rect x={x - 8} y={y - 8} width="16" height="16" rx="3" class="k fw" />
+    ))}
+  </g>
+)}

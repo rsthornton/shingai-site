@@ -1,0 +1,196 @@
+---
+// Drawings after Mario Bunge: the CESM model, levels, emergence, society's subsystems, mechanism.
+import Arrow from './Arrow.astro';
+import { arc, arcHead, gear } from './geom';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+
+const comps: [number, number][] = [0, 1, 2, 3, 4].map((i) => {
+  const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+  return [Math.round(160 + 44 * Math.cos(a)), Math.round(120 + 44 * Math.sin(a))];
+});
+const bonds = [
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [3, 4],
+  [4, 0],
+  [0, 2],
+];
+const env: [number, number][] = [
+  [52, 64],
+  [48, 176],
+  [268, 60],
+  [272, 178],
+  [160, 20],
+];
+const envLinks = [
+  [0, 0],
+  [1, 4],
+  [2, 1],
+  [3, 2],
+  [4, 1],
+];
+---
+
+{id === 'bunge-cesm' && (
+  <g>
+    {envLinks.map(([e, c]) => (
+      <g class="m thin d">
+        <path d={`M${env[e][0]} ${env[e][1]} L${comps[c][0]} ${comps[c][1]}`} />
+      </g>
+    ))}
+    <circle cx="160" cy="120" r="72" class="k fw" />
+    {bonds.map(([a, b]) => (
+      <g class="g">
+        <path d={`M${comps[a][0]} ${comps[a][1]} L${comps[b][0]} ${comps[b][1]}`} />
+      </g>
+    ))}
+    <path d={arc(160, 120, 15, 200, 500)} class="p" />
+    <path d={arcHead(160, 120, 15, 500)} class="p h" />
+    {comps.map(([x, y]) => (
+      <circle cx={x} cy={y} r="7" class="b fw" />
+    ))}
+    {env.map(([x, y]) => (
+      <circle cx={x} cy={y} r="6" class="m fw" />
+    ))}
+    <text x="108" y="84" style="fill:var(--frost-4)">
+      C
+    </text>
+    <text x="214" y="148" style="fill:#7f9f69">
+      S
+    </text>
+    <text x="160" y="120" style="fill:var(--aurora-purple)">
+      M
+    </text>
+    <text x="28" y="120" style="fill:var(--muted)">
+      E
+    </text>
+  </g>
+)}
+
+{id === 'bunge-levels' && (
+  <g>
+    {[
+      ['b', 'fb', 184],
+      ['t', 'ft', 148],
+      ['g', 'fg', 112],
+      ['o', 'fo', 76],
+      ['p', 'fp', 40],
+    ].map(([c, f, y], i) => (
+      <rect x={70 + i * 8} y={y} width={180 - i * 16} height="28" rx="6" class={`${c} ${f}`} />
+    ))}
+    {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+      <circle cx={110 + i * 16} cy="198" r="2.5" class="b dot" />
+    ))}
+    {[0, 1, 2].map((i) => (
+      <g class="t">
+        <circle cx={118 + i * 34} cy="162" r="4" />
+        <circle cx={127 + i * 34} cy="162" r="4" />
+      </g>
+    ))}
+    {[0, 1].map((i) => (
+      <g class="g">
+        <circle cx={136 + i * 48} cy="126" r="9" />
+        <circle cx={138 + i * 48} cy="126" r="3" class="g dot" />
+      </g>
+    ))}
+    {[0, 1, 2].map((i) => (
+      <circle cx={140 + i * 20} cy="90" r="5" class="o fw" />
+    ))}
+    <g class="p">
+      <rect x="150" y="47" width="20" height="14" rx="2" />
+      <path d="M156 47 V43 M164 47 V43" />
+    </g>
+    {[170, 134, 98, 62].map((y) => (
+      <Arrow a={[278, y + 22]} b={[278, y + 4]} class="m thin" size={5} />
+    ))}
+  </g>
+)}
+
+{id === 'bunge-emergence' && (
+  <g>
+    {[
+      [40, 90],
+      [72, 70],
+      [96, 104],
+      [60, 128],
+      [30, 150],
+      [84, 150],
+    ].map(([x, y]) => (
+      <circle cx={x} cy={y} r="8" class="b fw" />
+    ))}
+    <Arrow a={[118, 120]} b={[158, 120]} class="m" />
+    <circle cx="232" cy="120" r="56" class="o fy" style="stroke:none" />
+    {Array.from({ length: 6 }, (_, i) => {
+      const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+      return [232 + 40 * Math.cos(a), 120 + 40 * Math.sin(a)];
+    }).map(([x, y], i, all) => (
+      <g>
+        <path d={`M${x} ${y} L${all[(i + 1) % 6][0]} ${all[(i + 1) % 6][1]}`} class="g" />
+        <path d={`M${x} ${y} L232 120`} class="g thin" />
+      </g>
+    ))}
+    {Array.from({ length: 6 }, (_, i) => {
+      const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+      return <circle cx={232 + 40 * Math.cos(a)} cy={120 + 40 * Math.sin(a)} r="8" class="b fw" />;
+    })}
+  </g>
+)}
+
+{id === 'bunge-society' && (
+  <g>
+    <rect x="40" y="28" width="240" height="184" rx="18" class="k fw" />
+    {[
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [1, 2],
+      [1, 3],
+      [2, 3],
+    ].map(([a, b]) => {
+      const p = [
+        [104, 80],
+        [216, 80],
+        [104, 160],
+        [216, 160],
+      ];
+      return <path d={`M${p[a][0]} ${p[a][1]} L${p[b][0]} ${p[b][1]}`} class="m thin" />;
+    })}
+    <circle cx="104" cy="80" r="26" class="g fg" />
+    <circle cx="216" cy="80" r="26" class="b fb" />
+    <circle cx="104" cy="160" r="26" class="p fp" />
+    <circle cx="216" cy="160" r="26" class="o fo" />
+    <text x="104" y="80">
+      bio
+    </text>
+    <text x="216" y="80">
+      eco
+    </text>
+    <text x="104" y="160">
+      pol
+    </text>
+    <text x="216" y="160">
+      cul
+    </text>
+  </g>
+)}
+
+{id === 'bunge-mechanism' && (
+  <g>
+    <rect x="34" y="80" width="80" height="80" rx="6" class="k" style="fill:var(--ink-2)" />
+    <Arrow a={[8, 120]} b={[34, 120]} class="b" />
+    <Arrow a={[114, 120]} b={[140, 120]} class="o" />
+    <Arrow a={[148, 120]} b={[176, 120]} class="m d" />
+    <rect x="200" y="80" width="80" height="80" rx="6" class="k fw" />
+    <Arrow a={[176, 120]} b={[200, 120]} class="b" />
+    <Arrow a={[280, 120]} b={[306, 120]} class="o" />
+    <path d={gear(228, 112, 13, 9)} class="p fp" />
+    <circle cx="228" cy="112" r="4" class="p fw" />
+    <path d={gear(254, 136, 10, 7)} class="t ft" />
+    <circle cx="254" cy="136" r="3" class="t fw" />
+  </g>
+)}

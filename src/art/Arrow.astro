@@ -1,0 +1,23 @@
+---
+// One arrow: a line or curve and its head. Color comes from the class (k, b, o, g, p, r, t, a).
+import { arrow, type Pt } from './geom';
+
+interface Props {
+  a: Pt;
+  b: Pt;
+  class?: string;
+  gapA?: number;
+  gapB?: number;
+  bend?: number;
+  size?: number;
+  /** An open head, for Rosen's efficient causation. */
+  hollow?: boolean;
+}
+const { a, b, class: cls = 'k', hollow = false, ...opts } = Astro.props;
+const { d, head } = arrow(a, b, opts);
+---
+
+<g class={cls}>
+  <path d={d} fill="none" />
+  <path d={head} class={hollow ? 'hh' : 'h'} />
+</g>

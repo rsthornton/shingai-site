@@ -45,6 +45,15 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
       rel="stylesheet"
     />
     <title>{title}</title>
+    <!-- LAB (temporary): apply the palette chosen on home before first paint. -->
+    <script is:inline>
+      (function (r, s) {
+        ['palette', 'ink', 'heading'].forEach(function (k) {
+          var v = s.getItem('lab-' + k);
+          if (v) r.dataset[k] = v;
+        });
+      })(document.documentElement, localStorage);
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">

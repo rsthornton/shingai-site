@@ -1,0 +1,31 @@
+---
+// Draws one library drawing by id, in a 320×240 frame. Decorative: hidden from screen readers.
+import HomeArt from '../components/HomeArt.astro';
+import Mobus from './Mobus.astro';
+import Bunge from './Bunge.astro';
+import Rosen from './Rosen.astro';
+import Cybernetics from './Cybernetics.astro';
+import Dynamics from './Dynamics.astro';
+import { drawings } from './registry';
+import './art.css';
+
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+const d = drawings.find((x) => x.id === id);
+if (!d) throw new Error(`No drawing with id "${id}"`);
+const first = d.lineage === 'First three';
+---
+
+{first ? (
+  <HomeArt variant={id as 'system' | 'lattice' | 'nested'} />
+) : (
+  <svg class="art" viewBox="0 0 320 240" aria-hidden="true" focusable="false">
+    {d.lineage === 'Mobus' && <Mobus id={id} />}
+    {d.lineage === 'Bunge' && <Bunge id={id} />}
+    {d.lineage === 'Rosen' && <Rosen id={id} />}
+    {d.lineage === 'Cybernetics & GST' && <Cybernetics id={id} />}
+    {(d.lineage === 'Dynamics' || d.lineage === 'Networks') && <Dynamics id={id} />}
+  </svg>
+)}

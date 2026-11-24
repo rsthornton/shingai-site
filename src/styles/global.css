@@ -313,3 +313,22 @@ mark {
 ::view-transition-new(root) {
   animation-duration: 150ms;
 }
+
+/* LAB (temporary): color palettes and heading color, switched from the home toolbar and kept in
+   localStorage so every page shows the choice. Keep the chosen palette's values in :root above and
+   delete this block. */
+[data-palette='frost'] {
+  --accent: #3f5f8a;
+  --mark: #d5e3ef;
+}
+[data-palette='teal'] {
+  --accent: #2c6b68;
+  --mark: #d2e9e6;
+}
+[data-palette='plum'] {
+  --accent: #6a4a78;
+  --mark: #ebdff0;
+}
+[data-heading='accent'] :is(h1, h2, .logo) {
+  color: var(--accent);
+}
