@@ -1,15 +1,33 @@
 {
   "name": "shingai-site",
-  "type": "module",
   "version": "0.0.1",
+  "private": true,
+  "description": "Source for shingai.xyz, the personal site of Shingai Thornton. Astro and plain CSS.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsthornton/shingai-site.git"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.1.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^5.9.3"
   }
 }

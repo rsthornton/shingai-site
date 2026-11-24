@@ -4,14 +4,17 @@
 import json
 import os
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 
 from markdownify import MarkdownConverter
 
-GHOST_JSON = Path(__file__).parent / "shingai-thornton.ghost.2026-01-19-19-13-27.json"
-OUTPUT_DIR = Path(__file__).parent / "src" / "content" / "archive"
-IMAGES_DIR = Path(__file__).parent / "public" / "images" / "archive"
+ROOT = Path(__file__).resolve().parents[2]
+# Usage: python3 re_extract.py <Ghost export .json>
+GHOST_JSON = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "ghost-export.json"
+OUTPUT_DIR = ROOT / "src" / "content" / "archive"
+IMAGES_DIR = ROOT / "public" / "images" / "archive"
 
 
 def build_image_map(slug):
