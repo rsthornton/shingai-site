@@ -1,0 +1,64 @@
+---
+// Writing, version C: a hub. One lane per kind of writing, each showing its newest few and where the rest lives.
+// The site keeps the essays; field notes live on the blyg and the newsletter on Ideas, and this page points to both.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { name, thesisUrl, explorersUrl } from '../data/site';
+import { writing, shortDate, blygUrl, newsletterUrl } from '../data/writing';
+
+const items = await writing();
+const of = (k: string) => items.filter((i) => i.kind === k);
+const year = (d: Date) => d.getFullYear();
+const lanes = [
+  { title: 'Field notes', where: 'on the blyg', more: { href: blygUrl, label: 'blyg.shingai.xyz' }, items: of('note').slice(0, 5) },
+  { title: 'Talks', where: 'given', more: { href: '/about#talks', label: 'all talks' }, items: of('talk').slice(0, 5) },
+  { title: 'Essays', where: '2019–2023, kept here', more: { href: '/archive', label: `all ${of('essay').length} essays` }, items: of('essay').slice(0, 5) },
+];
+---
+
+<BaseLayout title={`Writing | ${name}`} description="Essays, field notes and talks by Shingai Thornton.">
+  <header class="intro">
+    <h1>Writing</h1>
+    <p>Field notes, talks and essays, all in one <a href="/rss.xml">RSS feed</a>.</p>
+  </header>
+
+  <div class="lanes">
+    {lanes.map((l) => (
+      <section>
+        <h2>{l.title} <span>{l.where}</span></h2>
+        <ul>
+          {l.items.map((i) => (
+            <li>
+              <a href={i.href}>{i.title}</a>
+              <span class="when">{i.kind === 'essay' ? year(i.date) : shortDate(i.date)}{i.where && i.kind === 'talk' ? ` · ${i.where}` : ''}</span>
+            </li>
+          ))}
+        </ul>
+        <a class="more" href={l.more.href}>{l.more.label} →</a>
+      </section>
+    ))}
+    <section>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href={newsletterUrl}>Ideas</a><span class="when">the newsletter, current</span></li>
+        <li><a href={explorersUrl}>System Explorers</a><span class="when">newsletter archive</span></li>
+        <li><a href={thesisUrl}>MS thesis</a><span class="when">2026, ProQuest</span></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro { margin-bottom: 36px; }
+  h1 { font: 600 2.4rem/1.15 var(--serif); letter-spacing: -0.01em; margin: 0 0 8px; }
+  .intro p { color: var(--ink-2); }
+  .lanes { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px 48px; }
+  @media (min-width: 820px) { .lanes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  h2 { font: 600 1.25rem var(--serif); margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  h2 span { font: 400 13px var(--sans); color: var(--muted); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; gap: 0; padding: 9px 0; border-bottom: var(--edge); }
+  li a { color: var(--ink); text-decoration: none; font-weight: 500; line-height: 1.4; }
+  li a:hover { color: var(--accent); text-decoration: underline; }
+  .when { font: 12px var(--mono); color: var(--muted); }
+  .more { display: inline-block; margin-top: 10px; font-size: 0.92rem; }
+</style>

@@ -1,8 +1,6 @@
 ---
-import { getCollection } from 'astro:content';
-import { name, updated, explorersUrl, thesisUrl, links } from '../data/site';
-const x = links.find((l) => l.label === 'X')!.href;
-const github = links.find((l) => l.label === 'GitHub')!.href;
+import { name, updated } from '../data/site';
+import Icons from '../components/Icons.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -10,22 +8,17 @@ interface Props {
   description?: string;
   window?: string; // subpages still pass this; it now just means "a document page"
   windowId?: string;
+  bare?: boolean; // home: no header or footer, the page is the navigation
 }
 
 const {
   title,
   description = 'Shingai Thornton: PhD student in Systems Science at Binghamton University; runs Halcyonic Systems.',
   window: isDoc,
+  bare = false,
 } = Astro.props;
 
-const essays = (await getCollection('archive')).length;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const writing = [
-  { label: 'Ideas', note: 'newsletter, current', href: 'https://ideas.halcyonic.systems' },
-  { label: 'System Explorers', note: 'newsletter archive', href: explorersUrl },
-  { label: 'Essays', note: `${essays} essays, 2019–23`, href: '/archive' },
-  { label: 'Thesis', note: 'MS, 2026', href: thesisUrl || '/cv' },
-];
 const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
 ---
 
@@ -51,38 +44,26 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
   </head>
   <body>
     <div class="column">
-      <header class="top">
+      {!bare && <header class="top">
         <a class="logo" href="/">Shingai Thornton</a>
         <nav aria-label="Site">
           <a href="/projects" aria-current={path.startsWith('/projects') ? 'page' : undefined}>Projects</a>
-          <details class="menu">
-            <summary aria-current={path.startsWith('/archive') ? 'page' : undefined}>Writing</summary>
-            <ul class="box">
-              {writing.map((w) => <li><a href={w.href}><span>{w.label}</span><span class="note">{w.note}</span></a></li>)}
-            </ul>
-          </details>
+          <a href="/writing" aria-current={path.startsWith('/writing') || path.startsWith('/archive') ? 'page' : undefined}>Writing</a>
           <a href="/about" aria-current={path.startsWith('/about') || path.startsWith('/cv') ? 'page' : undefined}>About</a>
-          <span class="social">
-            <a class="icon" href={x} aria-label="X">
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-            </a>
-            <a class="icon" href={github} aria-label="GitHub">
-              <svg viewBox="0 0 16 16" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            </a>
-          </span>
+          <span class="social"><Icons only={['x', 'github', 'rss']} /></span>
 
         </nav>
-      </header>
+      </header>}
 
       {isDoc ? <article class="doc"><slot /></article> : <slot />}
     </div>
 
-    <footer class="foot">
+    {!bare && <footer class="foot">
       <div class="column">
         <span>&copy; {updated.slice(0, 4)} {name}</span>
         <span>updated {updated}</span>
       </div>
-    </footer>
+    </footer>}
 
     <script is:inline>
       document.addEventListener('click', function (e) {

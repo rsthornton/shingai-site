@@ -13,6 +13,14 @@ export interface Item {
   external: boolean;
   where?: string; // where it lives when not here: "blyg", a venue
   summary?: string;
+  minutes?: number; // reading time, essays only
+}
+
+// First real paragraph of a markdown body, as plain text, cut near 180 characters.
+function excerpt(md: string): string {
+  const para = md.split(/\n\s*\n/).map((p) => p.trim()).find((p) => p && !/^(#|!\[|<|>|\||```|- |\* |\d+\. )/.test(p)) ?? '';
+  const text = para.replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' ');
+  return text.length > 180 ? text.slice(0, text.lastIndexOf(' ', 180)) + '…' : text;
 }
 
 export const blygUrl = 'https://blyg.shingai.xyz/';
@@ -33,7 +41,7 @@ async function blygNotes(): Promise<Item[]> {
       return {
         kind: 'note' as const,
         title: cut > 0 ? raw.slice(0, cut) : raw,
-        summary: cut > 0 ? raw.slice(cut + 2) : undefined,
+        summary: excerpt(pick(s, 'description').replace(/^<!\[CDATA\[|\]\]>$/g, '').replace(/<[^>]+>/g, ' ')),
         date: new Date(pick(s, 'pubDate')),
         href: pick(s, 'link'),
         external: true,
@@ -52,7 +60,8 @@ export async function writing(kinds: Kind[] = ['essay', 'note', 'talk']): Promis
     date: p.data.date,
     href: `/archive/${p.data.permalink}/`,
     external: false,
-    summary: p.data.description,
+    summary: p.data.description ?? excerpt(p.body ?? ''),
+    minutes: Math.max(1, Math.round((p.body ?? '').split(/\s+/).length / 230)),
   }));
   const said: Item[] = talks.map((t) => ({
     kind: 'talk',
