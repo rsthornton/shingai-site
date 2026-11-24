@@ -21,10 +21,8 @@ dist/
 # Logs
 *.log
 
-# Migration scripts and exports
-*.json
-!package.json
-!package-lock.json
-!tsconfig.json
+# Ghost exports and one-off migration leftovers stay local
+*.ghost.*.json
+ghost-export.json
 reinsert_images.py
-!src/data/*.json
+__pycache__/

@@ -9,10 +9,13 @@ Transforms:
 
 import re
 import shutil
+import sys
 from pathlib import Path
 
-SOURCE_DIR = Path("/Users/home/Desktop/halcyonic-projects/archive/shingai-ghost-export/published")
-TARGET_DIR = Path(__file__).parent / "src" / "content" / "archive"
+ROOT = Path(__file__).resolve().parents[2]
+# Usage: python3 transform_posts.py <folder of exported .md posts>
+SOURCE_DIR = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("published")
+TARGET_DIR = ROOT / "src" / "content" / "archive"
 
 
 def transform_frontmatter(content: str) -> str:

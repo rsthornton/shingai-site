@@ -7,12 +7,18 @@ Personal site for Shingai Thornton. Astro 5, plain CSS, no framework.
 
 ## Development
 
+Node 22 (`.nvmrc`); 20 or newer works.
+
 ```bash
 npm install
-npm run dev       # http://localhost:4321
-npm run build     # outputs to dist/
-npm run preview   # serves dist/
+npm run dev            # http://localhost:4321
+npm run build          # outputs to dist/
+npm run preview        # serves dist/
+npm run check          # astro check: types and templates
+npm run format:check   # prettier, not yet enforced (see below)
 ```
+
+CI (`.github/workflows/ci.yml`) runs `check` and `build` on every pull request.
 
 ## Layout
 
@@ -72,8 +78,20 @@ Pale gray-blue page (`--page`), white boxes, one navy accent, one highlight colo
 
 ## Archive import
 
-`transform_posts.py` and `re_extract.py` converted the Ghost export (`halcyonic-projects/archive/shingai-ghost-export/published/`) into `src/content/archive/`. Frontmatter: `title`, `permalink`, `date`, optional `updated` and `description`.
+`scripts/ghost-import/` holds the one-off scripts that turned the 2023 Ghost export into `src/content/archive/`: `re_extract.py <export.json>` (needs `markdownify`) and `transform_posts.py <folder>`. They are kept for the record and are not part of the build. Frontmatter: `title`, `permalink`, `date`, optional `updated` and `description`.
 
 ## Deployment
 
-Pushing to `main` builds and deploys through `.github/workflows/deploy.yml` to GitHub Pages; the custom domain is in `public/CNAME`. `.gitignore` excludes `*.json` except package files and `src/data/*.json`.
+Pushing to `main` builds and deploys through `.github/workflows/deploy.yml` to GitHub Pages; the custom domain is in `public/CNAME`. Ghost exports (`*.ghost.*.json`) are ignored and never committed.
+
+## Formatting
+
+`.prettierrc.json` matches the code's style (single quotes, 120 columns, the Astro plugin). The code has not been run through it yet: the first `npm run format` will be its own commit, after the open design branches are merged, so they don't conflict. CI starts checking format after that.
+
+## License
+
+Not chosen yet. Until a license file is added, the code and the content (essays, images, slides) are all rights reserved. Read and learn from it freely; ask before reusing.
+
+## Contributing
+
+It's Shingai's personal site, so changes come from him, but issues are welcome: a broken link, a typo, something unreadable on your screen.
