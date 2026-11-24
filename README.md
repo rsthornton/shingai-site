@@ -1,92 +1,101 @@
 # shingai.xyz
 
-Personal site for Shingai Thornton. Astro 5, plain CSS, no framework.
+Source for [shingai.xyz](https://shingai.xyz), the personal site of Shingai Thornton. Astro 5, plain CSS, no UI framework, no client-side JavaScript beyond a few lines.
 
-- **Production**: https://shingai.xyz (GitHub Pages)
-- **GitHub**: https://github.com/rsthornton/shingai-site
-
-## Development
+## Run it
 
 Node 22 (`.nvmrc`); 20 or newer works.
 
 ```bash
 npm install
-npm run dev            # http://localhost:4321
-npm run build          # outputs to dist/
-npm run preview        # serves dist/
-npm run check          # astro check: types and templates
-npm run format:check   # prettier, not yet enforced (see below)
+npm run dev       # http://localhost:4321
+npm run verify    # everything CI checks: format, types, build, internal links
 ```
 
-CI (`.github/workflows/ci.yml`) runs `check` and `build` on every pull request.
+| Script | Does |
+|---|---|
+| `dev` | Local server with reload |
+| `build` | Static site into `dist/` |
+| `preview` | Serves `dist/` |
+| `check` | `astro check`: TypeScript and templates |
+| `check:links` | Every internal `href` and `src` in `dist/` points at a file (run after `build`) |
+| `format` / `format:check` | Prettier, with the Astro plugin |
+| `verify` | All of the above, in CI's order |
 
-## Layout
+## Pages
 
-- **Header**: name, then Projects, Writing (menu: Ideas, System Explorers, Essays, Thesis), About, and X and GitHub icons. On phones (600px and under) the name sits above the nav.
-- **Home**: one big line ("Systems theorist and builder."), the theory of change under it once there is one, then "Working on": three featured projects side by side.
-- **Projects** (`/projects`): every project, featured ones first.
-- **About**: who Shingai is, the headshot, links to the CV and to book 20 minutes, and the talks.
-- **IM window**: on home only, bottom right; the one way to send a message, and it holds the away message. It starts closed; the tab opens it.
+| Address | Shows | File |
+|---|---|---|
+| `/` | Menu, a drawing, the one line and who | `src/pages/index.astro`, `src/components/HomeArt.astro` |
+| `/projects` | Projects with screenshots, then talks | `src/pages/projects.astro` |
+| `/writing` | Essays and blyg field notes in one list, with tabs | `src/pages/writing.astro` |
+| `/archive/<slug>` | One essay | `src/pages/archive/[slug].astro` |
+| `/about` | Bio, photo, CV and call links | `src/pages/about.astro` |
+| `/cv` | The CV | `src/pages/cv.astro` |
+| `/talks/ccs-2026` | A talk with its abstract and materials | `src/pages/talks/ccs-2026.astro` |
+| `/rss.xml` | RSS for everything on `/writing` | `src/pages/rss.xml.ts` |
+| `/archive` | Redirects to `/writing` | `astro.config.mjs` |
+| anything else | Not found | `src/pages/404.astro` |
 
-## Structure
+## Where things live
 
 ```
 src/
-├── content/archive/       # 32 essays, 2019–2023 (from the Ghost export)
 ├── data/
-│   ├── site.ts            # all copy: the big line, theory of change, projects, talks, links, away message
+│   ├── site.ts        # name, the line, who, portrait, email, every outside URL (urls)
+│   ├── projects.ts    # the projects, typed, in display order
+│   ├── talks.ts       # the talks, typed, newest first
+│   ├── writing.ts     # builds the writing list: essays + blyg notes (+ talks if asked)
 │   └── ccs-2026-abstract.json
-├── components/Im.astro    # the IM window
-├── layouts/BaseLayout.astro   # head, OG tags, header, footer
-├── pages/
-│   ├── index.astro        # home
-│   ├── projects.astro
-│   ├── about.astro
-│   ├── cv.astro
-│   ├── archive/           # essay index + post template
-│   └── talks/             # one page per talk
-└── styles/global.css      # color tokens, header, footer, prose styles
+├── content/archive/   # 32 essays, 2019–2023, markdown (schema in src/content/config.ts)
+├── components/
+│   ├── HomeArt.astro  # the SVG drawing on home
+│   └── Icons.astro    # X, GitHub, email, RSS icons
+├── layouts/BaseLayout.astro   # head and social tags, header menu, <main>, footer
+├── pages/             # one file per address (table above)
+└── styles/global.css  # color tokens, header, footer, prose
 public/
-├── images/icon/           # headshot and IM icons
-├── images/top8/           # project screenshots, 960×600
-└── talks/                 # slide PDFs
+├── images/projects/   # project screenshots, 960×600
+├── images/icon/       # headshot (photo and pixel)
+├── images/archive/    # images inside the essays
+└── talks/             # slide PDFs
+scripts/
+├── check-links.mjs    # the internal link check
+└── ghost-import/      # one-off scripts that imported the essays from Ghost (not part of the build)
 ```
+
+### How writing works
+
+`/writing` is a hub: it lists writing that lives in different places. Essays are markdown files in this repo. Field notes live on the blyg ([blyg.shingai.xyz](https://blyg.shingai.xyz)) and are read from its RSS feed when the site builds; if the blyg can't be reached, the build carries on without them. The site deploys daily, so a new blyg entry appears within a day without a commit. The newsletter (Ideas) and the thesis are linked, not listed.
 
 ## Editing
 
-Most changes are one edit to `src/data/site.ts`.
-
 | To | Do |
 |---|---|
-| Change the big line on home | edit `claim` |
-| Add the theory of change | write it in `theory` (empty for now, so nothing shows). It appears under the big line. Wrap a word in `[brackets]` to highlight it; two or three |
-| Feature a project on home | `featured: true` and a one-line `blurb` on its `top8` entry. Give it a one-word `kind` too. Three fit side by side |
-| Add a project | add to `top8` with a 960×600 screenshot at `public/images/top8/<img>.jpg`. An optional `talk` adds a "Talk: …" link under it |
-| Update the away message | `now` lines, and bump `updated` (it shows as "set …" in the IM window) |
-| Add a talk | add to `talks` (newest first, `status: 'upcoming' \| 'given'`). For a talk page, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
-| Change links | `links` (X, GitHub), `callUrl` (Book 20 minutes, on About), `email`, `thesisUrl` (ProQuest), `explorersUrl` |
-
-## Trying a new design
-
-There is one home page and one version of each thing. To try a different direction, make a branch, change it there, and merge it or delete it; do not keep alternatives side by side in `main`. Earlier directions stay in git history if one is wanted back: a text-only index and a profile-with-sidebar home are in commit `5416f11` (`src/components/Home.astro`), and the theory-of-change drafts are in `c45dee3` (`src/data/site.ts`).
-
-Email: the IM window never relies on a mail app alone. It offers Gmail, Outlook, the mail app, or copy, and remembers the last choice (`im:via`).
+| Change the line or the who sentence | `claim` and `who` in `src/data/site.ts` |
+| Add the theory of change | `theory` in `site.ts`; it shows under the who sentence on home when not empty |
+| Add a project | an entry in `src/data/projects.ts`, and a 960×600 screenshot at `public/images/projects/<img>.jpg` |
+| Add a talk | an entry at the top of `src/data/talks.ts`. For a page of its own, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
+| Add an essay | a markdown file in `src/content/archive/` with `title`, `permalink` and `date` |
+| Change a link | `urls` in `site.ts` |
+| Pick the home drawing | `chosen` in `src/pages/index.astro`; then delete the other variants from `HomeArt.astro` and the `?art=` script |
+| Mark a release | bump `updated` in `site.ts` (shown in the footer) |
 
 ## Style rules
 
-Pale gray-blue page (`--page`), white boxes, one navy accent, one highlight color. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only in the IM window and small counters. Borders only where a box means something (the IM window, project screenshots, menus). Corners 8px for boxes, 4px inside them. No shadows, no beige. Colors come from the tokens in `global.css`.
+Light only. Pale gray-blue page (`--page`), white boxes, one navy accent, one highlight color; every color is a token at the top of `global.css`. Source Serif 4 for headings, IBM Plex Sans for reading, Plex Mono only for small machine bits (dates, kinds). Borders only where a box means something (project screenshots). Corners 8px for boxes, 4px inside them. No shadows, no beige. Motion only where it says something, and never when the reader asks for reduced motion.
 
-## Archive import
+## Accessibility
 
-`scripts/ghost-import/` holds the one-off scripts that turned the 2023 Ghost export into `src/content/archive/`: `re_extract.py <export.json>` (needs `markdownify`) and `transform_posts.py <folder>`. They are kept for the record and are not part of the build. Frontmatter: `title`, `permalink`, `date`, optional `updated` and `description`.
+A skip link, one `<main>` per page, `aria-current` on the menu, visible focus rings, decorative images and drawings hidden from screen readers, and one link per project card. The writing tabs are radio buttons, so they work from the keyboard without script.
 
 ## Deployment
 
-Pushing to `main` builds and deploys through `.github/workflows/deploy.yml` to GitHub Pages; the custom domain is in `public/CNAME`. Ghost exports (`*.ghost.*.json`) are ignored and never committed.
+Pushing to `main` builds, checks links and deploys to GitHub Pages (`.github/workflows/deploy.yml`), and the same workflow runs daily. The custom domain is in `public/CNAME`. Pull requests run `npm run verify` (`.github/workflows/ci.yml`). Dependabot opens monthly update pull requests. Ghost exports (`*.ghost.*.json`) are ignored and never committed.
 
-## Formatting
+## History
 
-`.prettierrc.json` matches the code's style (single quotes, 120 columns, the Astro plugin). The code has not been run through it yet: the first `npm run format` will be its own commit, after the open design branches are merged, so they don't conflict. CI starts checking format after that.
+Earlier directions are in git, not side by side in `main`: the IM window and the Writing dropdown are in the history before the restructure commit (`git log -- src/components/Im.astro`), and the design explorations that led here were the `explore/*` branches.
 
 ## License
 
