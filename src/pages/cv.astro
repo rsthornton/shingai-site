@@ -3,8 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { name, email, urls } from '../data/site';
 import { talks } from '../data/talks';
 
-const fmt = (d: string) =>
-  new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
 const education = [
   { what: 'PhD student, Systems Science', where: 'Binghamton University (SUNY)', when: '2026–' },
@@ -12,7 +11,8 @@ const education = [
     what: 'MS, Systems Science',
     where: 'Binghamton University (SUNY)',
     when: '2026',
-    thesis: 'Testing Network Centrality for Economic Power Measurement: Structure and Boundaries in U.S. Interstate Trade',
+    thesis:
+      'Testing Network Centrality for Economic Power Measurement: Structure and Boundaries in U.S. Interstate Trade',
     note: 'Advisor: Cliff Joslyn. Committee chair: Carlos Gershenson.',
   },
   { what: 'BA, Social Sciences (Psychology)', where: 'University of Southern California', when: '2012' },
@@ -40,8 +40,14 @@ const experience = [
 ];
 
 const software = [
-  { what: 'BERT (Bounded Entity Reasoning Toolkit)', note: 'Desktop environment for systems modeling and decomposition, in Rust.' },
-  { what: 'Hayekian Systems Explorer', note: 'Interactive simulation of Hayekian coordination; the artifact for Markets & Society 2026.' },
+  {
+    what: 'BERT (Bounded Entity Reasoning Toolkit)',
+    note: 'Desktop environment for systems modeling and decomposition, in Rust.',
+  },
+  {
+    what: 'Hayekian Systems Explorer',
+    note: 'Interactive simulation of Hayekian coordination; the artifact for Markets & Society 2026.',
+  },
   {
     what: 'systems-science-foundations',
     note: 'Formalization of systems-science ontologies (Klir, Bunge, Mobus) in Lean 4.',
@@ -50,16 +56,32 @@ const software = [
 ];
 ---
 
-<BaseLayout title={`CV | ${name}`} description={`CV of ${name}, PhD student in Systems Science at Binghamton University.`} doc>
+<BaseLayout
+  title={`CV | ${name}`}
+  description={`CV of ${name}, PhD student in Systems Science at Binghamton University.`}
+  doc
+>
   <h1>{name}</h1>
-  <p class="contact"><a href={`mailto:${email}`}>{email}</a> · <a href="https://halcyonic.systems">halcyonic.systems</a> · <a href="https://github.com/rsthornton">github.com/rsthornton</a></p>
+  <p class="contact">
+    <a href={`mailto:${email}`}>{email}</a> · <a href="https://halcyonic.systems">halcyonic.systems</a> ·{' '}
+    <a href="https://github.com/rsthornton">github.com/rsthornton</a>
+  </p>
 
   <h2>education</h2>
   <ul class="entries">
     {education.map((e) => (
       <li>
-        <p class="row"><span><strong>{e.what}</strong>, {e.where}</span><span class="when">{e.when}</span></p>
-        {e.thesis && <p class="note">Thesis: <a href={urls.thesis}>{e.thesis}</a>.</p>}
+        <p class="row">
+          <span>
+            <strong>{e.what}</strong>, {e.where}
+          </span>
+          <span class="when">{e.when}</span>
+        </p>
+        {e.thesis && (
+          <p class="note">
+            Thesis: <a href={urls.thesis}>{e.thesis}</a>.
+          </p>
+        )}
         {e.note && <p class="note">{e.note}</p>}
       </li>
     ))}
@@ -69,7 +91,12 @@ const software = [
   <ul class="entries">
     {experience.map((e) => (
       <li>
-        <p class="row"><strong><a href={e.href}>{e.what}</a></strong><span class="when">{e.when}</span></p>
+        <p class="row">
+          <strong>
+            <a href={e.href}>{e.what}</a>
+          </strong>
+          <span class="when">{e.when}</span>
+        </p>
         <p class="note">{e.note}</p>
       </li>
     ))}
@@ -79,8 +106,14 @@ const software = [
   <ul class="entries">
     {talks.map((t) => (
       <li>
-        <p class="row"><a href={t.href}>{t.title}</a><span class="when">{fmt(t.date)}</span></p>
-        <p class="note">{t.venue}, {t.place}{t.status === 'upcoming' ? ' (upcoming)' : ''}</p>
+        <p class="row">
+          <a href={t.href}>{t.title}</a>
+          <span class="when">{fmt(t.date)}</span>
+        </p>
+        <p class="note">
+          {t.venue}, {t.place}
+          {t.status === 'upcoming' ? ' (upcoming)' : ''}
+        </p>
       </li>
     ))}
   </ul>
@@ -88,7 +121,12 @@ const software = [
   <h2>funded research</h2>
   <ul class="entries">
     <li>
-      <p class="row"><strong><a href="https://www.researchhub.com/proposal/32374/">ResearchHub Foundation</a></strong><span class="when">2026</span></p>
+      <p class="row">
+        <strong>
+          <a href="https://www.researchhub.com/proposal/32374/">ResearchHub Foundation</a>
+        </strong>
+        <span class="when">2026</span>
+      </p>
       <p class="note">Open replication proposal: network centrality analysis of the U.S. Commodity Flow Survey.</p>
     </li>
   </ul>
@@ -97,7 +135,9 @@ const software = [
   <ul class="entries">
     {software.map((s) => (
       <li>
-        <p class="row"><strong>{s.href ? <a href={s.href}>{s.what}</a> : s.what}</strong></p>
+        <p class="row">
+          <strong>{s.href ? <a href={s.href}>{s.what}</a> : s.what}</strong>
+        </p>
         <p class="note">{s.note}</p>
       </li>
     ))}
@@ -109,12 +149,47 @@ const software = [
 </BaseLayout>
 
 <style>
-  h1 { font-size: 26px; line-height: 1.25; margin: 0 0 4px; }
-  .contact { font-size: 15px; color: var(--ink-2); margin-bottom: 8px; }
-  h2 { font: 600 13px var(--mono); color: var(--ink-2); margin: 26px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
-  .entries { list-style: none; margin: 0; padding: 0; }
-  .entries li + li { margin-top: 12px; }
-  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin: 0; }
-  .when { flex: none; font: 13px var(--mono); color: var(--muted); }
-  .note { margin: 2px 0 0; color: var(--ink-2); font-size: 15px; max-width: 64ch; }
+  h1 {
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0 0 4px;
+  }
+  .contact {
+    font-size: 15px;
+    color: var(--ink-2);
+    margin-bottom: 8px;
+  }
+  h2 {
+    font: 600 13px var(--mono);
+    color: var(--ink-2);
+    margin: 26px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--line);
+  }
+  .entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .entries li + li {
+    margin-top: 12px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin: 0;
+  }
+  .when {
+    flex: none;
+    font: 13px var(--mono);
+    color: var(--muted);
+  }
+  .note {
+    margin: 2px 0 0;
+    color: var(--ink-2);
+    font-size: 15px;
+    max-width: 64ch;
+  }
 </style>

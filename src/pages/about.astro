@@ -11,14 +11,31 @@ import { name, portrait, urls } from '../data/site';
       I'm a PhD student in <mark>systems science</mark> at Binghamton University. I run
       <a href={urls.halcyonic}>Halcyonic Systems</a>, a small lab for <mark>formal systems research</mark>.
     </p>
-    <p><a href="/cv">CV</a> · <a href={urls.call}>Book 20 minutes</a></p>
+    <p>
+      <a href="/cv">CV</a> · <a href={urls.call}>Book 20 minutes</a>
+    </p>
   </div>
 </BaseLayout>
 
 <style>
-  .lede { font-size: 1.15rem; line-height: 1.9; }
-  .prose .face { display: block; width: 120px; height: 120px; border: 0; border-radius: 8px; margin: 0 0 20px; }
+  .lede {
+    font-size: 1.15rem;
+    line-height: 1.9;
+  }
+  .prose .face {
+    display: block;
+    width: 120px;
+    height: 120px;
+    border: 0;
+    border-radius: 8px;
+    margin: 0 0 20px;
+  }
   @media (min-width: 640px) {
-    .prose .face { float: right; width: 168px; height: 168px; margin: 6px 0 16px 32px; }
+    .prose .face {
+      float: right;
+      width: 168px;
+      height: 168px;
+      margin: 6px 0 16px 32px;
+    }
   }
 </style>

@@ -10,10 +10,29 @@ interface Props {
 const { variant } = Astro.props;
 
 // lattice: a 10×6 grid, with a few points joined into a small network
-const cols = 10, rows = 6, gap = 32, ox = 16, oy = 40;
+const cols = 10,
+  rows = 6,
+  gap = 32,
+  ox = 16,
+  oy = 40;
 const pt = (c: number, r: number) => [ox + c * gap, oy + r * gap] as const;
-const lit: [number, number][] = [[3, 1], [5, 2], [4, 4], [6, 4], [7, 1], [2, 3]];
-const edges: [number, number][] = [[0, 1], [1, 2], [1, 3], [1, 4], [2, 5], [0, 5], [3, 4]];
+const lit: [number, number][] = [
+  [3, 1],
+  [5, 2],
+  [4, 4],
+  [6, 4],
+  [7, 1],
+  [2, 3],
+];
+const edges: [number, number][] = [
+  [0, 1],
+  [1, 2],
+  [1, 3],
+  [1, 4],
+  [2, 5],
+  [0, 5],
+  [3, 4],
+];
 ---
 
 <svg class="art" data-variant={variant} viewBox="0 0 320 240" aria-hidden="true" focusable="false">
@@ -59,28 +78,73 @@ const edges: [number, number][] = [[0, 1], [1, 2], [1, 3], [1, 4], [2, 5], [0, 5
       <circle cx="118" cy="96" r="38" class="edge" />
       <circle cx="204" cy="100" r="32" class="edge" />
       <circle cx="160" cy="170" r="30" class="edge" />
-      <circle cx="104" cy="88" r="5" class="node" /><circle cx="130" cy="106" r="5" class="node" /><circle cx="114" cy="116" r="3.5" class="node" />
-      <circle cx="196" cy="94" r="5" class="node" /><circle cx="214" cy="110" r="3.5" class="node" />
-      <circle cx="150" cy="166" r="3.5" class="node" /><circle cx="170" cy="176" r="5" class="node" />
+      <circle cx="104" cy="88" r="5" class="node" />
+      <circle cx="130" cy="106" r="5" class="node" />
+      <circle cx="114" cy="116" r="3.5" class="node" />
+      <circle cx="196" cy="94" r="5" class="node" />
+      <circle cx="214" cy="110" r="3.5" class="node" />
+      <circle cx="150" cy="166" r="3.5" class="node" />
+      <circle cx="170" cy="176" r="5" class="node" />
       <path d="M150 124 Q160 140 156 146 M178 120 Q174 140 168 146 M156 102 H172" class="flow" />
     </g>
   )}
 </svg>
 
 <style>
-  .art { display: block; width: 100%; max-width: 360px; height: auto; overflow: visible; }
-  .edge { stroke: var(--ink-2); stroke-width: 1.25; fill: none; }
-  .flow { stroke: var(--accent); stroke-width: 1.5; fill: none; stroke-dasharray: 4 5; }
-  .inner { opacity: 0.75; }
-  .port { fill: var(--page); stroke: var(--ink-2); stroke-width: 1.25; }
-  .node { fill: var(--paper); stroke: var(--accent); stroke-width: 1.5; }
-  .dot { fill: var(--muted); opacity: 0.45; }
-  .link { stroke: var(--accent); stroke-width: 1.25; }
-  .hub { fill: var(--paper); stroke: var(--accent); stroke-width: 1.5; }
+  .art {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    overflow: visible;
+  }
+  .edge {
+    stroke: var(--ink-2);
+    stroke-width: 1.25;
+    fill: none;
+  }
+  .flow {
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-dasharray: 4 5;
+  }
+  .inner {
+    opacity: 0.75;
+  }
+  .port {
+    fill: var(--page);
+    stroke: var(--ink-2);
+    stroke-width: 1.25;
+  }
+  .node {
+    fill: var(--paper);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+  .dot {
+    fill: var(--muted);
+    opacity: 0.45;
+  }
+  .link {
+    stroke: var(--accent);
+    stroke-width: 1.25;
+  }
+  .hub {
+    fill: var(--paper);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
 
   /* the flow drifts slowly, unless the reader has asked for less motion */
   @media (prefers-reduced-motion: no-preference) {
-    .flow { animation: drift 2.4s linear infinite; }
+    .flow {
+      animation: drift 2.4s linear infinite;
+    }
   }
-  @keyframes drift { to { stroke-dashoffset: -18; } }
+  @keyframes drift {
+    to {
+      stroke-dashoffset: -18;
+    }
+  }
 </style>

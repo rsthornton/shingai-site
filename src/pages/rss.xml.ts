@@ -3,8 +3,7 @@ import type { APIContext } from 'astro';
 import { name } from '../data/site';
 import { writing } from '../data/writing';
 
-const esc = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export async function GET({ site }: APIContext) {
   const base = site!.href;

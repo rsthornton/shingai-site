@@ -47,13 +47,23 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
     <div class="column">
       <header class="top">
-        <a class="logo" href="/" aria-current={path === '/' ? 'page' : undefined}>{name}</a>
+        <a class="logo" href="/" aria-current={path === '/' ? 'page' : undefined}>
+          {name}
+        </a>
         <nav aria-label="Site">
-          {menu.map((m) => <a href={m.href} aria-current={m.current ? 'page' : undefined}>{m.label}</a>)}
-          <span class="social"><Icons only={['x', 'github', 'rss']} /></span>
+          {menu.map((m) => (
+            <a href={m.href} aria-current={m.current ? 'page' : undefined}>
+              {m.label}
+            </a>
+          ))}
+          <span class="social">
+            <Icons only={['x', 'github', 'rss']} />
+          </span>
         </nav>
       </header>
 
@@ -64,8 +74,12 @@ const ogImage = new URL(portrait.photo, Astro.site).href;
 
     <footer class="foot">
       <div class="column">
-        <span>&copy; {updated.slice(0, 4)} {name}</span>
-        <span><a href={urls.source}>source</a> · updated {updated}</span>
+        <span>
+          &copy; {updated.slice(0, 4)} {name}
+        </span>
+        <span>
+          <a href={urls.source}>source</a> · updated {updated}
+        </span>
       </div>
     </footer>
   </body>

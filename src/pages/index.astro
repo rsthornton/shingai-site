@@ -15,10 +15,13 @@ const [before, after] = who.split(halcyonic);
   <section class="home">
     <div class="art">
       {variants.map((v) => (
-        <div data-art={v} hidden={v !== chosen}><HomeArt variant={v} /></div>
+        <div data-art={v} hidden={v !== chosen}>
+          <HomeArt variant={v} />
+        </div>
       ))}
     </div>
     <h1>{claim}</h1>
+    <!-- prettier-ignore -->
     <p class="who">{before}<a href={urls.halcyonic}>{halcyonic}</a>{after}</p>
     {theory && <p class="theory">{theory}</p>}
   </section>
@@ -28,16 +31,44 @@ const [before, after] = who.split(halcyonic);
     (function () {
       var want = new URLSearchParams(location.search).get('art');
       if (!want) return;
-      document.querySelectorAll('[data-art]').forEach(function (el) { el.hidden = el.getAttribute('data-art') !== want; });
+      document.querySelectorAll('[data-art]').forEach(function (el) {
+        el.hidden = el.getAttribute('data-art') !== want;
+      });
     })();
   </script>
 </BaseLayout>
 
 <style>
-  .home { display: grid; justify-items: center; text-align: center; padding: 2vh 0 10vh; }
-  .art { width: min(360px, 80vw); margin-bottom: 40px; }
-  h1 { font: 600 2.4rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0; }
-  .who { max-width: 32em; margin: 16px 0 0; color: var(--ink-2); font-size: 1.08rem; line-height: 1.7; }
-  .theory { max-width: 34em; margin: 16px 0 0; font-size: 1.15rem; }
-  @media (min-width: 900px) { h1 { font-size: 3.2rem; } }
+  .home {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    padding: 2vh 0 10vh;
+  }
+  .art {
+    width: min(360px, 80vw);
+    margin-bottom: 40px;
+  }
+  h1 {
+    font: 600 2.4rem/1.1 var(--serif);
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .who {
+    max-width: 32em;
+    margin: 16px 0 0;
+    color: var(--ink-2);
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .theory {
+    max-width: 34em;
+    margin: 16px 0 0;
+    font-size: 1.15rem;
+  }
+  @media (min-width: 900px) {
+    h1 {
+      font-size: 3.2rem;
+    }
+  }
 </style>

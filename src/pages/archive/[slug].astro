@@ -22,14 +22,22 @@ const formattedDate = post.data.date.toLocaleDateString('en-US', {
 ---
 
 <BaseLayout title={`${post.data.title} | ${name}`} description={post.data.description} doc>
-  <p class="back"><a href="/writing">← writing</a></p>
+  <p class="back">
+    <a href="/writing">← writing</a>
+  </p>
   <article class="prose">
     <h1>{post.data.title}</h1>
-    <p class="date"><time datetime={post.data.date.toISOString().slice(0, 10)}>{formattedDate}</time> <span>· archived essay</span></p>
+    <p class="date">
+      <time datetime={post.data.date.toISOString().slice(0, 10)}>{formattedDate}</time> <span>· archived essay</span>
+    </p>
     <Content />
   </article>
 </BaseLayout>
 
 <style>
-  .date { font: 13px var(--mono); color: var(--muted); margin: -0.4em 0 1.6em; }
+  .date {
+    font: 13px var(--mono);
+    color: var(--muted);
+    margin: -0.4em 0 1.6em;
+  }
 </style>
