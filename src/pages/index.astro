@@ -1,57 +1,43 @@
 ---
-// Home, version D (C's doors with one line of who from A): a title page. No header, no images but the small portrait, no IM window.
-// The name, the line, three doors with what's behind each, and the icons. Everything else is one click in.
+// Home: the usual menu at the top, then one quiet drawing, the line and one sentence of who.
+// Everything else is one click away in the menu.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icons from '../components/Icons.astro';
-import { name, headline, claim, icons, top8 } from '../data/site';
+import HomeArt from '../components/HomeArt.astro';
+import { name, claim, who, theory, urls } from '../data/site';
 
-const featured = top8.filter((t) => t.featured).map((t) => t.title);
-const doors = [
-  { href: '/projects', label: 'Projects', note: `${featured.join(', ')}, and talks` },
-  { href: '/writing', label: 'Writing', note: 'Field notes and essays' },
-  { href: '/about', label: 'About', note: 'Bio, CV, book a call' },
-];
+const variants = ['system', 'lattice', 'nested'] as const;
+const chosen = 'system'; // the drawing shown; the others render hidden while Shingai chooses (?art=lattice)
+const halcyonic = 'Halcyonic Systems';
+const [before, after] = who.split(halcyonic);
 ---
 
-<BaseLayout title={name} description={headline} bare>
-  <main class="door">
-    <img class="face" src={icons.headshot.pixel} width="72" height="72" alt={icons.headshot.alt} />
-    <h1>{name}</h1>
-    <p class="claim">{claim}</p>
-    <p class="who">PhD student in systems science at Binghamton University. I run <a href="https://halcyonic.systems">Halcyonic Systems</a>, a small lab for formal systems research.</p>
-    <nav aria-label="Site">
-      <ul>
-        {doors.map((d) => (
-          <li>
-            <a href={d.href}><span class="label">{d.label}</span><span class="note">{d.note}</span><span class="arrow" aria-hidden="true">→</span></a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-    <Icons size={20} />
-  </main>
+<BaseLayout title={name}>
+  <section class="home">
+    <div class="art">
+      {variants.map((v) => (
+        <div data-art={v} hidden={v !== chosen}><HomeArt variant={v} /></div>
+      ))}
+    </div>
+    <h1>{claim}</h1>
+    <p class="who">{before}<a href={urls.halcyonic}>{halcyonic}</a>{after}</p>
+    {theory && <p class="theory">{theory}</p>}
+  </section>
+
+  <!-- Temporary, while choosing a drawing: ?art=lattice or ?art=nested shows that one. Remove with the losers. -->
+  <script is:inline>
+    (function () {
+      var want = new URLSearchParams(location.search).get('art');
+      if (!want) return;
+      document.querySelectorAll('[data-art]').forEach(function (el) { el.hidden = el.getAttribute('data-art') !== want; });
+    })();
+  </script>
 </BaseLayout>
 
 <style>
-  .door { max-width: 560px; margin: 0 auto; padding: 14vh 0 10vh; }
-  .face { display: block; width: 72px; height: 72px; border-radius: 8px; image-rendering: pixelated; margin-bottom: 24px; }
-  h1 { font: 600 2.6rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0; }
-  .claim { font: 400 1.3rem/1.4 var(--serif); color: var(--ink-2); margin: 8px 0 14px; }
-  .who { color: var(--ink-2); margin: 0 0 40px; max-width: 32em; }
-  ul { list-style: none; margin: 0 0 28px; padding: 0; border-top: var(--edge); }
-  li { margin: 0; border-bottom: var(--edge); }
-  li a { display: grid; grid-template-columns: 6.5em minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 14px 4px; text-decoration: none; color: var(--ink); border-radius: 4px; }
-  li a:hover { background: var(--tint); }
-  li a:hover .label { color: var(--accent); }
-  .label { font: 600 1.15rem var(--serif); }
-  .note { color: var(--muted); font-size: 0.95rem; }
-  .arrow { color: var(--muted); }
-  li a:hover .arrow { color: var(--accent); }
-  @media (max-width: 520px) {
-    .door { padding-top: 8vh; }
-    li a { grid-template-columns: minmax(0, 1fr) auto; }
-    .note { grid-column: 1; grid-row: 2; }
-    .arrow { grid-row: 1 / span 2; align-self: center; }
-  }
+  .home { display: grid; justify-items: center; text-align: center; padding: 2vh 0 10vh; }
+  .art { width: min(360px, 80vw); margin-bottom: 40px; }
+  h1 { font: 600 2.4rem/1.1 var(--serif); letter-spacing: -0.015em; margin: 0; }
+  .who { max-width: 32em; margin: 16px 0 0; color: var(--ink-2); font-size: 1.08rem; line-height: 1.7; }
+  .theory { max-width: 34em; margin: 16px 0 0; font-size: 1.15rem; }
   @media (min-width: 900px) { h1 { font-size: 3.2rem; } }
 </style>
