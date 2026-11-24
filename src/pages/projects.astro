@@ -1,37 +1,49 @@
 ---
-// Projects, version D: a curated few, equal size, two across; then the talks, which are work shown in public.
+// Projects: a curated few at equal size, two across, then the talks.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, top8, talks } from '../data/site';
-
-const projects = [...top8.filter((t) => t.featured), ...top8.filter((t) => !t.featured)];
-const when = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+import { name } from '../data/site';
+import { projects } from '../data/projects';
+import { talks, monthYear } from '../data/talks';
 ---
 
-<BaseLayout title={`Projects | ${name}`} description="Projects and talks by Shingai Thornton: theory, tools and empirical work in systems science.">
+<BaseLayout
+  title={`Projects | ${name}`}
+  description="Projects and talks by Shingai Thornton: theory, tools and empirical work in systems science."
+>
   <h1>Projects</h1>
 
   <ul class="grid">
-    {projects.map((t) => (
-      <li>
-        <a class="shot" href={t.href}><img src={`/images/top8/${t.img}.jpg`} width="960" height="600" alt="" /></a>
-        <span class="kind">{t.kind}</span>
-        <a class="t" href={t.href}>{t.title}</a>
-        <p>{t.blurb ?? t.note}</p>
-      </li>
-    ))}
+    {
+      projects.map((p) => (
+        <li>
+          <a class="card" href={p.href}>
+            <span class="shot">
+              <img src={`/images/projects/${p.img}.jpg`} width="960" height="600" alt="" />
+            </span>
+            <span class="kind">{p.kind}</span>
+            <span class="t">{p.title}</span>
+          </a>
+          <p>{p.blurb}</p>
+        </li>
+      ))
+    }
   </ul>
 
   <h2 id="talks">Talks</h2>
   <ul class="talks">
-    {talks.map((t) => (
-      <li>
-        <span class="when">{when(t.date)}</span>
-        <span>
-          <a href={t.href}>{t.title}</a>
-          <span class="where">{t.venue}, {t.place}</span>
-        </span>
-      </li>
-    ))}
+    {
+      talks.map((t) => (
+        <li>
+          <time datetime={t.date}>{monthYear(t.date)}</time>
+          <span>
+            <a href={t.href}>{t.title}</a>
+            <span class="where">
+              {t.venue}, {t.place}
+            </span>
+          </span>
+        </li>
+      ))
+    }
   </ul>
 </BaseLayout>
 
@@ -42,18 +54,22 @@ const when = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-US'
 
   .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px 32px; max-width: 880px; }
   @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .card { display: block; color: var(--ink); text-decoration: none; }
   .shot { display: block; border: var(--edge); border-radius: 8px; overflow: hidden; margin-bottom: 12px; background: var(--paper); }
-  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; transition: transform 200ms; }
-  .shot:hover img { transform: scale(1.02); }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; object-position: top; }
   .kind { display: block; font: 500 12px var(--mono); color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
-  .t { font: 600 1.2rem var(--serif); color: var(--ink); text-decoration: none; }
-  .t:hover { color: var(--accent); text-decoration: underline; }
+  .t { font: 600 1.2rem var(--serif); }
+  .card:hover .t, .card:focus-visible .t { color: var(--accent); text-decoration: underline; }
   .grid p { margin: 2px 0 0; color: var(--ink-2); }
+  @media (prefers-reduced-motion: no-preference) {
+    .shot img { transition: transform 200ms; }
+    .card:hover .shot img { transform: scale(1.02); }
+  }
 
   h2 { font: 600 1.6rem/1.2 var(--serif); margin: 72px 0 8px; }
   .talks { max-width: 880px; }
   .talks li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: var(--edge); }
-  .talks .when { font: 13px/1.9 var(--mono); color: var(--muted); }
+  .talks time { font: 13px/1.9 var(--mono); color: var(--muted); }
   .talks a { font-weight: 500; color: var(--ink); text-decoration: none; display: block; line-height: 1.45; }
   .talks a:hover { color: var(--accent); text-decoration: underline; }
   .where { font-size: 0.9rem; color: var(--muted); }

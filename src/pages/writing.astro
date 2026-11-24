@@ -1,11 +1,11 @@
 ---
-// Writing, version D: one vertical list, tabs to switch views (radio buttons and CSS, no script).
+// Writing: one vertical list, tabs to switch views (radio buttons and CSS, no script).
 // Field notes come from the blyg's feed; essays are kept here. Talks live on /projects.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, thesisUrl, explorersUrl } from '../data/site';
-import { writing, blygUrl, newsletterUrl } from '../data/writing';
+import { name, urls } from '../data/site';
+import { writing } from '../data/writing';
 
-const items = await writing(['essay', 'note']);
+const items = await writing();
 const n = (k: string) => items.filter((i) => i.kind === k).length;
 const tabs = [
   { id: 'all', label: 'All', count: items.length },
@@ -15,22 +15,21 @@ const tabs = [
 const date = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 ---
 
-<BaseLayout title={`Writing | ${name}`} description="Essays and field notes by Shingai Thornton.">
-  <div class="doc">
+<BaseLayout title={`Writing | ${name}`} description="Essays and field notes by Shingai Thornton." doc>
     <h1>Writing</h1>
     <p class="intro">
-      Field notes from my <a href={blygUrl}>blyg</a> and essays from 2019 on, in one <a href="/rss.xml">RSS feed</a>.
-      Also: <a href={newsletterUrl}>Ideas</a>, the newsletter (<a href={explorersUrl}>older issues</a>), and the <a href={thesisUrl}>MS thesis</a>.
+      Field notes from my <a href={urls.blyg}>blyg</a> and essays from 2019 on, in one <a href="/rss.xml">RSS feed</a>.
+      Also: <a href={urls.newsletter}>Ideas</a>, the newsletter (<a href={urls.newsletterArchive}>older issues</a>), and the <a href={urls.thesis}>MS thesis</a>.
     </p>
 
-    <div class="tabs">
+    <div class="tabs" role="group" aria-label="Show">
       {tabs.map((t, i) => (
         <>
-          <input type="radio" name="kind" id={`w-${t.id}`} checked={i === 0} />
+          <input type="radio" name="kind" id={`w-${t.id}`} checked={i === 0} aria-controls="writing-list" />
           <label for={`w-${t.id}`}>{t.label} <span>{t.count}</span></label>
         </>
       ))}
-      <ul class="list">
+      <ul class="list" id="writing-list">
         {items.map((i) => (
           <li data-kind={i.kind}>
             <span class="t"><a href={i.href}>{i.title}</a>{i.external && <span class="out"> ↗</span>}</span>
@@ -39,7 +38,6 @@ const date = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: '
         ))}
       </ul>
     </div>
-  </div>
 </BaseLayout>
 
 <style>

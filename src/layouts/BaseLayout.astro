@@ -1,25 +1,25 @@
 ---
-import { name, updated } from '../data/site';
+// Every page: head and social tags, the header with the site menu, a main region and the footer.
+import { name, who, updated, portrait, urls } from '../data/site';
 import Icons from '../components/Icons.astro';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
-  window?: string; // subpages still pass this; it now just means "a document page"
-  windowId?: string;
-  bare?: boolean; // home: no header or footer, the page is the navigation
+  /** Wrap the page in the narrow reading column (CV, essays, talk pages). */
+  doc?: boolean;
 }
 
-const {
-  title,
-  description = 'Shingai Thornton: PhD student in Systems Science at Binghamton University; runs Halcyonic Systems.',
-  window: isDoc,
-  bare = false,
-} = Astro.props;
+const { title, description = `${name}: ${who}`, doc = false } = Astro.props;
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
+const menu = [
+  { href: '/projects', label: 'Projects', current: path.startsWith('/projects') || path.startsWith('/talks') },
+  { href: '/writing', label: 'Writing', current: path.startsWith('/writing') || path.startsWith('/archive') },
+  { href: '/about', label: 'About', current: path.startsWith('/about') || path.startsWith('/cv') },
+];
+const ogImage = new URL(portrait.photo, Astro.site).href;
 ---
 
 <!doctype html>
@@ -29,6 +29,7 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="view-transition" content="same-origin" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -39,36 +40,33 @@ const ogImage = new URL('/images/icon/headshot.jpg', Astro.site).href;
     <link rel="alternate" type="application/rss+xml" title={`${name}: writing`} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <div class="column">
-      {!bare && <header class="top">
-        <a class="logo" href="/">Shingai Thornton</a>
+      <header class="top">
+        <a class="logo" href="/" aria-current={path === '/' ? 'page' : undefined}>{name}</a>
         <nav aria-label="Site">
-          <a href="/projects" aria-current={path.startsWith('/projects') ? 'page' : undefined}>Projects</a>
-          <a href="/writing" aria-current={path.startsWith('/writing') || path.startsWith('/archive') ? 'page' : undefined}>Writing</a>
-          <a href="/about" aria-current={path.startsWith('/about') || path.startsWith('/cv') ? 'page' : undefined}>About</a>
+          {menu.map((m) => <a href={m.href} aria-current={m.current ? 'page' : undefined}>{m.label}</a>)}
           <span class="social"><Icons only={['x', 'github', 'rss']} /></span>
-
         </nav>
-      </header>}
+      </header>
 
-      {isDoc ? <article class="doc"><slot /></article> : <slot />}
+      <main id="main" class:list={{ doc }}>
+        <slot />
+      </main>
     </div>
 
-    {!bare && <footer class="foot">
+    <footer class="foot">
       <div class="column">
         <span>&copy; {updated.slice(0, 4)} {name}</span>
-        <span>updated {updated}</span>
+        <span><a href={urls.source}>source</a> · updated {updated}</span>
       </div>
-    </footer>}
-
-    <script is:inline>
-      document.addEventListener('click', function (e) {
-        document.querySelectorAll('details.menu[open]').forEach(function (d) { if (!d.contains(e.target)) d.open = false; });
-      });
-    </script>
+    </footer>
   </body>
 </html>

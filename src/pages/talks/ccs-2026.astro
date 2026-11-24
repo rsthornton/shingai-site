@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { name, talks } from '../../data/site';
+import { name } from '../../data/site';
+import { talks } from '../../data/talks';
 import abstract from '../../data/ccs-2026-abstract.json';
 
 const talk = talks.find((t) => t.href === '/talks/ccs-2026')!;
@@ -18,7 +19,7 @@ const materials = [
 ];
 ---
 
-<BaseLayout title={`CCS 2026 talk | ${name}`} description={`${talk.title}. ${name} at CCS 2026.`} window="talk — CCS 2026" windowId="talk">
+<BaseLayout title={`CCS 2026 talk | ${name}`} description={`${talk.title}. ${name} at CCS 2026.`} doc>
   <p class="back"><a href="/projects#talks">← talks</a></p>
 
   <h1>{talk.title}</h1>

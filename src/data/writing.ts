@@ -1,47 +1,61 @@
-// One list of everything written or said, newest first: the essays here, field notes from the blyg, and talks.
-// The RSS feed, and any page that lists writing, reads from this one function.
+// One list of writing, newest first: the essays kept here and the field notes on the blyg.
+// The /writing page and the RSS feed both read from writing(). Talks can be mixed in by asking for them.
 import { getCollection } from 'astro:content';
-import { talks } from './site';
+import { urls } from './site';
+import { talks } from './talks';
 
-export type Kind = 'essay' | 'note' | 'talk';
+export type WritingKind = 'essay' | 'note' | 'talk';
 
 export interface Item {
-  kind: Kind;
+  kind: WritingKind;
   title: string;
   date: Date;
-  href: string; // absolute for things off this site
+  /** Relative for pages on this site, absolute for anything elsewhere. */
+  href: string;
   external: boolean;
-  where?: string; // where it lives when not here: "blyg", a venue
+  /** Where it lives when not here: "blyg", or a talk's venue. */
+  where?: string;
   summary?: string;
-  minutes?: number; // reading time, essays only
+  /** Reading time in minutes, essays only. */
+  minutes?: number;
 }
 
-// First real paragraph of a markdown body, as plain text, cut near 180 characters.
-function excerpt(md: string): string {
-  const para = md.split(/\n\s*\n/).map((p) => p.trim()).find((p) => p && !/^(#|!\[|<|>|\||```|- |\* |\d+\. )/.test(p)) ?? '';
-  const text = para.replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' ');
+/** The first real paragraph of a markdown body, as plain text, cut near 180 characters. */
+export function excerpt(md: string): string {
+  const para =
+    md
+      .split(/\n\s*\n/)
+      .map((p) => p.trim())
+      .find((p) => p && !/^(#|!\[|<|>|\||```|- |\* |\d+\. )/.test(p)) ?? '';
+  const text = para
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`]/g, '')
+    .replace(/\s+/g, ' ');
   return text.length > 180 ? text.slice(0, text.lastIndexOf(' ', 180)) + '…' : text;
 }
 
-export const blygUrl = 'https://blyg.shingai.xyz/';
-export const newsletterUrl = 'https://ideas.halcyonic.systems';
-
-// The blyg's feed, read at build time. If it can't be reached the build carries on without it.
+/**
+ * The blyg's RSS feed, read at build time. If it can't be reached the build carries on without it,
+ * so a blyg outage never breaks a deploy. New blyg entries appear after the next build (daily).
+ */
 async function blygNotes(): Promise<Item[]> {
   try {
-    const res = await fetch(new URL('feed.xml', blygUrl), { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(new URL('feed.xml', urls.blyg), { signal: AbortSignal.timeout(8000) });
     if (!res.ok) return [];
     const xml = await res.text();
-    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
     const pick = (s: string, tag: string) => s.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`))?.[1]?.trim() ?? '';
-    return items.map((s) => {
+    return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(([, s]) => {
       // The blyg titles an item "Entry title: first sentence…"; keep the entry title.
       const raw = pick(s, 'title');
       const cut = raw.indexOf(': ');
+      const body = pick(s, 'description')
+        .replace(/^<!\[CDATA\[|\]\]>$/g, '')
+        .replace(/<[^>]+>/g, ' ');
       return {
         kind: 'note' as const,
         title: cut > 0 ? raw.slice(0, cut) : raw,
-        summary: excerpt(pick(s, 'description').replace(/^<!\[CDATA\[|\]\]>$/g, '').replace(/<[^>]+>/g, ' ')),
+        summary: excerpt(body),
         date: new Date(pick(s, 'pubDate')),
         href: pick(s, 'link'),
         external: true,
@@ -53,34 +67,34 @@ async function blygNotes(): Promise<Item[]> {
   }
 }
 
-export async function writing(kinds: Kind[] = ['essay', 'note', 'talk']): Promise<Item[]> {
-  const essays: Item[] = (await getCollection('archive')).map((p) => ({
-    kind: 'essay',
-    title: p.data.title,
-    date: p.data.date,
-    href: `/archive/${p.data.permalink}/`,
-    external: false,
-    summary: p.data.description ?? excerpt(p.body ?? ''),
-    minutes: Math.max(1, Math.round((p.body ?? '').split(/\s+/).length / 230)),
-  }));
-  const said: Item[] = talks.map((t) => ({
-    kind: 'talk',
-    title: t.title,
-    date: new Date(t.date + 'T12:00:00'),
-    href: t.href,
-    external: t.href.startsWith('http'),
-    where: t.short,
-  }));
-  const notes = kinds.includes('note') ? await blygNotes() : [];
-  return [...essays, ...said, ...notes]
-    .filter((i) => kinds.includes(i.kind))
-    .sort((a, b) => b.date.getTime() - a.date.getTime());
+export async function writing(kinds: WritingKind[] = ['essay', 'note']): Promise<Item[]> {
+  const items: Item[] = [];
+  if (kinds.includes('essay')) {
+    for (const p of await getCollection('archive')) {
+      const body = p.body ?? '';
+      items.push({
+        kind: 'essay',
+        title: p.data.title,
+        date: p.data.date,
+        href: `/archive/${p.data.permalink}/`,
+        external: false,
+        summary: p.data.description ?? excerpt(body),
+        minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)),
+      });
+    }
+  }
+  if (kinds.includes('talk')) {
+    for (const t of talks) {
+      items.push({
+        kind: 'talk',
+        title: t.title,
+        date: new Date(t.date + 'T12:00:00'),
+        href: t.href,
+        external: t.href.startsWith('http'),
+        where: t.short,
+      });
+    }
+  }
+  if (kinds.includes('note')) items.push(...(await blygNotes()));
+  return items.sort((a, b) => b.date.getTime() - a.date.getTime());
 }
-
-export const byYear = (items: Item[]) =>
-  items.reduce((acc, i) => {
-    (acc[i.date.getFullYear()] ??= []).push(i);
-    return acc;
-  }, {} as Record<number, Item[]>);
-
-export const shortDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });

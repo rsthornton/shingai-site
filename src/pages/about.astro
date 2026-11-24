@@ -1,22 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, headline, callUrl, icons } from '../data/site';
+import { name, portrait, urls } from '../data/site';
 ---
 
-<BaseLayout title={`About | ${name}`} description={headline} window="about" windowId="about">
+<BaseLayout title={`About | ${name}`} doc>
   <div class="prose">
     <h1>About</h1>
-    <img class="face" src={icons.headshot.photo} width="512" height="512" alt="Shingai Thornton" />
+    <img class="face" src={portrait.photo} width="512" height="512" alt={portrait.alt} />
     <p class="lede">
-      I'm a PhD student in <mark>systems science</mark> at Binghamton University.
-      I run Halcyonic Systems, a small lab for <mark>formal systems research</mark>.
+      I'm a PhD student in <mark>systems science</mark> at Binghamton University. I run
+      <a href={urls.halcyonic}>Halcyonic Systems</a>, a small lab for <mark>formal systems research</mark>.
     </p>
-    <p><a href="/cv">CV</a> · <a href={callUrl}>Book 20 minutes</a></p>
+    <p><a href="/cv">CV</a> · <a href={urls.call}>Book 20 minutes</a></p>
   </div>
 </BaseLayout>
 
 <style>
   .lede { font-size: 1.15rem; line-height: 1.9; }
   .prose .face { display: block; width: 120px; height: 120px; border: 0; border-radius: 8px; margin: 0 0 20px; }
-  @media (min-width: 640px) { .prose .face { float: right; width: 168px; height: 168px; margin: 6px 0 16px 32px; } }
+  @media (min-width: 640px) {
+    .prose .face { float: right; width: 168px; height: 168px; margin: 6px 0 16px 32px; }
+  }
 </style>
