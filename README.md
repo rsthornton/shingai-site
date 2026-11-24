@@ -99,7 +99,7 @@ Earlier directions are in git, not side by side in `main`: the IM window and the
 
 ## License
 
-Not chosen yet. Until a license file is added, the code and the content (essays, images, slides) are all rights reserved. Read and learn from it freely; ask before reusing.
+The code is MIT. The content (essays, images, slides, the talk abstract) is © Shingai Thornton, all rights reserved. Details and the exact paths in [`LICENSE.md`](./LICENSE.md).
 
 ## Contributing
 

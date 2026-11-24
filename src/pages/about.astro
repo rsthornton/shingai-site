@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { name, portrait, urls } from '../data/site';
+import { name, email, portrait, urls } from '../data/site';
 ---
 
 <BaseLayout title={`About | ${name}`} doc>
@@ -12,12 +12,20 @@ import { name, portrait, urls } from '../data/site';
       <a href={urls.halcyonic}>Halcyonic Systems</a>, a small lab for <mark>formal systems research</mark>.
     </p>
     <p>
-      <a href="/cv">CV</a> · <a href={urls.call}>Book 20 minutes</a>
+      <a href="/cv">CV</a>
+    </p>
+
+    <h2 id="contact">Contact</h2>
+    <p>
+      <a href={`mailto:${email}`}>{email}</a> · <a href={urls.call}>Book 20 minutes</a> ·<a href={urls.x}>DM on X</a>
     </p>
   </div>
 </BaseLayout>
 
 <style>
+  h2 {
+    clear: both;
+  }
   .lede {
     font-size: 1.15rem;
     line-height: 1.9;

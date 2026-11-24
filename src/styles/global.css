@@ -14,6 +14,22 @@
   --accent: #1e3a8a;
   --mark: #d6e2f5; /* the one highlight color */
   --tint: #e8edf4; /* quiet fills: hovers */
+
+  /* Color beyond the navy: Frost blues and Aurora accents. Bright ones are for marks and fills;
+     text uses the -ink variants, which keep 4.5:1 contrast on --page. */
+  --frost-1: #8fbcbb;
+  --frost-2: #88c0d0;
+  --frost-3: #81a1c1;
+  --frost-4: #5e81ac;
+  --aurora-red: #bf616a;
+  --aurora-orange: #d08770;
+  --aurora-yellow: #ebcb8b;
+  --aurora-green: #a3be8c;
+  --aurora-purple: #b48ead;
+  --teal-ink: #2c6b68;
+  --frost-ink: #3f5f8a;
+  --kind-note: var(--teal-ink);
+  --kind-essay: var(--frost-ink);
 }
 :root {
   --link: var(--accent);
