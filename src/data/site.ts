@@ -2,7 +2,7 @@
 // Projects are in projects.ts, talks in talks.ts, and the writing list is assembled in writing.ts.
 
 /** Shown in the footer as the last update; bump it when the copy changes. */
-export const updated = '2026-11-24';
+export const updated = '2026-11-25';
 
 export const name = 'Shingai Thornton';
 
@@ -22,6 +22,10 @@ export const theory = '';
 /** Shingai's line (2026-11-25), shown by the 'studying' intro. His words; edit only with him. */
 export const studying =
   'Studying the properties of systems in general to support rigorous inter- and transdisciplinary scientific research.';
+
+/** Shingai's line (2026-11-25, later round), shown by the 'instruments' intro above the Instruments list. His words; edit only with him. */
+export const aim =
+  'Studying the properties of systems in general, and building instruments for rigorous transdisciplinary research.';
 
 export const portrait = {
   photo: '/images/icon/headshot.jpg',
@@ -49,14 +53,14 @@ export const urls = {
  * overrides it live (README § Dev mode) and offers the line to paste back here.
  *   drawing: an id from src/art/registry.ts      palette: 'navy' | 'frost' | 'teal' | 'plum'
  *   ink: drawing 'color' or 'mono' (one color)   heading: 'ink' | 'accent'
- *   intro: 'who' | 'working' | 'work-first' | 'line' | 'studying'
+ *   intro: 'who' | 'working' | 'work-first' | 'line' | 'studying' | 'instruments'
  */
 export interface Look {
   drawing: string;
   palette: 'navy' | 'frost' | 'teal' | 'plum';
   ink: 'color' | 'mono';
   heading: 'ink' | 'accent';
-  intro: 'who' | 'working' | 'work-first' | 'line' | 'studying';
+  intro: 'who' | 'working' | 'work-first' | 'line' | 'studying' | 'instruments';
 }
 
 export const look: Look = {
@@ -64,5 +68,5 @@ export const look: Look = {
   palette: 'navy',
   ink: 'color',
   heading: 'accent',
-  intro: 'working',
+  intro: 'instruments',
 };

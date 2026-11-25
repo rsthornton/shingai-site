@@ -5,12 +5,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Drawing from '../art/Drawing.astro';
 import { drawings } from '../art/registry';
-import { name, claim, who, theory, studying, urls, look } from '../data/site';
+import { name, claim, who, theory, studying, aim, urls, look } from '../data/site';
 import { projects } from '../data/projects';
 
 const dev = import.meta.env.DEV;
 const shown = dev ? drawings.map((d) => d.id) : [look.drawing];
-const intros = ['who', 'working', 'work-first', 'line', 'studying'] as const;
+const intros = ['who', 'working', 'work-first', 'line', 'studying', 'instruments'] as const;
 const hasIntro = (v: (typeof intros)[number]) => dev || look.intro === v;
 
 const halcyonic = 'Halcyonic Systems';
@@ -41,6 +41,22 @@ const dots = ['var(--frost-4)', 'var(--aurora-orange)', 'var(--aurora-purple)'];
     {hasIntro('working') && (
       <div data-intro="working" hidden={look.intro !== 'working'}>
         <p class="label">Currently working on</p>
+        <ul class="working">
+          {working.map((p, i) => (
+            <li>
+              <span class="dot" style={`background:${dots[i]}`} />
+              <a href={p.href}>{p.title}</a>
+              <span class="blurb">{p.blurb}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {hasIntro('instruments') && (
+      <div data-intro="instruments" hidden={look.intro !== 'instruments'}>
+        <p class="who">{aim}</p>
+        <p class="label">Instruments</p>
         <ul class="working">
           {working.map((p, i) => (
             <li>
@@ -125,6 +141,7 @@ const dots = ['var(--frost-4)', 'var(--aurora-orange)', 'var(--aurora-purple)'];
   }
   .working a {
     font-weight: 600;
+    white-space: nowrap;
   }
   .blurb {
     color: var(--ink-2);

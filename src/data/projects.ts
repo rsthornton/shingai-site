@@ -27,7 +27,7 @@ export const projects: Project[] = [
     href: 'https://statepower.systems',
     img: 'trade',
     kind: 'empirical',
-    blurb: 'GDP is not equivalent to economic power.',
+    blurb: 'Multidimensional measures of state power.',
   },
   {
     title: 'math.systems',
