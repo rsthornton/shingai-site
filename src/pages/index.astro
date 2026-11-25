@@ -5,12 +5,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Drawing from '../art/Drawing.astro';
 import { drawings } from '../art/registry';
-import { name, claim, who, theory, urls, look } from '../data/site';
+import { name, claim, who, theory, studying, urls, look } from '../data/site';
 import { projects } from '../data/projects';
 
 const dev = import.meta.env.DEV;
 const shown = dev ? drawings.map((d) => d.id) : [look.drawing];
-const intros = ['who', 'working', 'work-first', 'line'] as const;
+const intros = ['who', 'working', 'work-first', 'line', 'studying'] as const;
 const hasIntro = (v: (typeof intros)[number]) => dev || look.intro === v;
 
 const halcyonic = 'Halcyonic Systems';
@@ -57,6 +57,12 @@ const dots = ['var(--frost-4)', 'var(--aurora-orange)', 'var(--aurora-purple)'];
       <div data-intro="work-first" hidden={look.intro !== 'work-first'}>
         <!-- prettier-ignore -->
         <p class="who">Working on {working.map((p, i) => (<><a href={p.href}>{p.title}</a>{i === 0 ? ', ' : i === 1 ? ' and ' : '. '}</>))}PhD student in systems science at Binghamton; I run <a href={urls.halcyonic}>{halcyonic}</a>.</p>
+      </div>
+    )}
+
+    {hasIntro('studying') && (
+      <div data-intro="studying" hidden={look.intro !== 'studying'}>
+        <p class="who">{studying}</p>
       </div>
     )}
 
