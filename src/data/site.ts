@@ -11,7 +11,7 @@ export const claim = 'Systems theorist and builder.';
 
 /** One sentence of who: under the line on home, and the default page description. */
 export const who =
-  'PhD student in systems science at Binghamton University. I run Halcyonic Systems, a small lab for formal systems research.';
+  'Studying systems science at Binghamton University. I run Halcyonic Systems, a small lab for formal systems research.';
 
 /**
  * The theory of change, shown under the line on home. Empty until Shingai has one in his own words;
@@ -40,6 +40,7 @@ export const urls = {
   x: 'https://x.com/shingaithornton',
   github: 'https://github.com/rsthornton',
   halcyonic: 'https://halcyonic.systems',
+  systemsScience: 'https://www.binghamton.edu/ssie/graduate/systems-science.html',
   call: 'https://calendly.com/shingaithornton/new-meeting',
   thesis: 'https://www.proquest.com/docview/3343535100',
   newsletter: 'https://ideas.halcyonic.systems',

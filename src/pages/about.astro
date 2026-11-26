@@ -7,17 +7,15 @@ import { name, email, portrait, urls } from '../data/site';
   <div class="prose">
     <h1>About</h1>
     <img class="face" src={portrait.photo} width="512" height="512" alt={portrait.alt} />
-    <p class="lede">
-      I'm a PhD student in <mark>systems science</mark> at Binghamton University. I run
-      <a href={urls.halcyonic}>Halcyonic Systems</a>, a small lab for <mark>formal systems research</mark>.
-    </p>
+    <!-- prettier-ignore -->
+    <p class="lede">I'm studying <a href={urls.systemsScience}><mark>systems science</mark></a> at Binghamton University. I run <a href={urls.halcyonic}>Halcyonic Systems</a>, a small lab for <mark>formal systems research</mark>.</p>
     <p>
       <a href="/cv">CV</a>
     </p>
 
     <h2 id="contact">Contact</h2>
     <p>
-      <a href={`mailto:${email}`}>{email}</a> · <a href={urls.call}>Book 20 minutes</a> ·<a href={urls.x}>DM on X</a>
+      <a href={`mailto:${email}`}>{email}</a> · <a href={urls.call}>Book 20 minutes</a> · <a href={urls.x}>DM on X</a>
     </p>
   </div>
 </BaseLayout>
