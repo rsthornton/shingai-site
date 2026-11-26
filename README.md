@@ -76,9 +76,11 @@ scripts/
 
 | To | Do |
 |---|---|
-| Change the line or the who sentence | `claim` and `who` in `src/data/site.ts` |
-| Add the theory of change | `theory` in `site.ts`; it shows under the who sentence on home when not empty |
-| Add a project | an entry in `src/data/projects.ts`, and a 960×600 screenshot at `public/images/projects/<img>.jpg` |
+| Change the headline or the who sentence | `claim` and `who` in `src/data/site.ts` (`who` is also the default page description) |
+| Change the sentence under the headline | `aim` in `site.ts`, shown by the `instruments` intro above the Instruments list |
+| Add the theory of change | `theory` in `site.ts`; it shows under the intro on home when not empty |
+| Add a project | an entry in `src/data/projects.ts` (`blurb` shows on home and Projects, `gap` only on Projects), and a 960×600 screenshot at `public/images/projects/<img>.jpg`. The first three are home's Instruments list |
+| Change the line under Projects | the `frame` paragraph in `src/pages/projects.astro` |
 | Add a talk | an entry at the top of `src/data/talks.ts`. For a page of its own, copy `src/pages/talks/ccs-2026.astro` and put slides in `public/talks/` |
 | Add an essay | a markdown file in `src/content/archive/` with `title`, `permalink` and `date` |
 | Change a link | `urls` in `site.ts` |

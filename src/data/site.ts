@@ -9,7 +9,7 @@ export const name = 'Shingai Thornton';
 /** The big line on home. */
 export const claim = 'Systems theorist and builder.';
 
-/** One sentence of who: under the line on home, and the default page description. */
+/** One sentence of who: the default page description, and the 'who' intro on home. */
 export const who =
   'Studying systems science at Binghamton University. I run Halcyonic Systems, a small lab for formal systems research.';
 
